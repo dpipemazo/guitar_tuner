@@ -1,0 +1,2 @@
+vhdl work "../../hdl/vhdl/frequency_meter.vhd"
+vhdl work "../../hdl/vhdl/signal_tester_core.vhd"

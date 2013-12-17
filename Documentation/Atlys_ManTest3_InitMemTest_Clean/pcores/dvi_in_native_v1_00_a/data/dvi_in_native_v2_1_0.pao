@@ -1,0 +1,12 @@
+##############################################################################
+## Filename:          
+## Description:       Peripheral Analysis Order
+## Date:              
+##############################################################################
+
+lib dvi_in_native_v1_00_a DVI_Decoder vhdl
+lib dvi_in_native_v1_00_a DVI_Decoder_Data_Ch vhdl
+lib dvi_in_native_v1_00_a DVI_Decoder_Assy vhdl
+lib dvi_in_native_v1_00_a serdes_1_to_n_clk_pll_s16_diff vhdl
+lib dvi_in_native_v1_00_a serdes_1_to_n_data_s16_diff vhdl
+lib dvi_in_native_v1_00_a dvi_in_native verilog

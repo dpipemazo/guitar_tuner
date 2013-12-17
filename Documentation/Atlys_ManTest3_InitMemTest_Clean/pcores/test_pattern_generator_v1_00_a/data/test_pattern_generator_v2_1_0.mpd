@@ -1,0 +1,50 @@
+BEGIN test_pattern_generator
+
+## Peripheral Options
+OPTION IPTYPE = PERIPHERAL
+OPTION IMP_NETLIST = FALSE
+OPTION HDL = VERILOG
+OPTION SIM_MODELS = BEHAVIORAL : STRUCTURAL
+OPTION IP_GROUP = USER
+OPTION ARCH_SUPPORT_MAP = (spartan6 = DEVELOPMENT)
+OPTION RUN_NGCBUILD = FALSE
+OPTION STYLE = MIX
+
+## Bus Interfaces
+BUS_INTERFACE BUS = dvi_out, BUS_STD = DVI_VIDEO, BUS_TYPE = INITIATOR
+
+## Ports
+PORT clk = "", DIR = I, SIGIS = CLK
+PORT reset = "", DIR = I, SIGIS = RST
+PORT start_task_init = "", DIR = I
+PORT start_task_final = "", DIR = I
+PORT clear_init_done = "", DIR = I
+PORT clear_task_done = "", DIR = I
+PORT psw_busy = "", DIR = O
+PORT psw_init_done = "", DIR = O
+PORT psw_task_done = "", DIR = O
+PORT psw_released = "", DIR = O
+PORT psw_idle = "", DIR = O
+PORT psw_livein_frames_in_use = "", DIR = O, VEC = [3:0]
+PORT psw_liveout_frames_in_use = "", DIR = O, VEC = [3:0]
+PORT psw_sa_0_stalling = "", DIR = O
+PORT rawdatain_hsync_0 = "", DIR = I
+PORT rawdatain_hblank_0 = "", DIR = I, VEC = [31:0]
+PORT rawdatain_hbporch_0 = "", DIR = I, VEC = [31:0]
+PORT rawdatain_hactive_0 = "", DIR = I, VEC = [31:0]
+PORT rawdatain_vsync_0 = "", DIR = I
+PORT rawdatain_vblank_0 = "", DIR = I, VEC = [31:0]
+PORT rawdatain_vbporch_0 = "", DIR = I, VEC = [31:0]
+PORT rawdatain_vactive_0 = "", DIR = I, VEC = [31:0]
+PORT rawdatain_hfporch_0 = "", DIR = I, VEC = [31:0]
+PORT rawdatain_vfporch_0 = "", DIR = I, VEC = [31:0]
+PORT outstream_dvi_out_do_0_red = red, DIR = O, VEC = [7:0], BUS = dvi_out
+PORT outstream_dvi_out_do_0_green = green, DIR = O, VEC = [7:0], BUS = dvi_out
+PORT outstream_dvi_out_do_0_blue = blue, DIR = O, VEC = [7:0], BUS = dvi_out
+PORT outstream_dvi_out_do_0_hsync = hsync, DIR = O, BUS = dvi_out
+PORT outstream_dvi_out_do_0_vsync = vsync, DIR = O, BUS = dvi_out
+PORT outstream_dvi_out_do_0_de = de, DIR = O, BUS = dvi_out
+PORT outstream_dvi_out_req_0 = SEND, DIR = O, BUS = dvi_out
+PORT outstream_dvi_out_ready_0 = ACK, DIR = I, BUS = dvi_out, INITIALVAL = VCC
+
+END

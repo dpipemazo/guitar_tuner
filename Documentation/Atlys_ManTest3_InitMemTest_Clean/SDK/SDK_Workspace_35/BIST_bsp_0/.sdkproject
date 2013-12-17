@@ -1,0 +1,5 @@
+#
+#Tue Sep 21 19:26:54 EEST 2010
+THIRPARTY=false
+PROCESSOR=microblaze_0
+MSS_FILE=system.mss

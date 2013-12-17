@@ -1,0 +1,9 @@
+elfcheck
+Xilinx EDK 12.3 Build EDK_MS3.70d
+Copyright (c) 1995-2010 Xilinx, Inc.  All rights reserved.
+
+Command Line: elfcheck -hw ../../BIST_platform_0/system.xml -pe microblaze_0
+BIST.elf 
+
+ELF file	: BIST.elf
+elfcheck passed.

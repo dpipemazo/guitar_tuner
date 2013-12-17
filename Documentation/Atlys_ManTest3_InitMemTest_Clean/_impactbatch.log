@@ -1,0 +1,86 @@
+iMPACT Version: Jun 22 2010 00:41:41
+
+iMPACT log file Started on Tue Sep 21 19:10:38 2010
+
+Preference Table
+Name                 Setting             
+StartupClock         Auto_Correction     
+AutoSignature        False               
+KeepSVF              False               
+ConcurrentMode       False               
+UseHighz             False               
+ConfigOnFailure      Stop                
+UserLevel            Novice              
+MessageLevel         Detailed            
+svfUseTime           false               
+SpiByteSwap          Auto_Correction     
+AutoInfer            false               
+SvfPlayDisplayComments false               
+AutoDetecting cable. Please wait.
+Connecting to cable (Usb Port - USB21).
+Checking cable driver.
+ Driver file xusb_emb.sys found.
+ Driver version: src=1029, dest=1029.
+ Driver windrvr6.sys version = 10.1.0.0. WinDriver v10.10 Jungo (c) 1997 - 2009 Build Date: Sep  2 2009 X86 32bit SYS12:13:52, version = 1010.
+ Cable PID = 0008.
+ Max current requested during enumeration is 74 mA.
+Type = 0x0004.
+ Cable Type = 3, Revision = 0.
+ Setting cable speed to 6 MHz.
+Cable connection established.
+Firmware version = 1303.
+File version of M:/Xilinx/12.2/ISE_DS/ISE/data/xusb_xlp.hex = 1303.
+Firmware hex file version = 1303.
+PLD file version = 0012h.
+ PLD version = 0012h.
+Type = 0x0004.
+ESN option: 0000117FFD9D01.
+Identifying chain contents...'0': : Manufacturer's ID = Xilinx xc6slx45, Version : 2
+INFO:iMPACT:1777 - 
+   Reading M:/Xilinx/12.2/ISE_DS/ISE/spartan6/data/xc6slx45.bsd...
+INFO:iMPACT:501 - '1': Added Device xc6slx45 successfully.
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+done.
+Elapsed time =      0 sec.
+Elapsed time =      0 sec.
+'1': Loading file 'implementation/download.bit' ...
+done.
+UserID read from the bitstream file = 0xFFFFFFFF.
+Data width read from the bitstream file = 1.
+INFO:iMPACT:501 - '1': Added Device xc6slx45 successfully.
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+Maximum TCK operating frequency for this device chain: 25000000.
+Validating chain...
+Boundary-scan chain validated successfully.
+'1': Programming device...
+ LCK_cycle = NoWait.
+LCK cycle: NoWait
+done.
+'1': Reading status register contents...
+[0] CRC ERROR                                                              :        0
+[1] IDCODE ERROR                                                           :        0
+[2] DCM LOCK STATUS                                                        :        1
+[3] GTS_CFG_B STATUS                                                       :        1
+[4] GWE STATUS                                                             :        1
+[5] GHIGH STATUS                                                           :        1
+[6] DECRYPTION ERROR                                                       :        0
+[7] DECRYPTOR ENABLE                                                       :        0
+[8] HSWAPEN PIN                                                            :        1
+[9] MODE PIN M[0]                                                          :        0
+[10] MODE PIN M[1]                                                         :        1
+[11] RESERVED                                                              :        0
+[12] INIT_B PIN                                                            :        1
+[13] DONE PIN                                                              :        1
+[14] SUSPEND STATUS                                                        :        0
+[15] FALLBACK STATUS                                                       :        0
+INFO:iMPACT:2219 - Status register values:
+INFO:iMPACT - 0011 1100 1010 1100 
+INFO:iMPACT:579 - '1': Completed downloading bit file to device.
+INFO:iMPACT:188 - '1': Programming completed successfully.
+ LCK_cycle = NoWait.
+LCK cycle: NoWait
+INFO:iMPACT - '1': Checking done pin....done.
+'1': Programmed successfully.
+Elapsed time =      4 sec.

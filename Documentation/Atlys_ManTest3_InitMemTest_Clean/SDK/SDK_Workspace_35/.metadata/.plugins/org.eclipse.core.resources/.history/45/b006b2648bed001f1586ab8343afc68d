@@ -1,0 +1,941 @@
+/*
+ * Copyright (c) 2009 Xilinx, Inc.  All rights reserved.
+ *
+ * Xilinx, Inc.
+ * XILINX IS PROVIDING THIS DESIGN, CODE, OR INFORMATION "AS IS" AS A
+ * COURTESY TO YOU.  BY PROVIDING THIS DESIGN, CODE, OR INFORMATION AS
+ * ONE POSSIBLE   IMPLEMENTATION OF THIS FEATURE, APPLICATION OR
+ * STANDARD, XILINX IS MAKING NO REPRESENTATION THAT THIS IMPLEMENTATION
+ * IS FREE FROM ANY CLAIMS OF INFRINGEMENT, AND YOU ARE RESPONSIBLE
+ * FOR OBTAINING ANY RIGHTS YOU MAY REQUIRE FOR YOUR IMPLEMENTATION.
+ * XILINX EXPRESSLY DISCLAIMS ANY WARRANTY WHATSOEVER WITH RESPECT TO
+ * THE ADEQUACY OF THE IMPLEMENTATION, INCLUDING BUT NOT LIMITED TO
+ * ANY WARRANTIES OR REPRESENTATIONS THAT THIS IMPLEMENTATION IS FREE
+ * FROM CLAIMS OF INFRINGEMENT, IMPLIED WARRANTIES OF MERCHANTABILITY
+ * AND FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ */
+
+
+#include <stdio.h>
+#include "platform.h"
+#include "string.h"
+#include "xenv_standalone.h"
+#include "xintc.h"
+#include "xparameters.h"
+#include "xbasic_types.h"
+#include "xgpio.h"
+#include "xio.h"
+#include "xuartns550_l.h"
+#include "d_usb.h"
+#include "sleep.h"
+#include "bist.h"
+#include "quad_spi_if_0.h"
+
+
+//global variables for test
+Xuint32 Current_Command			=	0x00;
+Xuint32 Current_UART_Command 	= 	0x00;
+Xuint32 Current_Status 			= 	0x00;
+Xuint32 Current_Result 			= 	0x00;
+Xuint32 Bist_Started_EPP 		= 	0x00;
+
+Xuint32 Error_Code;
+Xuint32 Cur_Mode;
+
+//represents the number of bytes received
+Xuint32 Count_bytes = 0;
+
+u8 DATA_READ;
+Xuint32 i = 0;
+
+
+u8 data_read[256];
+Xuint32 m, n;
+
+
+
+unsigned char verbose = 0; //used to toggle verbose mode
+
+//flash address bytes
+static unsigned char flash_addr_0 = 0;
+static unsigned char flash_addr_1 = 0;
+static unsigned char flash_addr_2 = 0;
+//unsigned char flash_addr_3;
+//represents the current address
+static Xuint32 Flash_Starting_Addr;
+
+//data size bytes
+static unsigned char data_size_0 = 0;
+static unsigned char data_size_1 = 0;
+static unsigned char data_size_2 = 0;
+static unsigned char data_size_3 = 0;
+//represents the data size
+Xuint32 Data_Size;
+
+static unsigned int Data_Index;
+
+//if data size is smaller than one page (256 Bytes)
+Xuint32 Small_Page;
+
+//to store the current byte;
+static unsigned char current_byte;
+
+static char uart_msg[2]; //will store the received characters
+
+//GPIO devices
+XGpio LED8;
+XGpio I2C_Bus;
+
+//interrupt controller
+XIntc Intc;
+
+/****************************************************************************************
+ *  Function prototypes
+ ***************************************************************************************/
+
+void MessageTrap(char* UART_Msg);
+void uart_scan();
+unsigned int Command_check();
+unsigned int Command_Received();
+void usb_epp_interrupt_handler();
+
+
+int main()
+{
+	XStatus Status;
+//	Xuint32 m, n;
+	u8 DataRead;
+	Xuint32 temp;
+//	u8 data_read[256];
+
+	Xuint32 Failed_Address = 0;
+
+	/* Initialize RS232 - Set baudrate and number of stop bits */
+	XUartNs550_SetBaud(XPAR_XPS_UART16550_0_BASEADDR, XPAR_XPS_UART16550_0_CLOCK_FREQ_HZ, 9600);
+	XUartNs550_SetLineControlReg(XPAR_XPS_UART16550_0_BASEADDR, XUN_LCR_8_DATA_BITS);
+
+
+	XCACHE_ENABLE_ICACHE();
+	XCACHE_ENABLE_DCACHE();
+
+
+
+	Status = XIntc_Initialize (&Intc, XPAR_XPS_INTC_0_DEVICE_ID);
+
+
+	if (Status != XST_SUCCESS) xil_printf ("\r\nInterrupt controller initialization failure");
+	else xil_printf("\r\nInterrupt controller initialized");
+
+	Status = XIntc_Connect (&Intc, XPAR_XPS_INTC_0_D_USB_EPP_DSTM_0_IRQ_EPP_INTR,
+	                             (XInterruptHandler) usb_epp_interrupt_handler,
+	                             (void *)XPAR_D_USB_EPP_DSTM_0_BASEADDR);
+	if (Status != XST_SUCCESS) xil_printf ("\r\nRegistering USB_EPP Interrupt Failed");
+	else xil_printf("\r\nUSB_EPP Interrupt registered");
+
+	XIntc_Enable  (&Intc, XPAR_XPS_INTC_0_D_USB_EPP_DSTM_0_IRQ_EPP_INTR);
+
+
+	Status = XIntc_Start(&Intc, XIN_REAL_MODE);
+	if (Status != XST_SUCCESS) xil_printf ("\r\nInterupt controller starting failed");
+	else xil_printf("\r\nInterrupt controller started");
+
+	microblaze_enable_interrupts();
+	
+	//Gpio_devices_initialize();
+
+	//reset EPP
+	XIo_Out32 (D_USB_BASEADDR + EPP_CONTROL_REG_OFFSET, 1 << EPP_CONTROL_RESET_EPP);
+	XIo_Out32 (D_USB_BASEADDR + EPP_CONTROL_REG_OFFSET, 0);
+
+	xil_printf("\r\n----------------------------------------------------------\r\n");
+	xil_printf("\r\nAtlys Board Manufacturing Test Image III \r\n");
+	xil_printf("\r\n----------------------------------------------------------\r\n");
+
+	Count_bytes =0;
+	//wait until test starts
+	while (Current_Status != STATUS_BIST_STARTED_IDLE)
+	{
+
+		//poll_gpio_devices (DIP8, Push7, LED8);
+		//Current_Status = 0x01;
+
+		if (XUartNs550_IsReceiveData(XPAR_XPS_UART16550_0_BASEADDR))
+			if (XUartNs550_ReadReg(XPAR_XPS_UART16550_0_BASEADDR, XUN_RBR_OFFSET) == 'x')
+			{
+				Current_Status = STATUS_BIST_STARTED_IDLE;
+				Bist_Started_EPP = 0;
+			}
+
+	}
+
+
+	MessageTrap("x1.p\n");
+
+	while (1)
+	{
+
+
+	   	if (Current_Status == STATUS_COMMAND_RECEIVED)
+	   	{
+	   		
+			switch (Current_Command)
+			{
+				case 0x01: //Start BIST command when BIST is already started, ignore it
+					Current_Status = STATUS_BIST_STARTED_IDLE;
+					Current_Command = 0x01;
+				break;
+
+				case 0x02: //DDR2 test
+					Current_Status = STATUS_TEST_RUNNING;
+					MessageTrap("\ndr.r");
+					Failed_Address = memory_test(XPAR_MCB_DDR2_MPMC_BASEADDR, XPAR_MCB_DDR2_MPMC_HIGHADDR, 32);
+					Failed_Address = 0;
+					if (!(Failed_Address))
+					{
+						Current_Result = STATUS_TEST_PASSED;
+						MessageTrap("\ndr.p");
+						if (verbose) xil_printf("\nDDR2 test passed");
+					}
+					else if (Failed_Address == 0xFFFFFFFF)
+					{
+						Error_Code = 0xFFFFFFFF;
+						Current_Result = STATUS_TEST_FAILED;
+						MessageTrap("\ndr.f");
+						if (verbose) xil_printf("\nDDR2 not found");
+					}
+					else if (Failed_Address == 0xFFFFFFFE)
+					{
+						Error_Code = 0;
+						Current_Result = STATUS_TEST_FAILED;
+						MessageTrap("\ndr.f");
+						if (verbose) xil_printf("\nDDR2 test failed");
+					}
+					else
+					{
+						Current_Result = STATUS_TEST_FAILED;
+						Error_Code = Failed_Address;
+						MessageTrap("\ndr.f");
+						if (verbose) xil_printf("\nDDR2 test failed");
+					}
+					Current_Status = STATUS_BIST_STARTED_IDLE;
+				break;
+
+				case 0x03: //Flash test
+					Current_Status = STATUS_TEST_RUNNING;
+					MessageTrap("\nsf.r");
+					Failed_Address = Quad_SPI_Flash_Test (XPAR_QUAD_SPI_IF_0_BASEADDR);
+
+					if (Failed_Address == 0x00)
+					{
+						Current_Result = STATUS_TEST_PASSED;
+						MessageTrap("\nsf.p");
+						if(verbose) xil_printf("\nFlash test passed");
+					}
+					else if (Failed_Address == 0x80)
+					{
+						Error_Code = 0x80;
+						Current_Result = STATUS_TEST_FAILED;
+						MessageTrap("\nsf.f");
+						if(verbose) xil_printf("\nErasing memory failed");
+					}
+					else if (Failed_Address == 0x70)
+					{
+						Error_Code = 0x70;
+						Current_Result = STATUS_TEST_FAILED;
+						MessageTrap("\nsf.f");
+						if(verbose) xil_printf("\nFlash memory not found");
+					}
+					else if (Failed_Address == 0x60)
+					{
+						Error_Code = 0x60;
+						Current_Result = STATUS_TEST_FAILED;
+						MessageTrap("\nsf.f");
+						if(verbose) xil_printf("\nWrite to Flash memory failed");
+					}
+					else if (Failed_Address == 0x50)
+					{
+						Error_Code = 0x50;
+						Current_Result = STATUS_TEST_FAILED;
+						MessageTrap("\nsf.f");
+						if(verbose) xil_printf("\nRead from Flash memory failed");
+					}
+					else if (Failed_Address == 0x40)
+					{
+						Error_Code = 0x40;
+						Current_Result = STATUS_TEST_FAILED;
+						MessageTrap("\nsf.f");
+						if(verbose) xil_printf("\nError on line DQ3");
+					}
+					else if (Failed_Address == 0x30)
+					{
+						Error_Code = 0x30;
+						Current_Result = STATUS_TEST_FAILED;
+						MessageTrap("\nsf.f");
+						if(verbose) xil_printf("\nError on line DQ2");
+					}
+					else if (Failed_Address == 0x20)
+					{
+						Error_Code = 0x20;
+						Current_Result = STATUS_TEST_FAILED;
+						MessageTrap("\nsf.f");
+						if(verbose) xil_printf("\nError on line DQ1");
+					}
+					else
+					{
+						Error_Code = 0x10;
+						Current_Result = STATUS_TEST_FAILED;
+						MessageTrap("\nsf.f");
+						if(verbose) xil_printf("\nError on line DQ0");
+					}
+					Current_Status = STATUS_BIST_STARTED_IDLE;
+				break;
+
+				case 0x19: // HDMI I2C Loopback Test 1 : J1 and J2 Connectors
+					Current_Status = STATUS_TEST_RUNNING;
+					MessageTrap("\nho1.r");
+					Failed_Address = I2C_Loopback_Test_1(I2C_Bus);
+					if (Failed_Address)
+					{
+						Current_Result = STATUS_TEST_FAILED;
+						Error_Code = Failed_Address;
+						MessageTrap("\nho1.f");
+						if (verbose) xil_printf("\nHDMI I2C J1/J2 loop-back test failed");
+					}
+					else
+					{
+						Current_Result = STATUS_TEST_PASSED;
+						Error_Code = 0;
+						MessageTrap("\nho1.p");
+						if (verbose) xil_printf("\nHDMI I2C J1/J2 loop-back test passed");
+					}
+					Current_Status = STATUS_BIST_STARTED_IDLE;
+				break;
+
+				case 0x29: // HDMI I2C Loopback Test 2 : JA and J3 Connectors
+				    Current_Status = STATUS_TEST_RUNNING;
+					Failed_Address = I2C_Loopback_Test_2(I2C_Bus);
+					if (Failed_Address)
+					{
+						Current_Result = STATUS_TEST_FAILED;
+						Error_Code = Failed_Address;
+						MessageTrap("\nho2.f");
+						if (verbose) xil_printf("\nHDMI I2C JA/J3 loop-back test failed");
+					}
+					else
+					{
+						Current_Result = STATUS_TEST_PASSED;
+						Error_Code = 0;
+						MessageTrap("\nho2.p");
+						if (verbose) xil_printf("\nHDMI I2C JA/J3 loop-back test passed");
+					}
+					Current_Status = STATUS_BIST_STARTED_IDLE;
+				break;
+
+				case 0x1A: // HDMI I2C Short Test
+					Current_Status = STATUS_TEST_RUNNING;
+					Failed_Address = I2C_Short_Test(I2C_Bus);
+					if (Failed_Address)
+					{
+						Current_Result = STATUS_TEST_FAILED;
+						Error_Code = Failed_Address;
+						MessageTrap("\nhs.f");
+						if (verbose) xil_printf("\nHDMI I2C short test failed");
+					}
+					else
+					{
+						Current_Result = STATUS_TEST_PASSED;
+						Error_Code = 0;
+						MessageTrap("\nhs.p");
+						if (verbose) xil_printf("\nHDMI I2C short test passed");
+					}
+					Current_Status = STATUS_BIST_STARTED_IDLE;
+				break;
+
+				case 0x0b: //Toggle verbose mode
+					Current_Status = STATUS_TEST_RUNNING;
+					verbose = !verbose;
+					if (verbose)
+					{
+						Error_Code = 0x01;
+						MessageTrap("\nvb.on");
+					}
+					else
+					{
+						Error_Code = 0x00;
+						MessageTrap("\nvb.off");
+					}
+					Current_Result = STATUS_TEST_PASSED;
+					Current_Status = STATUS_BIST_STARTED_IDLE;
+				break;
+
+				case 0x0c: // Receive data mode
+					Current_Status = STATUS_TEST_RUNNING;
+					MessageTrap("\npf.r");
+					Count_bytes = 0;
+					Data_Index = 0;
+					Small_Page = 0;
+
+					Flash_Starting_Addr = (flash_addr_2 << 16) | (flash_addr_1 << 8) | flash_addr_0;
+					Data_Size = (data_size_3 << 24) | (data_size_2 << 16) | (data_size_1 << 8) | data_size_0;
+					temp = Flash_Starting_Addr + Data_Size;
+
+					// start writing to ddram
+					Current_Status = STATUS_DATA_RECEIVE_MODE;
+				//	while (Count_bytes < Data_Size);// wait until data size is received
+				//	if (verbose) xil_printf("\nSuccessfully wrote %d Bytes into DDRAM", Count_bytes);
+
+					if (Data_Size < 256)
+					{
+						Small_Page = Data_Size;
+					}
+					else
+					{
+						Small_Page = Data_Size % 256;
+						Data_Size = (Data_Size - Small_Page);
+					}
+					if (verbose) xil_printf("\nData size: %d, Small page: %d", Data_Size, Small_Page);
+
+					Count_bytes = 0;
+					n = 1;
+
+					// Check initial mode (so that Flash excepts multi-line commands)
+					Cur_Mode = Check_Initial_Mode (XPAR_QUAD_SPI_IF_0_BASEADDR);
+					if (verbose) xil_printf("\nCurrent mode: %d", Cur_Mode);
+
+					while (Count_bytes < Data_Size);// wait until data size is received
+					if (verbose) xil_printf("\nSuccessfully wrote %d Bytes into Flash", Count_bytes);
+
+					// read from ddram + write to flash
+	/*				for (m = 0; m <= (Data_Size + Small_Page); m++)
+					{
+						data_read[n-1] = XIo_In8 (XPAR_MCB_DDR2_MPMC_BASEADDR + m);
+
+						if (Count_bytes != Data_Size)
+						{
+							if (n == 256)
+							{
+								Error_Code = Page_Program (XPAR_QUAD_SPI_IF_0_BASEADDR, 2, Cur_Mode, 2,
+										(Flash_Starting_Addr + Count_bytes), n, data_read);
+								Count_bytes = Count_bytes + n;
+								n = 0;
+							}
+						}
+						else if (Small_Page)
+						{
+							if (n == Small_Page)
+							{
+								Error_Code = Page_Program (XPAR_QUAD_SPI_IF_0_BASEADDR, 2, Cur_Mode, 2,
+										(Flash_Starting_Addr + Count_bytes), n, data_read);
+								Count_bytes = Count_bytes + n;
+								n = 0;
+							}
+						}
+						n++;
+					}*/
+					if (Error_Code == 0x03)
+					{
+						Current_Result = STATUS_TEST_PASSED;
+						MessageTrap("\npf.p");
+						if (verbose) xil_printf("\nDone writing to Flash");
+					}
+					else
+					{
+						Current_Result = STATUS_TEST_FAILED;
+						MessageTrap("\npf.f");
+						if (verbose) xil_printf("\nError writing to Flash");
+					}
+					Current_Status = STATUS_BIST_STARTED_IDLE;
+				break;
+
+				case 0x0d: // Send data mode
+					Current_Status = STATUS_TEST_RUNNING;
+					MessageTrap("\nds.r");
+
+					// Check initial mode (so that Flash excepts multi-line commands)
+					Cur_Mode = Check_Initial_Mode (XPAR_QUAD_SPI_IF_0_BASEADDR);
+					if (verbose) xil_printf("\nCurrent mode: %d", Cur_Mode);
+					Count_bytes = 0;
+
+					Flash_Starting_Addr = (flash_addr_2 << 16) | (flash_addr_1 << 8) | flash_addr_0;
+					Data_Size = (data_size_3 << 24) | (data_size_2 << 16) | (data_size_1 << 8) | data_size_0;
+
+					Current_Status = STATUS_DATA_SEND_MODE;
+					while (Error_Code < Data_Size);//wait until data size is received
+					if (verbose) xil_printf ("\nDone reading from Flash");
+					Current_Result = STATUS_TEST_PASSED;
+					MessageTrap("\nds.p");
+					Current_Status = STATUS_BIST_STARTED_IDLE;
+				break;
+
+				case 0x13: // Blank check Flash Sector
+					Current_Status = STATUS_TEST_RUNNING;
+					MessageTrap("\nbs.r");
+
+					Flash_Starting_Addr = (flash_addr_2 << 16) | (flash_addr_1 << 8) | flash_addr_0;
+					if (Flash_Starting_Addr <= 0x1FFFFFF)
+					{
+						Failed_Address = Blank_Check_Sector (XPAR_QUAD_SPI_IF_0_BASEADDR, Flash_Starting_Addr);
+
+						if (Failed_Address == 0xFFFFFFFF)
+						{
+							Current_Result = STATUS_TEST_FAILED;
+							MessageTrap("\nbs.f");
+							if (verbose) xil_printf("\nFlash memory not present");
+						}
+						else if (Failed_Address == 0x00)
+						{
+							Current_Result = STATUS_TEST_PASSED;
+							MessageTrap("\nbs.p");
+							if (verbose) xil_printf("\nSector is blank");
+						}
+						else
+						{
+							Current_Result = STATUS_TEST_FAILED;
+							MessageTrap("\nbs.f");
+							if (verbose) xil_printf("\nSector not blank. Number of Bytes: 0x%x", Failed_Address);
+						}
+						Error_Code = Failed_Address;
+					}
+					else
+					{
+						Current_Result = STATUS_TEST_FAILED;
+						MessageTrap("\nbs.f");
+						if (verbose) xil_printf("\nError, Flash starting address 0x%x is larger than 0x1FFFFFF",
+								Flash_Starting_Addr);
+						Error_Code = 0xFFFFFFFE;
+					}
+					Current_Status = STATUS_BIST_STARTED_IDLE;
+				break;
+
+				case 0x23: // Blank check entire Flash
+					Current_Status = STATUS_TEST_RUNNING;
+					MessageTrap("\nbf.r");
+
+					Failed_Address = Blank_Check_Entire_Memory (XPAR_QUAD_SPI_IF_0_BASEADDR);
+
+					if (Failed_Address == 0xFFFFFFFF)
+					{
+						Current_Result = STATUS_TEST_FAILED;
+						MessageTrap("\nbf.f");
+						if (verbose) xil_printf("\nFlash memory is not present");
+					}
+					else if (Failed_Address == 0x00)
+					{
+						Current_Result = STATUS_TEST_PASSED;
+						MessageTrap("\nbf.p");
+						if (verbose) xil_printf("\nFlash memory is blank");
+					}
+					else
+					{
+						Current_Result = STATUS_TEST_FAILED;
+						MessageTrap("\nbf.f");
+						if (verbose) xil_printf("\nFlash memory not blank. Number of Bytes: 0x%0.8x", Failed_Address);
+					}
+					Error_Code = Failed_Address;
+					Current_Status = STATUS_BIST_STARTED_IDLE;
+				break;
+
+				case 0x33: // Get Flash ID
+					Current_Status = STATUS_TEST_RUNNING;
+					MessageTrap("\nmi.r");
+
+					Failed_Address = Manufact_ID (XPAR_QUAD_SPI_IF_0_BASEADDR);
+
+					if (Failed_Address == 0x20BA18)
+					{
+						Error_Code = Failed_Address;
+						Current_Result = STATUS_TEST_PASSED;
+						MessageTrap("\nmi.p");
+						if (verbose) xil_printf("\nIDCODE: %x", Failed_Address);
+					}
+					else
+					{
+						Error_Code = 0xFFFFFFFF;
+						Current_Result = STATUS_TEST_FAILED;
+						MessageTrap("\nmi.f");
+						if (verbose) xil_printf("\nFlash memory is not present");
+					}
+					Current_Status = STATUS_BIST_STARTED_IDLE;
+				break;
+
+				case 0xDD: // Set Flash Mode to Single
+					Current_Status = STATUS_TEST_RUNNING;
+					MessageTrap("\nsm0.r");
+					Write_Volatile_Enhanced_Configuration_Register (XPAR_QUAD_SPI_IF_0_BASEADDR, 4, 0x00, 0xFF);
+					Write_Volatile_Enhanced_Configuration_Register (XPAR_QUAD_SPI_IF_0_BASEADDR, 4, 0x01, 0xFF);
+					Write_Volatile_Enhanced_Configuration_Register (XPAR_QUAD_SPI_IF_0_BASEADDR, 4, 0x02, 0xFF);
+					Current_Result = STATUS_TEST_PASSED;
+					MessageTrap("\nsm0.p");
+					Current_Status = STATUS_BIST_STARTED_IDLE;
+				break;
+
+				case 0xEE: // Set Flash Mode to Dual
+					Current_Status = STATUS_TEST_RUNNING;
+					MessageTrap("\nsm2.r");
+					Write_Volatile_Enhanced_Configuration_Register (XPAR_QUAD_SPI_IF_0_BASEADDR, 4, 0x00, 0xBF);
+					Write_Volatile_Enhanced_Configuration_Register (XPAR_QUAD_SPI_IF_0_BASEADDR, 4, 0x01, 0xBF);
+					Write_Volatile_Enhanced_Configuration_Register (XPAR_QUAD_SPI_IF_0_BASEADDR, 4, 0x02, 0xBF);
+					Current_Result = STATUS_TEST_PASSED;
+					MessageTrap("\nsm2.p");
+					Current_Status = STATUS_BIST_STARTED_IDLE;
+				break;
+
+				case 0xFF: // Set Flash Mode to Quad
+					Current_Status = STATUS_TEST_RUNNING;
+					MessageTrap("\nsm4.r");
+					Write_Volatile_Enhanced_Configuration_Register (XPAR_QUAD_SPI_IF_0_BASEADDR, 4, 0x00, 0x7F);
+					Write_Volatile_Enhanced_Configuration_Register (XPAR_QUAD_SPI_IF_0_BASEADDR, 4, 0x01, 0x7F);
+					Write_Volatile_Enhanced_Configuration_Register (XPAR_QUAD_SPI_IF_0_BASEADDR, 4, 0x02, 0x7F);
+					Current_Result = STATUS_TEST_PASSED;
+					MessageTrap("\nsm4.p");
+					Current_Status = STATUS_BIST_STARTED_IDLE;
+				break;
+
+				case 0x43: // Erase Flash Sector
+					Current_Status = STATUS_TEST_RUNNING;
+					MessageTrap("\nse.r");
+
+					Flash_Starting_Addr = (flash_addr_2 << 16) | (flash_addr_1 << 8) | flash_addr_0;
+
+					if (Flash_Starting_Addr <= 0x1FFFFFF)
+					{
+						Failed_Address = Erase_Sector (XPAR_QUAD_SPI_IF_0_BASEADDR, Flash_Starting_Addr);
+
+						if (Failed_Address == 0xFFFFFFFF)
+						{
+							Current_Result = STATUS_TEST_FAILED;
+							MessageTrap("\nse.f");
+							if (verbose) xil_printf("\nFlash memory is not present");
+							Error_Code = 0xFFFFFFFF;
+						}
+						else if (Failed_Address == 0x00)
+						{
+							Current_Result = STATUS_TEST_PASSED;
+							MessageTrap("\nse.p");
+							if (verbose) xil_printf("\nFlash sector erased successfully");
+							Error_Code = 0x00;
+						}
+						else
+						{
+							Current_Result = STATUS_TEST_FAILED;
+							MessageTrap("\nse.f");
+							if (verbose) xil_printf("\nFlash sector erase error. Flag Status Register: 0x%x", (Failed_Address & 0x000000FF));
+							Error_Code = (Failed_Address & 0x000000FF);
+						}
+					}
+					else
+					{
+						Current_Result = STATUS_TEST_FAILED;
+						MessageTrap("\nse.f");
+						if (verbose) xil_printf("\nError, Flash starting address 0x%x is larger than 0x1FFFFFF", Flash_Starting_Addr);
+						Error_Code = 0xFFFFFFFE;
+					}
+					Current_Status = STATUS_BIST_STARTED_IDLE;
+				break;
+
+				case 0x53: // Erase entire Flash
+					Current_Status = STATUS_TEST_RUNNING;
+					MessageTrap("\nef.r");
+
+					Failed_Address = Erase_Entire_Memory (XPAR_QUAD_SPI_IF_0_BASEADDR);
+
+					if (Failed_Address == 0xFFFFFFFF)
+					{
+						Current_Result = STATUS_TEST_FAILED;
+						MessageTrap("\nef.f");
+						if (verbose) xil_printf("\nFlash memory is not present");
+						Error_Code = 0xFFFFFFFF;
+					}
+					else if (Failed_Address == 0x00)
+					{
+						Current_Result = STATUS_TEST_PASSED;
+						MessageTrap("\nef.p");
+						if (verbose) xil_printf("\nFlash erased successfully");
+						Error_Code = 0x00;
+					}
+					else
+					{
+						Current_Result = STATUS_TEST_FAILED;
+						MessageTrap("\nef.f");
+						if (verbose) xil_printf("\nFlash erase error. Flag Status Register: 0x%x", (Failed_Address & 0x000000FF));
+						Error_Code = (Failed_Address & 0x000000FF);
+					}
+
+					Current_Status = STATUS_BIST_STARTED_IDLE;
+				break;
+
+				case 0x63: // Clear Flag Status Register
+					Current_Status = STATUS_TEST_RUNNING;
+					MessageTrap("\ncf.r");
+					Clear_Flags (XPAR_QUAD_SPI_IF_0_BASEADDR);
+					Current_Result = STATUS_TEST_PASSED;
+					MessageTrap("\ncf.p");
+					Current_Status = STATUS_BIST_STARTED_IDLE;
+				break;
+
+				case 0x73: // Read Status Register ##############################################
+					Current_Status = STATUS_TEST_RUNNING;
+					Read_Status_Register (XPAR_QUAD_SPI_IF_0_BASEADDR, 2, 2, 1, &DataRead);
+					Current_Result = STATUS_TEST_PASSED;
+					xil_printf("\nStatus Register: 0x%x", &DataRead);
+					Current_Status = STATUS_BIST_STARTED_IDLE;
+				break; // #######################################################################
+
+			default:
+				Current_Status = STATUS_UNRECOGNIZED_COMMAND;
+			break;
+			}
+	    }
+		//check if command was received from the UART
+		if ((Current_Status == STATUS_BIST_STARTED_IDLE)
+			    && (!(Bist_Started_EPP)))
+	   	{
+	   		 Current_UART_Command = Command_Received();
+	   		 if (Current_UART_Command)
+	   		 {
+	   		  	Current_Command = Current_UART_Command;
+				Current_Status = STATUS_COMMAND_RECEIVED;
+	   		 }
+	   	}
+	  }
+
+
+
+//    cleanup_platform();
+
+    return 0;
+}
+
+/*******************************************************************************************
+ *
+ ******************************************************************************************/
+
+void MessageTrap(char* UART_Msg)
+{
+
+ xil_printf(UART_Msg);
+
+}
+
+
+void uart_scan()
+{
+	uart_msg[0]=uart_msg[1];
+	uart_msg[1] = XUartNs550_RecvByte(XPAR_XPS_UART16550_0_BASEADDR);
+}
+
+
+unsigned int Command_check()
+{
+//check if a valid command was received
+	unsigned int command_num;
+//returns the number of the test to run
+//0  - no new command received
+//0x06  - Ethernet test, command received is "eh"
+//0x07 -  USB host and device test, command received is "us"
+//0x08 - PS2 open test, command received is "po"
+//0x09 - PS2 short test, command received is "ps"
+//0x0b - enable verbose mode, command received is "vb"
+//0x016 - Ethernet Auto negotiate, command received is "en"
+//0x18 - Pmod Connector open test, command received is "mo"
+//0x19 - Pmod Connector short test, command received is "ms"
+//0x1a - UART 2 loopback test, command received is "u2"
+//0x28 - VHDCI open test, command received is "vo"
+//0x29 - VHDCI short test, command received is "vs"
+
+
+   command_num=0;
+   if      (!(strcmp(uart_msg, "dr"))) command_num = 0x02;
+   else if (!(strcmp(uart_msg, "sf"))) command_num = 0x03;
+   else if (!(strcmp(uart_msg, "ho1"))) command_num = 0x19;
+   else if (!(strcmp(uart_msg, "ho2"))) command_num = 0x29;
+   else if (!(strcmp(uart_msg, "hs"))) command_num = 0x1A;
+   else if (!(strcmp(uart_msg, "vb"))) command_num = 0x0B;
+   else if (!(strcmp(uart_msg, "pf"))) command_num = 0x0C;
+   else if (!(strcmp(uart_msg, "ds"))) command_num = 0x0D;
+   else if (!(strcmp(uart_msg, "bs"))) command_num = 0x13;
+   else if (!(strcmp(uart_msg, "bf"))) command_num = 0x23;
+   else if (!(strcmp(uart_msg, "mi"))) command_num = 0x33;
+   else if (!(strcmp(uart_msg, "se"))) command_num = 0x43;
+   else if (!(strcmp(uart_msg, "ef"))) command_num = 0x53;
+
+   return command_num;
+}
+
+
+unsigned int Command_Received()
+{
+	unsigned int command_num=0;
+
+	if ((XIo_In32(XPAR_XPS_UART16550_0_BASEADDR + 0x08) & 0x01))
+	{
+		uart_msg[0]=uart_msg[1];
+		uart_msg[1]=XIo_In32(XPAR_XPS_UART16550_0_BASEADDR);
+		command_num=Command_check();
+	}
+	return command_num;
+}
+
+
+void usb_epp_interrupt_handler (void * baseaddr_p)
+{
+
+Xuint32 Usb_epp_data;
+Xuint32 Usb_epp_address;
+Xuint32 Usb_epp_status;
+u8 DATA;
+
+
+	Usb_epp_status = XIo_In32(XPAR_D_USB_EPP_DSTM_0_BASEADDR + EPP_STATUS_REG_OFFSET);
+
+	if (Usb_epp_status & (1 << EPP_STATUS_READ_REQUESTED))
+	{
+		Usb_epp_address = XIo_In32 (XPAR_D_USB_EPP_DSTM_0_BASEADDR + EPP_ADDRESS_REG_OFFSET);
+
+		if ((Current_Status == STATUS_DATA_SEND_MODE)
+			&& (Usb_epp_address == DATA_RECEIVE_REG))
+		{
+			Fast_Read (XPAR_QUAD_SPI_IF_0_BASEADDR, 2, Cur_Mode, 2, (Flash_Starting_Addr + Count_bytes), 1, 10, &DATA);
+			//Usb_epp_data = XIo_In8(XPAR_MCB_DDR2_MPMC_BASEADDR + Count_bytes);
+			Usb_epp_data = DATA;
+			Count_bytes++;
+			Error_Code = Count_bytes;
+		}
+		else
+		{
+			switch (Usb_epp_address)
+			{
+			case D_USB_EPP_COMMAND_REG: Usb_epp_data = Current_Command;
+			break;
+			case D_USB_EPP_STATUS_REG: Usb_epp_data = Current_Status;
+			break;
+			case D_USB_EPP_RESULT_REG: Usb_epp_data = Current_Result;
+			break;
+			case D_USB_EPP_SWITCH_REG: Usb_epp_data = XIo_In32 (XPAR_DIP_SWITCHES_8BITS_BASEADDR);
+			break;
+			case D_USB_EPP_BUTTON_REG: Usb_epp_data = XIo_In32 (XPAR_PUSH_BUTTONS_5BITS_BASEADDR);
+			break;
+			case D_USB_EPP_ERROR_REG_0: Usb_epp_data = Error_Code & 0x000000FF;
+			break;
+			case D_USB_EPP_ERROR_REG_1: Usb_epp_data = (Error_Code >> 8) & 0x000000FF;
+			break;
+			case D_USB_EPP_ERROR_REG_2: Usb_epp_data = (Error_Code >> 16) & 0x000000FF;
+			break;
+			case D_USB_EPP_ERROR_REG_3: Usb_epp_data = (Error_Code >> 24) & 0x000000FF;
+			break;
+			case FLASH_ADDRESS_REG_0: Usb_epp_data = flash_addr_0;
+			break;
+			case FLASH_ADDRESS_REG_1: Usb_epp_data = flash_addr_1;
+			break;
+			case FLASH_ADDRESS_REG_2: Usb_epp_data = flash_addr_2;
+			break;
+			case DATA_SIZE_REG_0: Usb_epp_data = data_size_0;
+			break;
+			case DATA_SIZE_REG_1: Usb_epp_data = data_size_1;
+			break;
+			case DATA_SIZE_REG_2: Usb_epp_data = data_size_2;
+			break;
+			case DATA_SIZE_REG_3: Usb_epp_data = data_size_3;
+			break;
+			case DATA_RECEIVE_REG: Usb_epp_data = current_byte;
+			break;
+			}
+		}
+
+		//acknowledge the interrupt by setting the address from the status to the address register, then writing into the specified address
+		XIo_Out32(XPAR_D_USB_EPP_DSTM_0_BASEADDR + EPP_DATA_REG_OFFSET, Usb_epp_data);
+
+	}
+	else if (Usb_epp_status & (1 << EPP_STATUS_WRITE_PERFORMED))
+	{
+		Usb_epp_address = XIo_In32 (XPAR_D_USB_EPP_DSTM_0_BASEADDR + EPP_ADDRESS_REG_OFFSET);
+		//acknowledge the interrupt by reading from the current address
+		Usb_epp_data = XIo_In32(XPAR_D_USB_EPP_DSTM_0_BASEADDR + EPP_DATA_REG_OFFSET);
+
+		if ((Current_Status == STATUS_DATA_RECEIVE_MODE)
+			&& (Usb_epp_address == DATA_RECEIVE_REG))
+		//write the data in the memory
+		{
+			current_byte = Usb_epp_data & 0x000000FF;
+			//XIo_Out8(XPAR_MCB_DDR2_MPMC_BASEADDR + Count_bytes, current_byte);
+			//Count_bytes++;
+			//Count_bytes = 0;
+								//n = 1;
+
+								// Check initial mode (so that Flash excepts multi-line commands)
+								//Cur_Mode = Check_Initial_Mode (XPAR_QUAD_SPI_IF_0_BASEADDR);
+								//if (verbose) xil_printf("\nCurrent mode: %d", Cur_Mode);
+
+								// read from ddram + write to flash
+								//for (m = 0; m <= (Data_Size + Small_Page); m++)
+								//{
+			data_read[n-1] = current_byte;//XIo_In8 (XPAR_MCB_DDR2_MPMC_BASEADDR + m);
+
+			if (Count_bytes != Data_Size)
+			{
+				if (n == 256)
+				{
+					Error_Code = Page_Program (XPAR_QUAD_SPI_IF_0_BASEADDR, 2, Cur_Mode, 2,
+							(Flash_Starting_Addr + Count_bytes), n, data_read);
+					Count_bytes = Count_bytes + n;
+					n = 0;
+				}
+			}
+			else if (Small_Page)
+			{
+				if (n == Small_Page)
+				{
+					Error_Code = Page_Program (XPAR_QUAD_SPI_IF_0_BASEADDR, 2, Cur_Mode, 2,
+							(Flash_Starting_Addr + Count_bytes), n, data_read);
+					Count_bytes = Count_bytes + n;
+					n = 0;
+				}
+			}
+			n++;
+		}
+		else if (((Current_Status == STATUS_BIST_STARTED_IDLE)
+			     || (Current_Status == STATUS_UNRECOGNIZED_COMMAND))
+				 && (Usb_epp_address == D_USB_EPP_COMMAND_REG))
+		{
+			Current_Command = Usb_epp_data;
+			Current_Status = STATUS_COMMAND_RECEIVED;
+
+			//write status into the status register
+		}
+		else if ((Current_Status == STATUS_BIST_NOT_STARTED_IDLE) && (Usb_epp_address == D_USB_EPP_COMMAND_REG)
+			&& (Usb_epp_data == 0x01))
+		{
+			Current_Command = Usb_epp_data;
+			Current_Status = STATUS_BIST_STARTED_IDLE;
+			Bist_Started_EPP = 1;
+		}
+		else
+		{
+			switch (Usb_epp_address)
+			{
+				case FLASH_ADDRESS_REG_0: flash_addr_0 = Usb_epp_data;
+				break;
+				case FLASH_ADDRESS_REG_1: flash_addr_1 = Usb_epp_data;
+				break;
+				case FLASH_ADDRESS_REG_2: flash_addr_2 = Usb_epp_data;
+				break;
+				case DATA_SIZE_REG_0: data_size_0 = Usb_epp_data;
+				break;
+				case DATA_SIZE_REG_1: data_size_1 = Usb_epp_data;
+				break;
+				case DATA_SIZE_REG_2: data_size_2 = Usb_epp_data;
+				break;
+				case DATA_SIZE_REG_3: data_size_3 = Usb_epp_data;
+				break;
+//				case DATA_RECEIVE_REG: current_byte = Usb_epp_data;
+//				break;
+			}
+		}
+
+	}
+
+	Usb_epp_status = XIo_In32(D_USB_BASEADDR + EPP_STATUS_REG_OFFSET);
+}
+
+

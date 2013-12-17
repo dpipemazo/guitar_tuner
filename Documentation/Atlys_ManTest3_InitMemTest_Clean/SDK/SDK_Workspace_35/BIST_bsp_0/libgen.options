@@ -1,0 +1,5 @@
+#
+#Tue Sep 21 19:26:54 EEST 2010
+PROCESSOR=microblaze_0
+REPOSITORIES=
+HWSPEC=../BIST_platform_0/system.xml

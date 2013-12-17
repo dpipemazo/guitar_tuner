@@ -1,0 +1,15 @@
+##############################################################################
+## Filename:          D:\Digilent\Projects\Atlys\Atlys_12_2_RevC_BIST/drivers/d_usb_epp_dstm_v1_00_a/data/d_usb_epp_dstm_v2_1_0.mdd
+## Description:       Microprocessor Driver Definition
+## Date:              Mon Sep 06 18:09:03 2010 (by Create and Import Peripheral Wizard)
+##############################################################################
+
+OPTION psf_version = 2.1.0;
+
+BEGIN DRIVER d_usb_epp_dstm
+
+  OPTION supported_peripherals = (d_usb_epp_dstm);
+  OPTION depends = (common_v1_00_a);
+  OPTION copyfiles = all;
+
+END DRIVER

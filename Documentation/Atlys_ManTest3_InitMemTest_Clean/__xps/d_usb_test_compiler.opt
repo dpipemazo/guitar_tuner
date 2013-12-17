@@ -1,0 +1,22 @@
+microblaze_0
+D_USB_TEST_SOURCES = D_Usb_Test/src/d_usb.c D_Usb_Test/src/sleep.c 
+D_USB_TEST_HEADERS = D_Usb_Test/src/d_usb.h D_Usb_Test/src/sleep.h 
+D_USB_TEST_CC = mb-gcc
+D_USB_TEST_CC_SIZE = mb-size
+D_USB_TEST_CC_OPT = -O0
+D_USB_TEST_CFLAGS = 
+D_USB_TEST_CC_SEARCH = # -B
+D_USB_TEST_LIBPATH = -L./microblaze_0/lib/ # -L
+D_USB_TEST_INCLUDES = -I./microblaze_0/include/  -ID_Usb_Test/src/ # -I
+D_USB_TEST_LFLAGS = # -l
+D_USB_TEST_LINKER_SCRIPT = D_Usb_Test/D_Usb_Test_linker_script.ld
+D_USB_TEST_CC_DEBUG_FLAG =  -g 
+D_USB_TEST_CC_PROFILE_FLAG = # -pg
+D_USB_TEST_CC_GLOBPTR_FLAG= # -mxl-gp-opt
+D_USB_TEST_MODE = executable
+D_USB_TEST_LIBG_OPT = -$(D_USB_TEST_MODE) microblaze_0
+D_USB_TEST_CC_INFERRED_FLAGS= -mno-xl-soft-mul -mxl-pattern-compare -mcpu=v7.30.b 
+D_USB_TEST_CC_START_ADDR_FLAG=  #  # -Wl,-defsym -Wl,_TEXT_START_ADDR=
+D_USB_TEST_CC_STACK_SIZE_FLAG=  #  # -Wl,-defsym -Wl,_STACK_SIZE=
+D_USB_TEST_CC_HEAP_SIZE_FLAG=  #  # -Wl,-defsym -Wl,_HEAP_SIZE=
+                  $(D_USB_TEST_CC_INFERRED_FLAGS)  \

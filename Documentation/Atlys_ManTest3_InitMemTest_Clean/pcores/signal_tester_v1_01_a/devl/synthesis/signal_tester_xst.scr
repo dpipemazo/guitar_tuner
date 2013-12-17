@@ -1,0 +1,12 @@
+run
+-opt_level 2
+-opt_mode speed
+-ifmt mixed
+-ifn "E:\Atlys\Atlys_BIST\Atlys_12_2_RevC_BIST\pcores\signal_tester_v1_01_a\devl\synthesis\signal_tester_xst.prj"
+-top signal_tester
+-p virtex5
+-ofn "E:\Atlys\Atlys_BIST\Atlys_12_2_RevC_BIST\pcores\signal_tester_v1_01_a\devl\synthesis\signal_tester_xst.ngc"
+-iobuf NO
+-rtlview YES
+-hierarchy_separator /
+-work_lib signal_tester_v1_01_a

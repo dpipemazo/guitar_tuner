@@ -1,0 +1,4 @@
+vhdl work "../../hdl/vhdl/frequency_meter.vhd"
+vhdl work "../../hdl/vhdl/signal_tester_core.vhd"
+vhdl proc_common_v3_00_a "D:/Xilinx/12.2/ISE_DS/EDK/hw/XilinxProcessorIPLib/pcores/proc_common_v3_00_a/hdl/vhdl/proc_common_pkg.vhd"
+vhdl signal_tester_v1_01_a "../../hdl/vhdl/user_logic.vhd"

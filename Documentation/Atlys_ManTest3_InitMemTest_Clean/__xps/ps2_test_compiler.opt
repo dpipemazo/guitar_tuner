@@ -1,0 +1,22 @@
+microblaze_0
+PS2_TEST_SOURCES = PS2_Test/src/PS2_Test.c PS2_Test/src/sleep.c 
+PS2_TEST_HEADERS = PS2_Test/src/sleep.h 
+PS2_TEST_CC = mb-gcc
+PS2_TEST_CC_SIZE = mb-size
+PS2_TEST_CC_OPT = -O2
+PS2_TEST_CFLAGS = 
+PS2_TEST_CC_SEARCH = # -B
+PS2_TEST_LIBPATH = -L./microblaze_0/lib/ # -L
+PS2_TEST_INCLUDES = -I./microblaze_0/include/  -IPS2_Test/src/ # -I
+PS2_TEST_LFLAGS = # -l
+PS2_TEST_LINKER_SCRIPT = PS2_Test/PS2_Test_linker_script.ld
+PS2_TEST_CC_DEBUG_FLAG =  -g 
+PS2_TEST_CC_PROFILE_FLAG = # -pg
+PS2_TEST_CC_GLOBPTR_FLAG= # -mxl-gp-opt
+PS2_TEST_MODE = executable
+PS2_TEST_LIBG_OPT = -$(PS2_TEST_MODE) microblaze_0
+PS2_TEST_CC_INFERRED_FLAGS= -mno-xl-soft-mul -mxl-pattern-compare -mcpu=v7.30.b 
+PS2_TEST_CC_START_ADDR_FLAG=  #  # -Wl,-defsym -Wl,_TEXT_START_ADDR=
+PS2_TEST_CC_STACK_SIZE_FLAG=  #  # -Wl,-defsym -Wl,_STACK_SIZE=
+PS2_TEST_CC_HEAP_SIZE_FLAG=  #  # -Wl,-defsym -Wl,_HEAP_SIZE=
+                  $(PS2_TEST_CC_INFERRED_FLAGS)  \
