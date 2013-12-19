@@ -58,6 +58,18 @@ architecture TB_ARCHITECTURE of new_auto_tb is
 	--Signal used to stop clock signal generators. should always be FALSE
     signal  END_SIM  :  BOOLEAN := FALSE;
 
+    --
+    -- OPCODE TYPE DEFINITION ENUM
+    --
+    type string_tests is(
+        STRING_E2,
+        STRING_A,
+        STRING_D,
+        STRING_B,
+        STRING_G,
+        STRING_E4
+    );
+
 begin
 
 	-- Declare the unit under test
@@ -75,43 +87,23 @@ begin
 	-- Make the system clock
 	make_clock: process
 	begin
-        -- this process generates a 20 ns period, 50% duty cycle clock
-
-        -- only generate clock while still have stimulus vectors
-
+        -- this process generates a 10 ns period, 50% duty cycle clock, 
+        -- which is equivalent to the clock which we will have in our system. 
         if END_SIM = FALSE then
             test_clock <= '1';
-            wait for 10 ns;
+            wait for 5 ns;
         else
             wait;
         end if;
 
         if END_SIM = FALSE then
             test_clock <= '0';
-            wait for 10 ns;
+            wait for 5 ns;
         else
             wait;
         end if;
-
     end process;    -- end of clock process
 
-    -- Make a quarter-sample sine wave
-    make_sin: process
-    begin
-
-    	-- Make a 255-sample periodic sample and check it.
-
-    	test_sample <= "01";
-    	wait for 80 ns;
-
-    	for i in 1 to 253 loop
-	    	test_sample <= "00";
-	    	wait for 80 ns;
-	    end loop;
-
-    	test_sample <= "11";
-    	wait for 80 ns;
-    end process;
 
     --
     -- Actually test the autocorrelation unit
@@ -119,34 +111,115 @@ begin
     do_test: process
 
     	-- Define variables here
+    	variable sin_val : real;
+    	variable freq : real;
+    	variable time_count : real;
+    	variable sin_val : real;
 
     begin
 
-    	-- Need to initialize all of our signals
+	    -- Loop forever
+	    while (END_SIM = FALSE) loop
 
-    	-- Sample at 1/4 the rate of our system clock, so set 
-    	--	the divided to 4
-    	test_clk_div <= "00000000000100";
+	    	-- Loop over all of the strings
+	    	for curr_string in string_tests loop
 
-    	-- Set reset high for a bit to initialize everything
-    	test_reset <= '1';
+	    		--
+	    		-- Map out the variables based on the frequency
+	    		--
+	    		if (curr_string = STRING_E2) then
+	    			test_clk_div <= std_logic_vector(9480, test_clk_div'length);
+	    			freq := 82.41;
 
-    	-- Wait for a bit to let it reset
-    	wait for 250 ns;
+	    		elsif (curr_string = STRING_A) then
+	    			test_clk_div <= std_logic_vector(7102, test_clk_div'length);
+	    			freq := 110.0;
 
-    	-- Now, assert reset low and just visually inspect the results for now
-    	test_reset <= '0';
+	    		elsif (curr_string = STRING_D) then
+	    			test_clk_div <= std_logic_vector(5322, test_clk_div'length);
+	    			freq := 146.8;
 
-    	while (test_done /= '1') loop
-    		wait for 10 ns;
-    	end loop;
+	    		elsif (curr_string = STRING_G) then
+	    			test_clk_div <= std_logic_vector(3986, test_clk_div'length);
+	    			freq := 196.0;
 
-    	wait for 1000 ns;
+	    		elsif (curr_string = STRING_B) then
+	    			test_clk_div <= std_logic_vector(3164, test_clk_div'length);
+	    			freq := 246.9;
 
-    	-- At this point, it should be done, so take a look at what we have
-    end process;
+	    		elsif (curr_string = STRING_E4) then
+	    			test_clk_div <= std_logic_vector(2370, test_clk_div'length);
+	    			freq := 329.6;
+
+	    		else 
+	    			test_clk_div <= std_logic_vector(0, test_clk_div'length);
+	    			freq := 0;
+	    		end if;
+
+	    		-- Assert the reset for a few clocks to clear everything
+	    		test_reset <= '1';
+
+	    		wait for 50 ns;
+
+	    		-- Initialize reset and the time count;
+	    		test_reset <= '0';
+	    		time_count := 0;
+
+	    		-- Generate samples at the desired frequency until it is done
+	    		while (test_done =/ '1') loop
+
+	    			sin_val = sin(2*MATH_2_PI*time_count*freq);
+	    			if (sin_val > 0.8) then
+	    				test_sample <= "10";
+	    			elsif (sin_val < -0.8) then
+	    				test_sample <= "11";
+	    			else
+	    				test_sample <= "00";
+	    			end if;
+
+	    			-- Increment the time count and wait for 10 ns
+	    			time_count := time_count + 0.00000001;
+	    			wait for 10 ns;
+
+	    		end loop;
+
+	    		-- Now, the done signal should be high. So assert that the bin was 128
+	    		assert(to_integer(test_max_idx) = 128) report "Did not correctly detect frequency";
+
+	    	end loop;
+
+	    end loop;
+
+	end process;
 
 end architecture;
+
+
+--     	-- Need to initialize all of our signals
+
+--     	-- Sample at 1/4 the rate of our system clock, so set 
+--     	--	the divided to 4
+--     	test_clk_div <= "00000000000100";
+
+--     	-- Set reset high for a bit to initialize everything
+--     	test_reset <= '1';
+
+--     	-- Wait for a bit to let it reset
+--     	wait for 250 ns;
+
+--     	-- Now, assert reset low and just visually inspect the results for now
+--     	test_reset <= '0';
+
+--     	while (test_done /= '1') loop
+--     		wait for 10 ns;
+--     	end loop;
+
+--     	wait for 1000 ns;
+
+--     	-- At this point, it should be done, so take a look at what we have
+--     end process;
+
+-- end architecture;
 
 
 
