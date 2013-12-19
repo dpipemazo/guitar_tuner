@@ -175,7 +175,7 @@ begin
 		end if;
 	end process;
 
-end behavioral;
+end architecture;
 
 
 --
@@ -203,12 +203,9 @@ entity AUTOCORRELATE is
 													--	and up to be detected. Assumes
 													--	system clock is 100MHz.
 		sample  : in std_logic_vector(1 downto 0);	-- sample input
-		go 		: in std_logic;						-- assert to '1' in order
-													--	to begin sampling and 
-													-- autocorrelation process
-													-- MUST BE ASSERTED UNTIL DONE
-													--	SIGNAL IS NONZERO AND THEN
-													--	DEASSERTED
+		reset   : in std_logic;						-- active high. System will run
+													--  as long as this is low, else
+													--	will stay in a reset state, 
 
 		-- Output
 		max_idx : out std_logic_vector(7 downto 0); -- Index of sample which 
@@ -254,9 +251,9 @@ architecture behavioral of AUTOCORRELATE is
 	-- Counter for the system. Measures out the 512 sample clock
 	--	cycle which the system runs on. It is a 10-bit counter
 	--	so that the top bit can be the "done" signal
-	signal samp_counter : std_logic_vector(10 downto 0);
+	signal samp_counter : std_logic_vector(9 downto 0);
 	-- Mux result for the counter
-	signal samp_counter_mux : std_logic_vector(10 downto 0); 
+	signal samp_counter_mux : std_logic_vector(9 downto 0); 
 
 	-- Declare our sample clock as a clock
 	signal sample_clock : std_logic;
@@ -291,6 +288,33 @@ architecture behavioral of AUTOCORRELATE is
 	signal hamming_7s : hamming_7;
 	signal final_hamming : std_logic_vector(8 downto 0);
 
+	-- Signals for computing the maximum autocorrelation value and storing
+	--	its index
+	signal max_idx_mux 		: std_logic_vector(7 downto 0);
+	signal max_idx_val		: std_logic_vector(7 downto 0);
+	signal max_auto_mux		: std_logic_vector(8 downto 0);
+	signal max_auto_val 	: std_logic_vector(8 downto 0);	
+	signal new_max			: std_logic;
+
+	-- The SINGLE_AUTO component
+	component SINGLE_AUTO
+		port(
+			-- Inputs
+			clock		: in std_logic;						-- sample clock
+			sample_in 	: in std_logic_vector(1 downto 0);	-- new sample data
+			op_in	 	: in std_logic;						-- If low, then 
+															--	put sample_in into
+															--	both registers, else
+															--	only register 2
+			-- Outputs
+			sample_out  : out std_logic_vector(1 downto 0); -- current sample data
+			auto_out	: out std_logic;					-- Autocorrelation result
+			op_out		: out std_logic						-- Same as op_in. Pass
+															--	directly through, do 
+															--	not latch.
+		);
+	end component;
+
 begin
 
 	--
@@ -301,49 +325,26 @@ begin
 
 	-- First, need to do the logic for the go and done signals.
 	--	The "done" signal is the top bit of the system counter, 
-	--	which will be set after 512 system clocks have been executed
-	done <= counter(10);
+	--	which will be set after 512 system clocks have been executed, and will remain asserted
+	--	for a single sample cycle.
+	done <= samp_counter(9);
 
-	-- Now, when the "go" signal is given, we need to set the counter to 
-	--	0. If the done signal is not set, we need to increment the counter, 
-	--	And if done signal is set and the "go" signal is not given, then
-	--	the counter should stick.
-	samp_counter_mux <= 	(others => '0') when (go) 				else
-							counter 		when (samp_counter(10)) else
-							std_logic_vector(unsigned(samp_counter) + 1);
+	-- Reset the counter when we either reach the maximum count or 
+	--	our run signal is high
+	samp_counter_mux <= (others => '0') when (samp_counter(9) or reset) else
+						std_logic_vector(unsigned(samp_counter) + 1);
 
 	-- Incremented cock counter value. This needs to be broken out since we will
 	--	be using it to wrap around the divider value.
 	clk_counter_inc <= std_logic_vector(unsigned(clk_counter) + 1);
 	-- If the current counter + 1 == the divider, need to wrap around, else just increment
 	--	the counter
-	clk_counter_mux <= 	(others => '0') when std_match(clk_counter_inc, clk_div) else
+	clk_counter_mux <= 	(others => '0') when (std_match(clk_counter_inc, clk_div) or reset) else
 						clk_counter_inc;
 	-- Create the sample clock. High for a single system clock pulse when 
 	--	the clock counter is 0, else low.
-	sample_clock_mux <= '1' when std_match(clk_counter, (others => '0')) else
+	sample_clock_mux <= '1' when ( std_match(clk_counter, (others => '0')) and not reset ) else
 						'0';
-
-	-- Generate the sample clock and update the clock counter
-	MakeSampleClock : process(clock)
-
-		if (rising_edge(clock)) then
-			-- Latch the muxes
-			clk_counter <= clk_counter_mux;
-			sample_clock <= sample_clock_mux;
-		end if;
-
-	end process MakeSampleClock;
-
-	-- Increment the sample counter based off of the sample clock
-	UpdateSampleCounter : process(sample_clock)
-
-		if (rising_edge(sample_clock)) then
-			-- Latch the muxes
-			samp_counter <= samp_counter_mux;
-		end if;
-
-	end process UpdateSampleCounter;
 
 	--
 	---
@@ -381,11 +382,103 @@ begin
 
 	-- NOTE: sample_array(512) and ops(512) will not be connected to anything.
 	--	They don't matter, since once a sample gets shifted out, we are done with
-	--	it and the operation is just a feedthrough. Now, we need to put together
+	--	it and the operation is just a feedthrough.
+
+	--  Now, we need to put together
 	--	the hamming weight adder for the autos. Do this with a bunch of 
 	--	for-generate adders.
+	genham1s: for i in 0 to 127 generate
+	begin
+		hamming1s(i) <= std_logic_vector(("0" & unsigned(autos(2*i))) + ("0" & unsigned(autos(2*i + 1))));
+	end generate genham1s;
 
+	genham2s: for i in 0 to 63 generate
+	begin
+		hamming2s(i) <= std_logic_vector(("0" & unsigned(hamming1s(2*i))) + ("0" & unsigned(hamming1s(2*i + 1))));
+	end generate genham2s;
 
+	genham3s: for i in 0 to 31 generate
+	begin
+		hamming3s(i) <= std_logic_vector(("0" & unsigned(hamming2s(2*i))) + ("0" & unsigned(hamming2s(2*i + 1))));
+	end generate genham3s;
+
+	genham4s: for i in 0 to 15 generate
+	begin
+		hamming4s(i) <= std_logic_vector(("0" & unsigned(hamming3s(2*i))) + ("0" & unsigned(hamming3s(2*i + 1))));
+	end generate genham4s;
+
+	genham5s: for i in 0 to 7 generate
+	begin
+		hamming5s(i) <= std_logic_vector(("0" & unsigned(hamming4s(2*i))) + ("0" & unsigned(hamming4s(2*i + 1))));
+	end generate genham5s;
+
+	genham6s: for i in 0 to 3 generate
+	begin
+		hamming6s(i) <= std_logic_vector(("0" & unsigned(hamming5s(2*i))) + ("0" & unsigned(hamming5s(2*i + 1))));
+	end generate genham6s;
+
+	genham7s: for i in 0 to 1 generate
+	begin
+		hamming7s(i) <= std_logic_vector(("0" & unsigned(hamming6s(2*i))) + ("0" & unsigned(hamming6s(2*i + 1))));
+	end generate genham7s;
+
+	-- Put together the final adder, and then we have our value!
+	final_hamming <= std_logic_vector(unsigned(hamming7s(0)) + unsigned(hamming7s(1)));
+
+	--
+	---
+	---- MAXIMUM ITERATION LOGIC
+	---
+	--
+
+	-- Here, we need to compare the current value of final_hamming to the 
+	--	known maximum. If the current value is greater, then it becomes the
+	--	maximum and max_idx is set to the current value of the sample clock.
+	new_max <= 	'1' when (unsigned(final_hamming) > unsigned(max_auto_val)) else
+				'0';
+
+	-- Want max_auto to be 0 when not in the final 256 clocks, 
+	max_auto_mux <= final_hamming 	when (new_max and samp_counter(8)) else
+					max_auto_val	when (samp_counter(8) or samp_counter(9)) else
+					(others => '0');
+
+	max_idx_mux <= 	samp_counter(7 downto 0) 	when (new_max and samp_counter(8)) else
+					max_idx_val 				when (samp_counter(8) or samp_counter(9)) else
+					(others => '0');
+
+	-- Now, output the maximum index 
+	max_idx <= max_idx_val;	
+
+	--
+	---
+	---- DFFs
+	---
+	--
+
+	-- Generate the sample clock and update the clock counter
+	MakeSampleClock : process(clock)
+
+		if (rising_edge(clock)) then
+			-- Latch the muxes
+			clk_counter 	<= clk_counter_mux;
+			sample_clock 	<= sample_clock_mux;
+		end if;
+
+	end process MakeSampleClock;
+
+	-- Increment the sample counter based off of the sample clock
+	UpdateSampleCounter : process(sample_clock)
+
+		if (rising_edge(sample_clock)) then
+			-- Latch the muxes
+			samp_counter 	<= samp_counter_mux;
+			max_idx_val 	<= max_idx_mux;
+			max_auto_val 	<= max_auto_mux;
+		end if;
+
+	end process UpdateSampleCounter;
+
+end architecture;
 
 
 
