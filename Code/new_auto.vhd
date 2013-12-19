@@ -342,7 +342,8 @@ begin
 	--	The "done" signal is the top bit of the system counter, 
 	--	which will be set after 512 system clocks have been executed, and will remain asserted
 	--	until the sample counter is reset
-	done_val <= (unsigned(samp_counter) > unsigned("1000000000"));
+	done_val <= 	'1' when (unsigned(samp_counter) > unsigned("1000000000")) else
+					'0';
 	done <= done_val;
 
 	-- Increment the sample counter as long as reset is not high.
