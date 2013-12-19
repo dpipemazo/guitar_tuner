@@ -36,7 +36,7 @@ architecture TB_ARCHITECTURE of new_auto_tb is
 														--	will stay in a reset state, 
 
 			-- Output
-			max_idx : out std_logic_vector(7 downto 0); -- Index of sample which 
+			max_idx : out std_logic_vector(8 downto 0); -- Index of sample which 
 														-- had maximum autocorrelation
 														-- value. Frequency is then
 														-- equal to the sampling
