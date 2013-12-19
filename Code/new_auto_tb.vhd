@@ -153,8 +153,8 @@ begin
     		end if;
 
     		-- Calculate freq_lo and freq_hi
-    		freq_lo := 0.996*freq;
-    		freq_hi := 1.004*freq;
+    		freq_lo := 0.995*freq;
+    		freq_hi := 1.005*freq;
 
     		-- Assert the reset for a few clocks to clear everything
     		test_reset <= '1';
