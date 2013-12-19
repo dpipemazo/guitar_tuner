@@ -450,7 +450,7 @@ begin
 	-- Here, we need to compare the current value of final_hamming to the 
 	--	known maximum. If the current value is greater, then it becomes the
 	--	maximum and max_idx is set to the current value of the sample clock.
-	new_max <= 	'1' when ((unsigned(final_hamming) > unsigned(max_auto_val)) else
+	new_max <= 	'1' when (unsigned(final_hamming) > unsigned(max_auto_val)) else
 				'0';
 
 	valid_auto <= '1' when ((samp_counter(8) = '1') and not std_match(samp_counter(7 downto 0), "00000000")) else
