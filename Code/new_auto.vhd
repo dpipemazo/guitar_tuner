@@ -457,6 +457,7 @@ begin
 
 	-- Generate the sample clock and update the clock counter
 	MakeSampleClock : process(clock)
+	begin
 
 		if (rising_edge(clock)) then
 			-- Latch the muxes
@@ -468,6 +469,7 @@ begin
 
 	-- Increment the sample counter based off of the sample clock
 	UpdateSampleCounter : process(sample_clock)
+	begin
 
 		if (rising_edge(sample_clock)) then
 			-- Latch the muxes
