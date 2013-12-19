@@ -95,6 +95,20 @@ begin
 
     end process;    -- end of clock process
 
+    -- Make a quarter-sample sine wave
+    make_sin: process
+    begin
+
+    	test_sampe <= "01";
+    	wait for 80 ns;
+    	test_sample <= "00";
+    	wait for 80 ns;
+    	test_sample <= "11";
+    	wait for 80 ns;
+    	test_sample <= "00";
+    	wait for 80 ns;
+    end process;
+
     --
     -- Actually test the autocorrelation unit
     --
@@ -109,8 +123,7 @@ begin
     	-- Sample at 1/4 the rate of our system clock, so set 
     	--	the divided to 4
     	test_clk_div <= "00000000000100";
-    	-- For now, just give it 1s on the sample to see how it behaves
-    	test_sample <= "11";
+
     	-- Set reset high for a bit to initialize everything
     	test_reset <= '1';
 
