@@ -437,7 +437,7 @@ begin
 	end generate genham7s;
 
 	-- Put together the final adder, and then we have our value!
-	final_hamming <= std_logic_vector(unsigned(hamming_7s(0)(7 downto 0)) + unsigned(hamming_7s(1)(7 downto 0)));
+	final_hamming <= std_logic_vector(("0" & unsigned(hamming_7s(0))) + ("0" & unsigned(hamming_7s(1))));
 
 	--
 	---
