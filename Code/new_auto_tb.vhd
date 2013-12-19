@@ -166,9 +166,11 @@ begin
 	    		time_count := 0;
 
 	    		-- Generate samples at the desired frequency until it is done
-	    		while (test_done =/ '1') loop
+	    		while (test_done /= '1') loop
 
-	    			sin_val = sin(2*MATH_2_PI*time_count*freq);
+	    			-- Calculate the sine.
+	    			sin_val := sin(2*MATH_2_PI*time_count*freq);
+
 	    			if (sin_val > 0.8) then
 	    				test_sample <= "10";
 	    			elsif (sin_val < -0.8) then
