@@ -186,7 +186,7 @@ end architecture;
 ----
 ---
 --
---
+--: 
 
 --
 -- Declare the I/O
@@ -266,9 +266,9 @@ architecture behavioral of AUTOCORRELATE is
 
 	-- Signals to link together the autocorrelation units
 	type sample_array 	is array(512 downto 0) of std_logic_vector(1 downto 0);
-	signal samples 		is sample_array;
-	signal ops 			is std_logic_vector(512 downto 0);
-	signal autos 		is std_logic_vector(511 downto 0);
+	signal samples 		: sample_array;
+	signal ops 			: std_logic_vector(512 downto 0);
+	signal autos 		: std_logic_vector(511 downto 0);
 
 	-- Signals to do the hamming weight addition
 	type hamming_1 is array(127 downto 0) 	of std_logic_vector(1 downto 0);
