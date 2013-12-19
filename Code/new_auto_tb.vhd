@@ -1,5 +1,10 @@
 --
--- This is the test bench for the autocorrelation unit for the guitar tuner
+-- This is the test bench for the autocorrelation unit for the guitar tuner.
+--	If tests each string's predicted frequency as well as the upper and 
+--	lower limits of the tolerance for each string to ensure that they are
+--	detected correctly. The simulations are performed in "real time", 
+--	so they do take a while, but use the same values as will be used 
+--	in the real system. 
 --
 
 library ieee;
