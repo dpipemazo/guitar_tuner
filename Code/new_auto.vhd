@@ -160,6 +160,9 @@ begin
 	auto_out 	<=  '1' when (std_match(register_1, register_2)) else
 					'0';
 
+	-- Always output register 2 as the sample output
+	sample_out <= register_2;
+
 	-- Finally, DFF the registers on the rising edge of the clock
 	doDFF	: process(clock)
 	begin
@@ -170,8 +173,6 @@ begin
 			register_1 <= reg_1_mux;
 			-- Always put the input sample in register 2
 			register_2 <= sample_in;
-			-- Always output register 2 as the sample output
-			sample_out <= register_2;
 		end if;
 	end process;
 
