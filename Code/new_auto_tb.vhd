@@ -49,7 +49,7 @@ architecture TB_ARCHITECTURE of new_auto_tb is
 
 	-- Signals to map to I/) of the component
 	signal test_clock 		: std_logic;
-	signal test_clk_div 	: std_logic;
+	signal test_clk_div 	: std_logic_vector(13 downto 0);
 	signal test_sample 		: std_logic_vector(1 downto 0);
 	signal test_reset 		: std_logic;
 	signal test_max_idx 	: std_logic_vector(7 downto 0);

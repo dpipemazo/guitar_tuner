@@ -400,6 +400,8 @@ begin
 	--	for-generate adders.
 	genham1s: for i in 0 to 127 generate
 	begin
+		-- Couldn't figure out how to to a single add of bits, so just do it myself without the 
+		--	need for an adder. 
 		hamming_1s(i)(0) <= autos(2*i) xor autos(2*i + 1);
 		hamming_1s(i)(1) <= autos(2*i) and autos(2*i + 1);
 	end generate genham1s;
