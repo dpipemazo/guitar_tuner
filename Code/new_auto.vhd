@@ -369,7 +369,7 @@ begin
 	samples(0) 	<= sample;
 	-- Set the operation equal to bit 9 of the counter. Bit 9 will be
 	--	high after 256 iterations, and will stay high until reset. 
-	ops(0) 		<= samp_counter(9);
+	ops(0) 		<= samp_counter(8);
 
 	-- First, string together autocorrelation units
 	genautos: for i in 0 to 255 generate 
