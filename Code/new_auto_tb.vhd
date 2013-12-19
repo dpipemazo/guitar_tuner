@@ -115,7 +115,7 @@ begin
     	test_reset <= '1';
 
     	-- Wait for a bit to let it reset
-    	wait for 20 ns;
+    	wait for 250 ns;
 
     	-- Now, assert reset low and just visually inspect the results for now
     	test_reset <= '0';
