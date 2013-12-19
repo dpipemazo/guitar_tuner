@@ -308,6 +308,9 @@ architecture behavioral of AUTOCORRELATE is
 	signal new_max			: std_logic;
 	signal valid_auto		: std_logic;
 
+	-- Signal to see if we are done so that we can stick all of the outputs
+	signal done_val 		: std_logic;
+
 	-- The SINGLE_AUTO component
 	component SINGLE_AUTO
 		port(
