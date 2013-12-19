@@ -93,7 +93,7 @@ begin
             wait;
         end if;
 
-    end process make_clock;    -- end of clock process
+    end process;    -- end of clock process
 
     --
     -- Actually test the autocorrelation unit
@@ -120,13 +120,13 @@ begin
     	-- Now, assert reset low and just visually inspect the results for now
     	test_reset <= '0';
 
-    	while (test_done = '0')
+    	while (test_done = '0') loop
     		wait for 10 ns;
     	end loop;
 
     	-- At this point, it should be done, so take a look at what we have
-    end do_test;
-    
+    end process;
+
 end architecture;
 
 
