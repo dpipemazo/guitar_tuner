@@ -306,6 +306,7 @@ architecture behavioral of AUTOCORRELATE is
 	signal max_auto_mux		: std_logic_vector(8 downto 0);
 	signal max_auto_val 	: std_logic_vector(8 downto 0);	
 	signal new_max			: std_logic;
+	signal valid_auto		: std_logic;
 
 	-- The SINGLE_AUTO component
 	component SINGLE_AUTO
@@ -449,16 +450,20 @@ begin
 	-- Here, we need to compare the current value of final_hamming to the 
 	--	known maximum. If the current value is greater, then it becomes the
 	--	maximum and max_idx is set to the current value of the sample clock.
-	new_max <= 	'1' when (unsigned(final_hamming) > unsigned(max_auto_val)) else
+	new_max <= 	'1' when ((unsigned(final_hamming) > unsigned(max_auto_val)) else
 				'0';
 
+	valid_auto <= '1' when ((samp_counter(8) = '1') and not std_match(samp_counter(7 downto 0), "00000000")) else
+				  '0';
+				  
+
 	-- Want max_auto to be 0 when not in the final 256 clocks, 
-	max_auto_mux <= final_hamming 	when ((new_max = '1') and (samp_counter(8) = '1')) else
-					max_auto_val	when ((samp_counter(8) = '1') or (samp_counter(9) = '1')) else
+	max_auto_mux <= final_hamming 	when ((new_max = '1') and (valid_auto = '1')) else
+					max_auto_val	when ((valid_auto = '1') or (samp_counter(9) = '1')) else
 					(others => '0');
 
-	max_idx_mux <= 	samp_counter(7 downto 0) 	when ((new_max = '1') and (samp_counter(8) = '1')) else
-					max_idx_val 				when ((samp_counter(8) = '1') or (samp_counter(9) = '1')) else
+	max_idx_mux <= 	samp_counter(7 downto 0) 	when ((new_max = '1') and (valid_auto = '1')) else
+					max_idx_val 				when ((valid_auto = '1') or (samp_counter(9) = '1')) else
 					(others => '0');
 
 	-- Now, output the maximum index 
