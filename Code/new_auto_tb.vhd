@@ -107,6 +107,8 @@ begin
     	wait for 80 ns;
     	test_sample <= "00";
     	wait for 80 ns;
+    	test_sample <= "00";
+    	wait for 80 ns;
     end process;
 
     --
