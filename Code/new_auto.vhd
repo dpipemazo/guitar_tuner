@@ -310,6 +310,7 @@ architecture behavioral of AUTOCORRELATE is
 
 	-- Signal to see if we are done so that we can stick all of the outputs
 	signal done_val 		: std_logic;
+	signal zeroes 			: std_logic;
 
 	-- The SINGLE_AUTO component
 	component SINGLE_AUTO
@@ -457,7 +458,9 @@ begin
 	new_max <= 	'1' when (unsigned(final_hamming) > unsigned(max_auto_val)) else
 				'0';
 
-	valid_auto <= '1' when ((samp_counter(8) = '1') and not std_match(samp_counter(7 downto 0), "00000000")) else
+	samp_zeroes <= std_match(samp_counter(7 downto 0), "00000000");
+	valid_auto <= '1' when (((samp_counter(8) = '1') and (not samp_zeroes)) or 
+							((samp_counter(9) = '1') and samp_zeroes)) else
 				  '0';
 				  
 
