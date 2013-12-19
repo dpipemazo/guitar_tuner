@@ -128,7 +128,7 @@ begin
 	    		--
 	    		if (curr_string = STRING_E2) then
 	    			test_clk_div <= std_logic_vector(to_unsigned(9480, test_clk_div'length));
-	    			freq := 83.0;
+	    			freq := 82.41;
 
 	    		elsif (curr_string = STRING_A) then
 	    			test_clk_div <= std_logic_vector(to_unsigned(7102, test_clk_div'length));
