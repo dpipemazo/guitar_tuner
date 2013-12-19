@@ -139,6 +139,8 @@ begin
     		wait for 10 ns;
     	end loop;
 
+    	wait for 100 ns;
+
     	-- At this point, it should be done, so take a look at what we have
     end process;
 
