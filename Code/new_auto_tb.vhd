@@ -112,115 +112,145 @@ begin
 
     	-- Define variables here
     	variable sin_val : real;
-    	variable freq : real;
+    	variable freq, freq_lo, freq_hi : real;
     	variable time_count : real;
 
     begin
 
-	    -- Loop forever
-	    while (END_SIM = FALSE) loop
+    	-- Loop over all of the strings
+    	for curr_string in string_tests loop
 
-	    	-- Loop over all of the strings
-	    	for curr_string in string_tests loop
+    		--
+    		-- Map out the variables based on the frequency
+    		--
+    		if (curr_string = STRING_E2) then
+    			test_clk_div <= std_logic_vector(to_unsigned(9480, test_clk_div'length));
+    			freq := 82.41;
 
-	    		--
-	    		-- Map out the variables based on the frequency
-	    		--
-	    		if (curr_string = STRING_E2) then
-	    			test_clk_div <= std_logic_vector(to_unsigned(9480, test_clk_div'length));
-	    			freq := 82.41;
+    		elsif (curr_string = STRING_A) then
+    			test_clk_div <= std_logic_vector(to_unsigned(7102, test_clk_div'length));
+    			freq := 110.0;
 
-	    		elsif (curr_string = STRING_A) then
-	    			test_clk_div <= std_logic_vector(to_unsigned(7102, test_clk_div'length));
-	    			freq := 110.0;
+    		elsif (curr_string = STRING_D) then
+    			test_clk_div <= std_logic_vector(to_unsigned(5322, test_clk_div'length));
+    			freq := 146.8;
 
-	    		elsif (curr_string = STRING_D) then
-	    			test_clk_div <= std_logic_vector(to_unsigned(5322, test_clk_div'length));
-	    			freq := 146.8;
+    		elsif (curr_string = STRING_G) then
+    			test_clk_div <= std_logic_vector(to_unsigned(3986, test_clk_div'length));
+    			freq := 196.0;
 
-	    		elsif (curr_string = STRING_G) then
-	    			test_clk_div <= std_logic_vector(to_unsigned(3986, test_clk_div'length));
-	    			freq := 196.0;
+    		elsif (curr_string = STRING_B) then
+    			test_clk_div <= std_logic_vector(to_unsigned(3164, test_clk_div'length));
+    			freq := 246.9;
 
-	    		elsif (curr_string = STRING_B) then
-	    			test_clk_div <= std_logic_vector(to_unsigned(3164, test_clk_div'length));
-	    			freq := 246.9;
+    		elsif (curr_string = STRING_E4) then
+    			test_clk_div <= std_logic_vector(to_unsigned(2370, test_clk_div'length));
+    			freq := 329.6;
 
-	    		elsif (curr_string = STRING_E4) then
-	    			test_clk_div <= std_logic_vector(to_unsigned(2370, test_clk_div'length));
-	    			freq := 329.6;
+    		else 
+    			test_clk_div <= std_logic_vector(to_unsigned(0, test_clk_div'length));
+    			freq := 0.0;
+    		end if;
 
-	    		else 
-	    			test_clk_div <= std_logic_vector(to_unsigned(0, test_clk_div'length));
-	    			freq := 0.0;
-	    		end if;
+    		-- Calculate freq_lo and freq_hi
+    		freq_lo := 0.996*freq;
+    		freq_hi := 1.004*freq;
 
-	    		-- Assert the reset for a few clocks to clear everything
-	    		test_reset <= '1';
+    		-- Assert the reset for a few clocks to clear everything
+    		test_reset <= '1';
+    		wait for 50 ns;
+    		test_reset <= '0';
+    		-- Initialize the time count
+    		time_count := 0.0;
 
-	    		wait for 50 ns;
+    		-- Test the actual frequency
+    		while (test_done /= '1') loop
 
-	    		-- Initialize reset and the time count;
-	    		test_reset <= '0';
-	    		time_count := 0.0;
+    			-- Calculate the sine.
+    			sin_val := sin(MATH_2_PI*time_count*freq);
 
-	    		-- Generate samples at the desired frequency until it is done
-	    		while (test_done /= '1') loop
+    			if (sin_val > 0.8) then
+    				test_sample <= "10";
+    			elsif (sin_val < -0.8) then
+    				test_sample <= "11";
+    			else
+    				test_sample <= "00";
+    			end if;
 
-	    			-- Calculate the sine.
-	    			sin_val := sin(MATH_2_PI*time_count*freq);
+    			-- Increment the time count and wait for 10 ns
+    			time_count := time_count + 0.00000001;
+    			wait for 10 ns;
 
-	    			if (sin_val > 0.8) then
-	    				test_sample <= "10";
-	    			elsif (sin_val < -0.8) then
-	    				test_sample <= "11";
-	    			else
-	    				test_sample <= "00";
-	    			end if;
+    		end loop;
 
-	    			-- Increment the time count and wait for 10 ns
-	    			time_count := time_count + 0.00000001;
-	    			wait for 10 ns;
+    		-- Now, the done signal should be high. So assert that the bin was 128
+    		assert(to_integer(unsigned(test_max_idx)) = 128) report "Did not correctly detect frequency";
 
-	    		end loop;
+    		-- Assert the reset for a few clocks to clear everything
+    		test_reset <= '1';
+    		wait for 50 ns;
+    		test_reset <= '0';
+    		-- Initialize the time count
+    		time_count := 0.0;
 
-	    		-- Now, the done signal should be high. So assert that the bin was 128
-	    		assert(to_integer(unsigned(test_max_idx)) = 128) report "Did not correctly detect frequency";
+    		-- Test the frequency on the low side of the tolerance
+    		while (test_done /= '1') loop
 
-	    	end loop;
+    			-- Calculate the sine.
+    			sin_val := sin(MATH_2_PI*time_count*freq_lo);
 
-	    end loop;
+    			if (sin_val > 0.8) then
+    				test_sample <= "10";
+    			elsif (sin_val < -0.8) then
+    				test_sample <= "11";
+    			else
+    				test_sample <= "00";
+    			end if;
+
+    			-- Increment the time count and wait for 10 ns
+    			time_count := time_count + 0.00000001;
+    			wait for 10 ns;
+
+    		end loop;
+
+    		-- Now, the done signal should be high. So make sure that the bin is not 128
+    		assert(to_integer(unsigned(test_max_idx)) /= 128) report "False positive on low bound";
+
+    		-- Assert the reset for a few clocks to clear everything
+    		test_reset <= '1';
+    		wait for 50 ns;
+    		test_reset <= '0';
+  	    	-- Initialize the time count
+    		time_count := 0.0;
+
+    		-- Test the frequency on the high side of the tolerance
+    		while (test_done /= '1') loop
+
+    			-- Calculate the sine.
+    			sin_val := sin(MATH_2_PI*time_count*freq_hi);
+
+    			if (sin_val > 0.8) then
+    				test_sample <= "10";
+    			elsif (sin_val < -0.8) then
+    				test_sample <= "11";
+    			else
+    				test_sample <= "00";
+    			end if;
+
+    			-- Increment the time count and wait for 10 ns
+    			time_count := time_count + 0.00000001;
+    			wait for 10 ns;
+
+    		end loop;
+
+    		-- Now, the done signal should be high. So make sure that the bin is not 128
+    		assert(to_integer(unsigned(test_max_idx)) /= 128) report "False positive on high bound";
+
+    	end loop;
 
 	end process;
 
 end architecture;
-
-
---     	-- Need to initialize all of our signals
-
---     	-- Sample at 1/4 the rate of our system clock, so set 
---     	--	the divided to 4
---     	test_clk_div <= "00000000000100";
-
---     	-- Set reset high for a bit to initialize everything
---     	test_reset <= '1';
-
---     	-- Wait for a bit to let it reset
---     	wait for 250 ns;
-
---     	-- Now, assert reset low and just visually inspect the results for now
---     	test_reset <= '0';
-
---     	while (test_done /= '1') loop
---     		wait for 10 ns;
---     	end loop;
-
---     	wait for 1000 ns;
-
---     	-- At this point, it should be done, so take a look at what we have
---     end process;
-
--- end architecture;
 
 
 
