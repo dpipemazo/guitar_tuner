@@ -152,7 +152,7 @@ begin
 	op_out 		<= op_in;
 
 	-- Mux the inputs to the internal registers
-	reg_1_mux 	<= 	sample_in when (not op_in) else
+	reg_1_mux 	<= 	sample_in when (op_in = '0') else
 					register_1;
 
 	-- Calculate the output. Output a "1" if the two registers
@@ -186,7 +186,15 @@ end architecture;
 ----
 ---
 --
---: 
+--
+
+--
+-- Libraries
+--
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.std_logic_misc.all;
+use ieee.numeric_std.all; 
 
 --
 -- Declare the I/O
