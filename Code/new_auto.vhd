@@ -400,7 +400,8 @@ begin
 	--	for-generate adders.
 	genham1s: for i in 0 to 127 generate
 	begin
-		hamming_1s(i) <= std_logic_vector(("0" & unsigned(std_logic_vector(autos(2*i)))) + ("0" & unsigned(std_logic_vector(autos(2*i + 1)))));
+		hamming_1s(i)(0) <= autos(2*i) xor autos(2*i + 1);
+		hamming_1s(i)(1) <= autos(2*i) and autos(2*i + 1);
 	end generate genham1s;
 
 	genham2s: for i in 0 to 63 generate
