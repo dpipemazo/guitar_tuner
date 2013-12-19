@@ -217,11 +217,12 @@ entity AUTOCORRELATE is
 													--	will stay in a reset state, 
 
 		-- Output
-		max_idx : out std_logic_vector(7 downto 0); -- Index of sample which 
+		max_idx : out std_logic_vector(8 downto 0); -- Index of sample which 
 													-- had maximum autocorrelation
 													-- value. Frequency is then
 													-- equal to the sampling
 													-- frequency divided by this value.
+													-- Range 1 - 256
 		done	: out std_logic						-- Signal which indicates that
 													--	autocorrelation and sampling 
 													-- is complete and that the data
@@ -301,8 +302,8 @@ architecture behavioral of AUTOCORRELATE is
 
 	-- Signals for computing the maximum autocorrelation value and storing
 	--	its index
-	signal max_idx_mux 		: std_logic_vector(7 downto 0);
-	signal max_idx_val		: std_logic_vector(7 downto 0);
+	signal max_idx_mux 		: std_logic_vector(8 downto 0);
+	signal max_idx_val		: std_logic_vector(8 downto 0);
 	signal max_auto_mux		: std_logic_vector(8 downto 0);
 	signal max_auto_val 	: std_logic_vector(8 downto 0);	
 	signal new_max			: std_logic;
@@ -470,7 +471,7 @@ begin
 					max_auto_val	when ((valid_auto = '1') or (done_val = '1')) else
 					(others => '0');
 
-	max_idx_mux <= 	samp_counter(7 downto 0) 	when ((new_max = '1') and (valid_auto = '1')) else
+	max_idx_mux <= 	samp_counter(8 downto 0) 	when ((new_max = '1') and (valid_auto = '1')) else
 					max_idx_val 				when ((valid_auto = '1') or (done_val = '1')) else
 					(others => '0');
 
