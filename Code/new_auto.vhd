@@ -266,6 +266,8 @@ architecture behavioral of AUTOCORRELATE is
 	-- Declare our sample clock as a clock
 	signal sample_clock : std_logic;
 	signal sample_clock_mux : std_logic;
+	-- Declare the buffer_type itself
+   	attribute buffer_type : string;
 	attribute buffer_type of sample_clock : signal is "BUFG";
 	-- Counter for our sample clock
 	signal clk_counter 		: std_logic_vector(13 downto 0);
@@ -339,7 +341,7 @@ begin
 
 	-- Reset the counter when we either reach the maximum count or 
 	--	our run signal is high
-	samp_counter_mux <= (others => '0') when (samp_counter(9) or reset) else
+	samp_counter_mux <= (others => '0') when ((samp_counter(9) = '1') or (reset = '1')) else
 						std_logic_vector(unsigned(samp_counter) + 1);
 
 	-- Incremented cock counter value. This needs to be broken out since we will
@@ -347,11 +349,11 @@ begin
 	clk_counter_inc <= std_logic_vector(unsigned(clk_counter) + 1);
 	-- If the current counter + 1 == the divider, need to wrap around, else just increment
 	--	the counter
-	clk_counter_mux <= 	(others => '0') when (std_match(clk_counter_inc, clk_div) or reset) else
+	clk_counter_mux <= 	(others => '0') when (std_match(clk_counter_inc, clk_div) or (reset = '1')) else
 						clk_counter_inc;
 	-- Create the sample clock. High for a single system clock pulse when 
 	--	the clock counter is 0, else low.
-	sample_clock_mux <= '1' when ( std_match(clk_counter, (others => '0')) and not reset ) else
+	sample_clock_mux <= '1' when ( std_match(clk_counter, (others => '0')) and (reset = '0') ) else
 						'0';
 
 	--
@@ -363,7 +365,7 @@ begin
 	-- Connect the inputs to the main unit to the autocorrelation
 	--	units. Make the input samples to the main unit the input samples
 	--	to the array of units. 
-	sample_array(0) 	<= sample;
+	sample_array(0) 	<= sample_in;
 	-- Set the operation equal to bit 9 of the counter. Bit 9 will be
 	--	high after 256 iterations, and will stay high until reset. 
 	ops(0) 				<= samp_counter(9);
@@ -371,16 +373,17 @@ begin
 	-- First, string together autocorrelation units
 	genautos: for i in 0 to 511 generate 
 	begin
-		autox: entity SINGLE_AUTO(behavioral)
+
+		autox: SINGLE_AUTO
 			port map(
 
 				-- Input
 				clock 		=> sample_clock,
-				sample_in 	=> sample_array(i),
+				sample_in 	=> samples(i),
 				op_in 		=> ops(i),
 
 				-- Output
-				sample_out 	=> sample_array(i + 1),
+				sample_out 	=> samples(i + 1),
 				op_out		=> ops(i + 1),
 				auto_out 	=> autos(i)
 
@@ -397,41 +400,41 @@ begin
 	--	for-generate adders.
 	genham1s: for i in 0 to 127 generate
 	begin
-		hamming1s(i) <= std_logic_vector(("0" & unsigned(autos(2*i))) + ("0" & unsigned(autos(2*i + 1))));
+		hamming_1s(i) <= std_logic_vector(("0" & unsigned(autos(2*i))) + ("0" & unsigned(autos(2*i + 1))));
 	end generate genham1s;
 
 	genham2s: for i in 0 to 63 generate
 	begin
-		hamming2s(i) <= std_logic_vector(("0" & unsigned(hamming1s(2*i))) + ("0" & unsigned(hamming1s(2*i + 1))));
+		hamming_2s(i) <= std_logic_vector(("0" & unsigned(hamming_1s(2*i))) + ("0" & unsigned(hamming_1s(2*i + 1))));
 	end generate genham2s;
 
 	genham3s: for i in 0 to 31 generate
 	begin
-		hamming3s(i) <= std_logic_vector(("0" & unsigned(hamming2s(2*i))) + ("0" & unsigned(hamming2s(2*i + 1))));
+		hamming_3s(i) <= std_logic_vector(("0" & unsigned(hamming_2s(2*i))) + ("0" & unsigned(hamming_2s(2*i + 1))));
 	end generate genham3s;
 
 	genham4s: for i in 0 to 15 generate
 	begin
-		hamming4s(i) <= std_logic_vector(("0" & unsigned(hamming3s(2*i))) + ("0" & unsigned(hamming3s(2*i + 1))));
+		hamming_4s(i) <= std_logic_vector(("0" & unsigned(hamming_3s(2*i))) + ("0" & unsigned(hamming_3s(2*i + 1))));
 	end generate genham4s;
 
 	genham5s: for i in 0 to 7 generate
 	begin
-		hamming5s(i) <= std_logic_vector(("0" & unsigned(hamming4s(2*i))) + ("0" & unsigned(hamming4s(2*i + 1))));
+		hamming_5s(i) <= std_logic_vector(("0" & unsigned(hamming_4s(2*i))) + ("0" & unsigned(hamming_4s(2*i + 1))));
 	end generate genham5s;
 
 	genham6s: for i in 0 to 3 generate
 	begin
-		hamming6s(i) <= std_logic_vector(("0" & unsigned(hamming5s(2*i))) + ("0" & unsigned(hamming5s(2*i + 1))));
+		hamming_6s(i) <= std_logic_vector(("0" & unsigned(hamming_5s(2*i))) + ("0" & unsigned(hamming_5s(2*i + 1))));
 	end generate genham6s;
 
 	genham7s: for i in 0 to 1 generate
 	begin
-		hamming7s(i) <= std_logic_vector(("0" & unsigned(hamming6s(2*i))) + ("0" & unsigned(hamming6s(2*i + 1))));
+		hamming_7s(i) <= std_logic_vector(("0" & unsigned(hamming_6s(2*i))) + ("0" & unsigned(hamming_6s(2*i + 1))));
 	end generate genham7s;
 
 	-- Put together the final adder, and then we have our value!
-	final_hamming <= std_logic_vector(unsigned(hamming7s(0)) + unsigned(hamming7s(1)));
+	final_hamming <= std_logic_vector(unsigned(hamming_7s(0)) + unsigned(hamming_7s(1)));
 
 	--
 	---
