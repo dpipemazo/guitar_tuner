@@ -276,10 +276,10 @@ architecture behavioral of AUTOCORRELATE is
 	signal clk_counter_inc  : std_logic_vector(13 downto 0);
 
 	-- Signals to link together the autocorrelation units
-	type sample_array 	is array(512 downto 0) of std_logic_vector(1 downto 0);
+	type sample_array 	is array(256 downto 0) of std_logic_vector(1 downto 0);
 	signal samples 		: sample_array;
-	signal ops 			: std_logic_vector(512 downto 0);
-	signal autos 		: std_logic_vector(511 downto 0);
+	signal ops 			: std_logic_vector(256 downto 0);
+	signal autos 		: std_logic_vector(255 downto 0);
 
 	-- Signals to do the hamming weight addition
 	type hamming_1 is array(127 downto 0) 	of std_logic_vector(1 downto 0);
@@ -372,7 +372,7 @@ begin
 	ops(0) 		<= samp_counter(9);
 
 	-- First, string together autocorrelation units
-	genautos: for i in 0 to 511 generate 
+	genautos: for i in 0 to 255 generate 
 	begin
 
 		autox: SINGLE_AUTO
