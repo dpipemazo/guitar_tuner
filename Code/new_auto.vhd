@@ -365,10 +365,10 @@ begin
 	-- Connect the inputs to the main unit to the autocorrelation
 	--	units. Make the input samples to the main unit the input samples
 	--	to the array of units. 
-	sample_array(0) 	<= sample_in;
+	samples(0) 	<= sample_in;
 	-- Set the operation equal to bit 9 of the counter. Bit 9 will be
 	--	high after 256 iterations, and will stay high until reset. 
-	ops(0) 				<= samp_counter(9);
+	ops(0) 		<= samp_counter(9);
 
 	-- First, string together autocorrelation units
 	genautos: for i in 0 to 511 generate 
@@ -400,7 +400,7 @@ begin
 	--	for-generate adders.
 	genham1s: for i in 0 to 127 generate
 	begin
-		hamming_1s(i) <= std_logic_vector(("0" & unsigned(autos(2*i))) + ("0" & unsigned(autos(2*i + 1))));
+		hamming_1s(i) <= std_logic_vector(unsigned("0" & autos(2*i)) + unsigned("0" & autos(2*i + 1)));
 	end generate genham1s;
 
 	genham2s: for i in 0 to 63 generate
@@ -449,12 +449,12 @@ begin
 				'0';
 
 	-- Want max_auto to be 0 when not in the final 256 clocks, 
-	max_auto_mux <= final_hamming 	when (new_max and samp_counter(8)) else
-					max_auto_val	when (samp_counter(8) or samp_counter(9)) else
+	max_auto_mux <= final_hamming 	when ((new_max = '1') and (samp_counter(8) = '1')) else
+					max_auto_val	when ((samp_counter(8) = '1') or (samp_counter(9) = '1')) else
 					(others => '0');
 
-	max_idx_mux <= 	samp_counter(7 downto 0) 	when (new_max and samp_counter(8)) else
-					max_idx_val 				when (samp_counter(8) or samp_counter(9)) else
+	max_idx_mux <= 	samp_counter(7 downto 0) 	when ((new_max = '1') and (samp_counter(8) = '1')) else
+					max_idx_val 				when ((samp_counter(8) = '1') or (samp_counter(9) = '1')) else
 					(others => '0');
 
 	-- Now, output the maximum index 
