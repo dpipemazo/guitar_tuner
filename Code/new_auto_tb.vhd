@@ -99,15 +99,17 @@ begin
     make_sin: process
     begin
 
+    	-- Make a 256-sample periodic sample and check it.
+
     	test_sample <= "01";
     	wait for 80 ns;
-    	test_sample <= "00";
-    	wait for 80 ns;
+
+    	for i in 1 to 254 loop
+	    	test_sample <= "00";
+	    	wait for 80 ns;
+	    end loop;
+
     	test_sample <= "11";
-    	wait for 80 ns;
-    	test_sample <= "00";
-    	wait for 80 ns;
-    	test_sample <= "00";
     	wait for 80 ns;
     end process;
 
@@ -139,7 +141,7 @@ begin
     		wait for 10 ns;
     	end loop;
 
-    	wait for 100 ns;
+    	wait for 1000 ns;
 
     	-- At this point, it should be done, so take a look at what we have
     end process;

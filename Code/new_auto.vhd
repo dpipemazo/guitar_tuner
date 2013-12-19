@@ -338,12 +338,12 @@ begin
 	-- First, need to do the logic for the go and done signals.
 	--	The "done" signal is the top bit of the system counter, 
 	--	which will be set after 512 system clocks have been executed, and will remain asserted
-	--	for a single sample cycle.
-	done <= samp_counter(9);
+	--	until the sample counter is reset
+	done_val <= (unsigned(samp_counter) > unsigned("1000000000"));
+	done <= done_val;
 
-	-- Reset the counter when we either reach the maximum count or 
-	--	our run signal is high
-	samp_counter_mux <= (others => '0') when ((samp_counter(9) = '1') or (reset = '1')) else
+	-- Increment the sample counter as long as reset is not high.
+	samp_counter_mux <= (others => '0') when (reset = '1') else
 						std_logic_vector(unsigned(samp_counter) + 1);
 
 	-- Incremented cock counter value. This needs to be broken out since we will
@@ -355,7 +355,7 @@ begin
 						clk_counter_inc;
 	-- Create the sample clock. High for a single system clock pulse when 
 	--	the clock counter is 0, else low.
-	sample_clock_mux <= '1' when std_match(clk_counter, "00000000000000") else
+	sample_clock_mux <= '1' when (std_match(clk_counter, "00000000000000") and (done_val /= '1')) else
 						'0';
 
 	--
@@ -459,11 +459,11 @@ begin
 
 	-- Want max_auto to be 0 when not in the final 256 clocks, 
 	max_auto_mux <= final_hamming 	when ((new_max = '1') and (valid_auto = '1')) else
-					max_auto_val	when ((valid_auto = '1') or (samp_counter(9) = '1')) else
+					max_auto_val	when ((valid_auto = '1') or (done_val = '1')) else
 					(others => '0');
 
 	max_idx_mux <= 	samp_counter(7 downto 0) 	when ((new_max = '1') and (valid_auto = '1')) else
-					max_idx_val 				when ((valid_auto = '1') or (samp_counter(9) = '1')) else
+					max_idx_val 				when ((valid_auto = '1') or (done_val = '1')) else
 					(others => '0');
 
 	-- Now, output the maximum index 
