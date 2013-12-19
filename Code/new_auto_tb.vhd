@@ -114,7 +114,6 @@ begin
     	variable sin_val : real;
     	variable freq : real;
     	variable time_count : real;
-    	variable sin_val : real;
 
     begin
 
@@ -128,27 +127,27 @@ begin
 	    		-- Map out the variables based on the frequency
 	    		--
 	    		if (curr_string = STRING_E2) then
-	    			test_clk_div <= std_logic_vector(9480, test_clk_div'length);
+	    			test_clk_div <= std_logic_vector(to_unsigned(9480, test_clk_div'length));
 	    			freq := 82.41;
 
 	    		elsif (curr_string = STRING_A) then
-	    			test_clk_div <= std_logic_vector(7102, test_clk_div'length);
+	    			test_clk_div <= std_logic_vector(to_unsigned(7102, test_clk_div'length));
 	    			freq := 110.0;
 
 	    		elsif (curr_string = STRING_D) then
-	    			test_clk_div <= std_logic_vector(5322, test_clk_div'length);
+	    			test_clk_div <= std_logic_vector(to_unsigned(5322, test_clk_div'length));
 	    			freq := 146.8;
 
 	    		elsif (curr_string = STRING_G) then
-	    			test_clk_div <= std_logic_vector(3986, test_clk_div'length);
+	    			test_clk_div <= std_logic_vector(to_unsigned(3986, test_clk_div'length));
 	    			freq := 196.0;
 
 	    		elsif (curr_string = STRING_B) then
-	    			test_clk_div <= std_logic_vector(3164, test_clk_div'length);
+	    			test_clk_div <= std_logic_vector(to_unsigned(3164, test_clk_div'length));
 	    			freq := 246.9;
 
 	    		elsif (curr_string = STRING_E4) then
-	    			test_clk_div <= std_logic_vector(2370, test_clk_div'length);
+	    			test_clk_div <= std_logic_vector(to_unsigned(2370, test_clk_div'length));
 	    			freq := 329.6;
 
 	    		else 
@@ -163,7 +162,7 @@ begin
 
 	    		-- Initialize reset and the time count;
 	    		test_reset <= '0';
-	    		time_count := 0;
+	    		time_count := 0.0;
 
 	    		-- Generate samples at the desired frequency until it is done
 	    		while (test_done /= '1') loop
@@ -186,7 +185,7 @@ begin
 	    		end loop;
 
 	    		-- Now, the done signal should be high. So assert that the bin was 128
-	    		assert(to_integer(test_max_idx) = 128) report "Did not correctly detect frequency";
+	    		assert(to_integer(unsigned(test_max_idx)) = 128) report "Did not correctly detect frequency";
 
 	    	end loop;
 
