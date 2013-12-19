@@ -36,7 +36,7 @@ architecture TB_ARCHITECTURE of new_auto_tb is
 														--	will stay in a reset state, 
 
 			-- Output
-			max_idx : out std_logic_vector(8 downto 0); -- Index of sample which 
+			max_idx : out std_logic_vector(7 downto 0); -- Index of sample which 
 														-- had maximum autocorrelation
 														-- value. Frequency is then
 														-- equal to the sampling
@@ -52,7 +52,7 @@ architecture TB_ARCHITECTURE of new_auto_tb is
 	signal test_clk_div 	: std_logic_vector(13 downto 0);
 	signal test_sample 		: std_logic_vector(1 downto 0);
 	signal test_reset 		: std_logic;
-	signal test_max_idx 	: std_logic_vector(8 downto 0);
+	signal test_max_idx 	: std_logic_vector(7 downto 0);
 	signal test_done 		: std_logic; 
 
 	--Signal used to stop clock signal generators. should always be FALSE
@@ -99,12 +99,12 @@ begin
     make_sin: process
     begin
 
-    	-- Make a 256-sample periodic sample and check it.
+    	-- Make a 255-sample periodic sample and check it.
 
     	test_sample <= "01";
     	wait for 80 ns;
 
-    	for i in 1 to 254 loop
+    	for i in 1 to 253 loop
 	    	test_sample <= "00";
 	    	wait for 80 ns;
 	    end loop;

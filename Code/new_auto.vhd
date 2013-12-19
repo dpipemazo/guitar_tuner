@@ -217,7 +217,7 @@ entity AUTOCORRELATE is
 													--	will stay in a reset state, 
 
 		-- Output
-		max_idx : out std_logic_vector(8 downto 0); -- Index of sample which 
+		max_idx : out std_logic_vector(7 downto 0); -- Index of sample which 
 													-- had maximum autocorrelation
 													-- value. Frequency is then
 													-- equal to the sampling
@@ -302,16 +302,12 @@ architecture behavioral of AUTOCORRELATE is
 
 	-- Signals for computing the maximum autocorrelation value and storing
 	--	its index
-	signal max_idx_mux 		: std_logic_vector(8 downto 0);
-	signal max_idx_val		: std_logic_vector(8 downto 0);
+	signal max_idx_mux 		: std_logic_vector(7 downto 0);
+	signal max_idx_val		: std_logic_vector(7 downto 0);
 	signal max_auto_mux		: std_logic_vector(8 downto 0);
 	signal max_auto_val 	: std_logic_vector(8 downto 0);	
 	signal new_max			: std_logic;
 	signal valid_auto		: std_logic;
-
-	-- Signal to see if we are done so that we can stick all of the outputs
-	signal done_val 		: std_logic;
-	signal samp_zeroes 		: std_logic;
 
 	-- The SINGLE_AUTO component
 	component SINGLE_AUTO
@@ -343,10 +339,8 @@ begin
 	-- First, need to do the logic for the go and done signals.
 	--	The "done" signal is the top bit of the system counter, 
 	--	which will be set after 512 system clocks have been executed, and will remain asserted
-	--	until the sample counter is reset
-	done_val <= 	'1' when ((samp_counter(9) = '1') and  (not std_match(samp_counter(8 downto 0), "000000000"))) else
-					'0';
-	done <= done_val;
+	--	until the sample counter is reset. 
+	done <= samp_counter(9);
 
 	-- Increment the sample counter as long as reset is not high.
 	samp_counter_mux <= (others => '0') when (reset = '1') else
@@ -361,7 +355,7 @@ begin
 						clk_counter_inc;
 	-- Create the sample clock. High for a single system clock pulse when 
 	--	the clock counter is 0, else low.
-	sample_clock_mux <= '1' when (std_match(clk_counter, "00000000000000") and (done_val /= '1')) else
+	sample_clock_mux <= '1' when std_match(clk_counter, "00000000000000") else
 						'0';
 
 	--
@@ -459,20 +453,17 @@ begin
 	new_max <= 	'1' when (unsigned(final_hamming) > unsigned(max_auto_val)) else
 				'0';
 
-	samp_zeroes <=  '1' when std_match(samp_counter(7 downto 0), "00000000") else
-					'0';
-	valid_auto <= '1' when (((samp_counter(8) = '1') and (samp_zeroes = '0')) or 
-							((samp_counter(9) = '1') and (samp_zeroes = '1'))) else
+	valid_auto <= '1' when (((samp_counter(8) = '1') and (not std_match(samp_counter(7 downto 0), "00000000"))) else
 				  '0';
 				  
 
 	-- Want max_auto to be 0 when not in the final 256 clocks, 
 	max_auto_mux <= final_hamming 	when ((new_max = '1') and (valid_auto = '1')) else
-					max_auto_val	when ((valid_auto = '1') or (done_val = '1')) else
+					max_auto_val	when ((valid_auto = '1') or (samp_counter(9) = '1')) else
 					(others => '0');
 
-	max_idx_mux <= 	samp_counter(8 downto 0) 	when ((new_max = '1') and (valid_auto = '1')) else
-					max_idx_val 				when ((valid_auto = '1') or (done_val = '1')) else
+	max_idx_mux <= 	samp_counter(7 downto 0) 	when ((new_max = '1') and (valid_auto = '1')) else
+					max_idx_val 				when ((valid_auto = '1') or (samp_counter(9) = '1')) else
 					(others => '0');
 
 	-- Now, output the maximum index 
