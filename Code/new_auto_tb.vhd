@@ -120,7 +120,7 @@ begin
     	-- Now, assert reset low and just visually inspect the results for now
     	test_reset <= '0';
 
-    	while (test_done = '0') loop
+    	while (test_done /= '1') loop
     		wait for 10 ns;
     	end loop;
 
