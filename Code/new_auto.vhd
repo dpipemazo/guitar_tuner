@@ -459,8 +459,8 @@ begin
 				'0';
 
 	samp_zeroes <= std_match(samp_counter(7 downto 0), "00000000");
-	valid_auto <= '1' when (((samp_counter(8) = '1') and (not samp_zeroes)) or 
-							((samp_counter(9) = '1') and samp_zeroes)) else
+	valid_auto <= '1' when (((samp_counter(8) = '1') and (samp_zeroes = '0')) or 
+							((samp_counter(9) = '1') and (samp_zeroes = '1')) else
 				  '0';
 				  
 
