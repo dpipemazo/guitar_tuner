@@ -310,7 +310,7 @@ architecture behavioral of AUTOCORRELATE is
 
 	-- Signal to see if we are done so that we can stick all of the outputs
 	signal done_val 		: std_logic;
-	signal zeroes 			: std_logic;
+	signal samp_zeroes 		: std_logic;
 
 	-- The SINGLE_AUTO component
 	component SINGLE_AUTO
