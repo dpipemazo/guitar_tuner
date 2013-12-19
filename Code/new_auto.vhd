@@ -353,7 +353,7 @@ begin
 						clk_counter_inc;
 	-- Create the sample clock. High for a single system clock pulse when 
 	--	the clock counter is 0, else low.
-	sample_clock_mux <= '1' when ( std_match(clk_counter, "00000000000000") and (reset = '0') ) else
+	sample_clock_mux <= '1' when std_match(clk_counter, "00000000000000") else
 						'0';
 
 	--
