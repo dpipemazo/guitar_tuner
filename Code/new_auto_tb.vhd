@@ -99,7 +99,7 @@ begin
     make_sin: process
     begin
 
-    	test_sampe <= "01";
+    	test_sample <= "01";
     	wait for 80 ns;
     	test_sample <= "00";
     	wait for 80 ns;
