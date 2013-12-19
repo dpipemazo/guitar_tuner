@@ -365,7 +365,7 @@ begin
 	-- Connect the inputs to the main unit to the autocorrelation
 	--	units. Make the input samples to the main unit the input samples
 	--	to the array of units. 
-	samples(0) 	<= sample_in;
+	samples(0) 	<= sample;
 	-- Set the operation equal to bit 9 of the counter. Bit 9 will be
 	--	high after 256 iterations, and will stay high until reset. 
 	ops(0) 		<= samp_counter(9);
@@ -400,7 +400,7 @@ begin
 	--	for-generate adders.
 	genham1s: for i in 0 to 127 generate
 	begin
-		hamming_1s(i) <= std_logic_vector(unsigned("0" & autos(2*i)) + unsigned("0" & autos(2*i + 1)));
+		hamming_1s(i) <= std_logic_vector(("0" & unsigned(std_logic_vector(autos(2*i)))) + ("0" & unsigned(std_logic_vector(autos(2*i + 1)))));
 	end generate genham1s;
 
 	genham2s: for i in 0 to 63 generate
