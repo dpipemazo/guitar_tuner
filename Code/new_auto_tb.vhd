@@ -151,8 +151,8 @@ begin
 	    			freq := 329.6;
 
 	    		else 
-	    			test_clk_div <= std_logic_vector(0, test_clk_div'length);
-	    			freq := 0;
+	    			test_clk_div <= std_logic_vector(to_unsigned(0, test_clk_div'length));
+	    			freq := 0.0;
 	    		end if;
 
 	    		-- Assert the reset for a few clocks to clear everything
@@ -168,7 +168,7 @@ begin
 	    		while (test_done /= '1') loop
 
 	    			-- Calculate the sine.
-	    			sin_val := sin(2*MATH_2_PI*time_count*freq);
+	    			sin_val := sin(MATH_2_PI*time_count*freq);
 
 	    			if (sin_val > 0.8) then
 	    				test_sample <= "10";
