@@ -137,7 +137,7 @@ begin
             -- Get a random value on the interval [0,1].
             UNIFORM(seed1, seed2, rand);
             -- Map the random value to [25, 20000]
-            rand_freq := INTEGER(TRUNC(rand1*19975.0)) + 25.0;
+            rand_freq := rand*19975.0 + 25.0;
 
             new_divider := 10;
             old_divider := 0;
@@ -145,7 +145,7 @@ begin
             while (new_divider /= old_divider) loop
 
                 -- Set the divider to the new value
-                test_clk_div <= std_logic_vector(to_unsigned(new_divider), test_clk_div'length);
+                test_clk_div <= std_logic_vector(to_unsigned(new_divider, test_clk_div'length));
 
                 -- Need to reset at beginning of time. 
                 test_reset <= '1';
@@ -191,7 +191,7 @@ begin
             -- Now, the done signal should be high. So assert that the frequency is within
             --  the 0.12% limit
             reported_freq  := 100000000.0/(real(old_divider)*real(to_integer(unsigned(test_max_idx))));
-            assert( abs(1 - (rand_freq/reported_freq)) < 0.0012 ) report "Frequency not detected to 2 cent error bound";
+            assert( abs(1.0 - (rand_freq/reported_freq)) < 0.0012 ) report "Frequency not detected to 2 cent error bound";
 
         end loop;
 
