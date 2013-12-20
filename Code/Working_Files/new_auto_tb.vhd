@@ -139,7 +139,7 @@ begin
             -- Map the random value to [25, 20000]
             rand_freq := rand*19975.0 + 25.0;
 
-            new_divider := 10;
+            new_divider := 5;
             old_divider := 0;
 
             -- Initialize the time to a random time
