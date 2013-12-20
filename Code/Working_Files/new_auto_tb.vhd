@@ -185,7 +185,7 @@ begin
 
                 -- Calculate the new divider
                 if (to_integer(unsigned(test_max_idx)) = 1) then
-                    new_divider := old_divider * 2;
+                    new_divider := old_divider + 1;
                 else
                     new_divider := integer( round( (real(old_divider)*real(to_integer(unsigned(test_max_idx)))/1000.0) ) );
                 end if;
