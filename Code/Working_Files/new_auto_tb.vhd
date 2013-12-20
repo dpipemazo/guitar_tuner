@@ -184,7 +184,7 @@ begin
                 end loop;
 
                 -- Calculate the new divider
-                new_divider = INTEGER( TRUNC( (real(old_divider)*real(to_integer(unsigned(test_max_idx)))/512) ) );
+                new_divider := INTEGER( TRUNC( (real(old_divider)*real(to_integer(unsigned(test_max_idx)))/512) ) );
 
             end loop;
 
