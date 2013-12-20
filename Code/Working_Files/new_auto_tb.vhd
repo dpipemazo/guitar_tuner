@@ -208,8 +208,8 @@ begin
             -- Now, the done signal should be high. So assert that the frequency is within
             --  the 0.12% limit
             reported_freq  := 100000000.0/(real(old_divider)*real(to_integer(unsigned(test_max_idx))));
-            if ( abs(1.0 - (rand_freq/reported_freq)) < 0.0012 ) then
-                assert false report "SUCCESS: Frequency correctly detected to within 2 cents";
+            if ( abs(1.0 - (rand_freq/reported_freq)) < 0.0006 ) then
+                assert false report "SUCCESS: Frequency correctly detected to within 1 cent";
             else
                 assert false report "ERROR: Frequency incorrectly detected";
             end if;
