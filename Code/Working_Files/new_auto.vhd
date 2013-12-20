@@ -205,24 +205,25 @@ entity AUTOCORRELATE is
 	port (
 		-- Inputs
 		clock 	: in std_logic;						-- the system clock, 100MHz. 
-		clk_div	: in std_logic_vector(13 downto 0); -- Divider from system clock
-													--	to create the sample clock
-													-- 	from. 14 bits allows
-													--	from frequencies from ~50Hz 
-													--	and up to be detected. Assumes
-													--	system clock is 100MHz.
+		clk_div	: in std_logic_vector(12 downto 0); -- Divider for the system clock. 
+													-- Samples will be taken at the system clock
+													-- 	divided by this number. The center
+													--	frequency for the autocorrelation unit
+													--	is this frequency divided by 512. 
+													-- This allows the algorithm to converge for 
+													--	frequencies of ~25Hz+.
 		sample  : in std_logic_vector(1 downto 0);	-- sample input
 		reset   : in std_logic;						-- active high. System will run
 													--  as long as this is low, else
 													--	will stay in a reset state, 
 
 		-- Output
-		max_idx : out std_logic_vector(7 downto 0); -- Index of sample which 
+		max_idx : out std_logic_vector(9 downto 0); -- Index of sample which 
 													-- had maximum autocorrelation
 													-- value. Frequency is then
 													-- equal to the sampling
 													-- frequency divided by this value.
-													-- Range 1 - 256
+													-- Range 1 - 1023
 		done	: out std_logic						-- Signal which indicates that
 													--	autocorrelation and sampling 
 													-- is complete and that the data
@@ -258,12 +259,11 @@ end AUTOCORRELATE;
 --
 architecture behavioral of AUTOCORRELATE is 
 	
-	-- Counter for the system. Measures out the 512 sample clock
-	--	cycle which the system runs on. It is a 10-bit counter
-	--	so that the top bit can be the "done" signal
-	signal samp_counter : std_logic_vector(9 downto 0);
+	-- Counter for the system. Measures out the 2048 sample clock
+	--	cycle which the system runs on. Range 0 - 2047
+	signal samp_counter 	: std_logic_vector(11 downto 0);
 	-- Mux result for the counter
-	signal samp_counter_mux : std_logic_vector(9 downto 0); 
+	signal samp_counter_mux : std_logic_vector(11 downto 0); 
 
 	-- Declare our sample clock as a clock
 	signal sample_clock : std_logic;
@@ -271,26 +271,30 @@ architecture behavioral of AUTOCORRELATE is
 	-- Declare the buffer_type itself
    	attribute buffer_type : string;
 	attribute buffer_type of sample_clock : signal is "BUFG";
-	-- Counter for our sample clock
-	signal clk_counter 		: std_logic_vector(13 downto 0);
-	signal clk_counter_mux 	: std_logic_vector(13 downto 0);
-	signal clk_counter_inc  : std_logic_vector(13 downto 0);
+	-- Counter for our sample clock. Needs to be same bitwidth as 
+	--	the divider
+	signal clk_counter 		: std_logic_vector(12 downto 0);
+	signal clk_counter_mux 	: std_logic_vector(12 downto 0);
+	signal clk_counter_inc  : std_logic_vector(12 downto 0);
 
 	-- Signals to link together the autocorrelation units
-	type sample_array 	is array(256 downto 0) of std_logic_vector(1 downto 0);
+	type sample_array 	is array(1024 downto 0) of std_logic_vector(1 downto 0);
 	signal samples 		: sample_array;
-	signal ops 			: std_logic_vector(256 downto 0);
-	signal autos 		: std_logic_vector(255 downto 0);
+	signal ops 			: std_logic_vector(1024 downto 0);
+	signal autos 		: std_logic_vector(1024 downto 0);
 
 	-- Signals to do the hamming weight addition
-	type hamming_1 is array(127 downto 0) 	of std_logic_vector(1 downto 0);
-	type hamming_2 is array(63 downto 0) 	of std_logic_vector(2 downto 0);
-	type hamming_3 is array(31 downto 0)	of std_logic_vector(3 downto 0);
-	type hamming_4 is array(15 downto 0)	of std_logic_vector(4 downto 0);
-	type hamming_5 is array(7 downto 0)		of std_logic_vector(5 downto 0);
-	type hamming_6 is array(3 downto 0)		of std_logic_vector(6 downto 0);
-	type hamming_7 is array(1 downto 0)		of std_logic_vector(7 downto 0);
+	type hamming_1 is array(511 downto 0) 	of std_logic_vector(1 downto 0);
+	type hamming_2 is array(255 downto 0) 	of std_logic_vector(2 downto 0);
+	type hamming_3 is array(128 downto 0)	of std_logic_vector(3 downto 0);
+	type hamming_4 is array(63 downto 0)	of std_logic_vector(4 downto 0);
+	type hamming_5 is array(31 downto 0)	of std_logic_vector(5 downto 0);
+	type hamming_6 is array(15 downto 0)	of std_logic_vector(6 downto 0);
+	type hamming_7 is array(7 downto 0)		of std_logic_vector(7 downto 0);
+	type hamming_8 is array(3 downto 0)		of std_logic_vector(8 downto 0);
+	type hamming_9 is array(1 downto 0)		of std_logic_vector(9 downto 0);
 
+	-- We will use these to create our adder tree
 	signal hamming_1s : hamming_1;
 	signal hamming_2s : hamming_2;
 	signal hamming_3s : hamming_3;
@@ -298,14 +302,17 @@ architecture behavioral of AUTOCORRELATE is
 	signal hamming_5s : hamming_5;
 	signal hamming_6s : hamming_6;
 	signal hamming_7s : hamming_7;
-	signal final_hamming : std_logic_vector(8 downto 0);
+	signal hamming_8s : hamming_8;
+	signal hamming_9s : hamming_9;
+	signal final_hamming : std_logic_vector(10 downto 0);
 
-	-- Signals for computing the maximum autocorrelation value and storing
-	--	its index
-	signal max_idx_mux 		: std_logic_vector(7 downto 0);
-	signal max_idx_val		: std_logic_vector(7 downto 0);
-	signal max_auto_mux		: std_logic_vector(8 downto 0);
-	signal max_auto_val 	: std_logic_vector(8 downto 0);	
+	-- Index at which maximum occurred. Needs to be same bitwidth as max_idx
+	signal max_idx_mux 		: std_logic_vector(9 downto 0);
+	signal max_idx_val		: std_logic_vector(9 downto 0);
+	-- Maximum autocorrelation value. Needs to be same bitwidth as final_hamming
+	signal max_auto_mux		: std_logic_vector(10 downto 0);
+	signal max_auto_val 	: std_logic_vector(10 downto 0);
+	-- Signals for seeing if it is a valid cycle to store results or if we have a new maximum	
 	signal new_max			: std_logic;
 	signal valid_auto		: std_logic;
 
@@ -336,26 +343,29 @@ begin
 	---
 	--
 
-	-- First, need to do the logic for the go and done signals.
-	--	The "done" signal is the top bit of the system counter, 
-	--	which will be set after 512 system clocks have been executed, and will remain asserted
-	--	until the sample counter is reset. 
-	done <= samp_counter(9);
-
-	-- Increment the sample counter as long as reset is not high.
+	--
+	-- Logic for which sample we are currently taking. The sample counter
+	--	will reset to 0 after reset is asserted and will stick at the 
+	--	maximum value until reset is asserted, else, increment. 
+	--
 	samp_counter_mux <= (others => '0') when (reset = '1') else
+						samp_counter when (samp_counter(11) = '1') else
 						std_logic_vector(unsigned(samp_counter) + 1);
 
-	-- Incremented cock counter value. This needs to be broken out since we will
-	--	be using it to wrap around the divider value.
+
+	--
+	-- Logic for generating the sample clock. The sample clock will always be 
+	--	running, and will wrap around the divider value. It will be an approximately
+	--	50% duty cycle clock.
+	--
+
+	-- Incrementor
 	clk_counter_inc <= std_logic_vector(unsigned(clk_counter) + 1);
-	-- If the current counter + 1 == the divider, need to wrap around, else just increment
-	--	the counter
-	clk_counter_mux <= 	(others => '0') when (std_match(clk_counter_inc, clk_div) or (reset = '1')) else
+	-- Need to wrap the sample clock 
+	clk_counter_mux <= 	(others => '0') when std_match(clk_counter_inc, clk_div) else
 						clk_counter_inc;
-	-- Create the sample clock. High for a single system clock pulse when 
-	--	the clock counter is 0, else low.
-	sample_clock_mux <= '1' when std_match(clk_counter, "00000000000000") else
+	-- Sample clock is high when count is greater than divisor/2, else low
+	sample_clock_mux <= '1' when (unsigned(clk_counter) > ("0" & unsigned(clk_div(12 downto 1)))) else
 						'0';
 
 	--
@@ -373,7 +383,7 @@ begin
 	ops(0) 		<= samp_counter(8);
 
 	-- First, string together autocorrelation units
-	genautos: for i in 0 to 255 generate 
+	genautos: for i in 0 to 1024 generate 
 	begin
 
 		autox: SINGLE_AUTO
@@ -400,7 +410,7 @@ begin
 	--  Now, we need to put together
 	--	the hamming weight adder for the autos. Do this with a bunch of 
 	--	for-generate adders.
-	genham1s: for i in 0 to 127 generate
+	genham1s: for i in 0 to 511 generate
 	begin
 		-- Couldn't figure out how to to a single add of bits, so just do it myself without the 
 		--	need for an adder. 
@@ -408,38 +418,48 @@ begin
 		hamming_1s(i)(1) <= autos(2*i) and autos(2*i + 1);
 	end generate genham1s;
 
-	genham2s: for i in 0 to 63 generate
+	genham2s: for i in 0 to 255 generate
 	begin
 		hamming_2s(i) <= std_logic_vector(("0" & unsigned(hamming_1s(2*i))) + ("0" & unsigned(hamming_1s(2*i + 1))));
 	end generate genham2s;
 
-	genham3s: for i in 0 to 31 generate
+	genham3s: for i in 0 to 127 generate
 	begin
 		hamming_3s(i) <= std_logic_vector(("0" & unsigned(hamming_2s(2*i))) + ("0" & unsigned(hamming_2s(2*i + 1))));
 	end generate genham3s;
 
-	genham4s: for i in 0 to 15 generate
+	genham4s: for i in 0 to 63 generate
 	begin
 		hamming_4s(i) <= std_logic_vector(("0" & unsigned(hamming_3s(2*i))) + ("0" & unsigned(hamming_3s(2*i + 1))));
 	end generate genham4s;
 
-	genham5s: for i in 0 to 7 generate
+	genham5s: for i in 0 to 31 generate
 	begin
 		hamming_5s(i) <= std_logic_vector(("0" & unsigned(hamming_4s(2*i))) + ("0" & unsigned(hamming_4s(2*i + 1))));
 	end generate genham5s;
 
-	genham6s: for i in 0 to 3 generate
+	genham6s: for i in 0 to 15 generate
 	begin
 		hamming_6s(i) <= std_logic_vector(("0" & unsigned(hamming_5s(2*i))) + ("0" & unsigned(hamming_5s(2*i + 1))));
 	end generate genham6s;
 
-	genham7s: for i in 0 to 1 generate
+	genham7s: for i in 0 to 7 generate
 	begin
 		hamming_7s(i) <= std_logic_vector(("0" & unsigned(hamming_6s(2*i))) + ("0" & unsigned(hamming_6s(2*i + 1))));
 	end generate genham7s;
 
+	genham7s: for i in 0 to 3 generate
+	begin
+		hamming_8s(i) <= std_logic_vector(("0" & unsigned(hamming_7s(2*i))) + ("0" & unsigned(hamming_7s(2*i + 1))));
+	end generate genham7s;
+
+		genham7s: for i in 0 to 1 generate
+	begin
+		hamming_9s(i) <= std_logic_vector(("0" & unsigned(hamming_8s(2*i))) + ("0" & unsigned(hamming_8s(2*i + 1))));
+	end generate genham7s;
+
 	-- Put together the final adder, and then we have our value!
-	final_hamming <= std_logic_vector(("0" & unsigned(hamming_7s(0))) + ("0" & unsigned(hamming_7s(1))));
+	final_hamming <= std_logic_vector(("0" & unsigned(hamming_9s(0))) + ("0" & unsigned(hamming_9s(1))));
 
 	--
 	---
@@ -453,17 +473,17 @@ begin
 	new_max <= 	'1' when (unsigned(final_hamming) > unsigned(max_auto_val)) else
 				'0';
 
-	valid_auto <= '1' when ( (samp_counter(8) = '1') and  (not std_match(samp_counter(7 downto 0), "00000000")) ) else
+	valid_auto <= '1' when ( (samp_counter(10) = '1') and  (OR_REDUCE(samp_counter(9 downto 0) = '0')) ) else
 				  '0';
 				  
 
 	-- Want max_auto to be 0 when not in the final 256 clocks, 
 	max_auto_mux <= final_hamming 	when ((new_max = '1') and (valid_auto = '1')) else
-					max_auto_val	when ((valid_auto = '1') or (samp_counter(9) = '1')) else
+					max_auto_val	when ((valid_auto = '1') or (samp_counter(11) = '1')) else
 					(others => '0');
 
-	max_idx_mux <= 	samp_counter(7 downto 0) 	when ((new_max = '1') and (valid_auto = '1')) else
-					max_idx_val 				when ((valid_auto = '1') or (samp_counter(9) = '1')) else
+	max_idx_mux <= 	samp_counter(9 downto 0) 	when ((new_max = '1') and (valid_auto = '1')) else
+					max_idx_val 				when ((valid_auto = '1') or (samp_counter(11) = '1')) else
 					(others => '0');
 
 	-- Now, output the maximum index 
@@ -496,6 +516,14 @@ begin
 			samp_counter 	<= samp_counter_mux;
 			max_idx_val 	<= max_idx_mux;
 			max_auto_val 	<= max_auto_mux;
+
+			-- We are done when our sample counter has reached the total number
+			--	of samples being taken, the top bit. This needs to be done in 
+			--	a DFF to ensure that if the 255th sample is the max, it 
+			--	can be clocked in by the final clock and be valid for a clock
+			--	before done is asserted.
+			done <= samp_counter(11);
+
 		end if;
 
 	end process UpdateSampleCounter;
