@@ -343,15 +343,17 @@ begin
 	---
 	--
 
+	-- We are done when the high bit of the sample counter is set. Since done is going to be
+	--	used as a clock to a FIFO, we do not care now long this stays high for. 
+	done <= samp_counter(11);
+
 	--
 	-- Logic for which sample we are currently taking. The sample counter
 	--	will reset to 0 after reset is asserted and will stick at the 
 	--	maximum value until reset is asserted, else, increment. 
 	--
-	samp_counter_mux <= (others => '0') when (reset = '1') else
-						samp_counter when (samp_counter(11) = '1') else
+	samp_counter_mux <= (others => '0') when ((samp_counter(11) = '1') or (reset = '1')) else
 						std_logic_vector(unsigned(samp_counter) + 1);
-
 
 	--
 	-- Logic for generating the sample clock. The sample clock will always be 
@@ -362,8 +364,8 @@ begin
 	-- Incrementor
 	clk_counter_inc <= std_logic_vector(unsigned(clk_counter) + 1);
 	-- Need to wrap the sample clock 
-	clk_counter_mux <= 	(others => '0') when ( std_match(clk_counter_inc, clk_div) or (reset = '1') ) else
-						clk_counter_inc;
+	clk_counter_mux <= 	clk_counter_inc when (unsigned(clk_counter_inc) <  unsigned(clk_div)) else
+						(others => '0');
 	-- Sample clock is high when count is greater than divisor/2, else low
 	sample_clock_mux <= '1' when (unsigned(clk_counter) < ("0" & unsigned(clk_div(12 downto 1)))) else
 						'0';
@@ -500,9 +502,11 @@ begin
 	begin
 
 		if (rising_edge(clock)) then
+
 			-- Latch the muxes
 			clk_counter 	<= clk_counter_mux;
 			sample_clock 	<= sample_clock_mux;
+
 		end if;
 
 	end process MakeSampleClock;
@@ -516,13 +520,6 @@ begin
 			samp_counter 	<= samp_counter_mux;
 			max_idx_val 	<= max_idx_mux;
 			max_auto_val 	<= max_auto_mux;
-
-			-- We are done when our sample counter has reached the total number
-			--	of samples being taken, the top bit. This needs to be done in 
-			--	a DFF to ensure that if the 255th sample is the max, it 
-			--	can be clocked in by the final clock and be valid for a clock
-			--	before done is asserted.
-			done <= samp_counter(11);
 
 		end if;
 

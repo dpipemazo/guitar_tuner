@@ -122,6 +122,10 @@ begin
 
     begin
 
+        -- We don't need the reset here
+        test_reset <= '0';
+
+
     	-- Loop over all of the strings
     	for curr_string in string_tests loop
 
@@ -161,11 +165,10 @@ begin
     		freq_lo := 0.995*freq;
     		freq_hi := 1.005*freq;
 
-            wait for 50 ns;
-    		-- Assert the reset for a few clocks to clear everything
-    		test_reset <= '1';
-    		wait for 50 ns;
-    		test_reset <= '0';
+            -- Wait for done to go back low if it's high
+            while (test_done = '1') loop
+                wait for 10 ns;
+            end loop;
     		-- Initialize the time count
     		time_count := 0.0;
 
@@ -192,11 +195,10 @@ begin
     		-- Now, the done signal should be high. So assert that the bin was 512
     		assert(to_integer(unsigned(test_max_idx)) = 512) report "Did not correctly detect frequency";
 
-            wait for 50 ns;
-    		-- Assert the reset for a few clocks to clear everything
-    		test_reset <= '1';
-    		wait for 50 ns;
-    		test_reset <= '0';
+            -- Wait for done to go back low
+            while (test_done = '1') loop
+                wait for 10 ns;
+            end loop;
     		-- Initialize the time count
     		time_count := 0.0;
 
@@ -223,11 +225,10 @@ begin
     		-- Now, the done signal should be high. So make sure that the bin is not 512
     		assert(to_integer(unsigned(test_max_idx)) /= 512) report "False positive on low bound";
 
-            wait for 50 ns;
-    		-- Assert the reset for a few clocks to clear everything
-    		test_reset <= '1';
-    		wait for 50 ns;
-    		test_reset <= '0';
+            -- Wait for done to go back low
+            while (test_done = '1') loop
+                wait for 10 ns;
+            end loop;
   	    	-- Initialize the time count
     		time_count := 0.0;
 
