@@ -281,12 +281,12 @@ architecture behavioral of AUTOCORRELATE is
 	type sample_array 	is array(1024 downto 0) of std_logic_vector(1 downto 0);
 	signal samples 		: sample_array;
 	signal ops 			: std_logic_vector(1024 downto 0);
-	signal autos 		: std_logic_vector(1024 downto 0);
+	signal autos 		: std_logic_vector(1023 downto 0);
 
 	-- Signals to do the hamming weight addition
 	type hamming_1 is array(511 downto 0) 	of std_logic_vector(1 downto 0);
 	type hamming_2 is array(255 downto 0) 	of std_logic_vector(2 downto 0);
-	type hamming_3 is array(128 downto 0)	of std_logic_vector(3 downto 0);
+	type hamming_3 is array(127 downto 0)	of std_logic_vector(3 downto 0);
 	type hamming_4 is array(63 downto 0)	of std_logic_vector(4 downto 0);
 	type hamming_5 is array(31 downto 0)	of std_logic_vector(5 downto 0);
 	type hamming_6 is array(15 downto 0)	of std_logic_vector(6 downto 0);
@@ -473,7 +473,7 @@ begin
 	new_max <= 	'1' when (unsigned(final_hamming) > unsigned(max_auto_val)) else
 				'0';
 
-	valid_auto <= '1' when ( (samp_counter(10) = '1') and  (OR_REDUCE(samp_counter(9 downto 0)) = '0') ) else
+	valid_auto <= '1' when ( (samp_counter(10) = '1') and  ( not OR_REDUCE(samp_counter(9 downto 0)) = '0') ) else
 				  '0';
 				  
 
