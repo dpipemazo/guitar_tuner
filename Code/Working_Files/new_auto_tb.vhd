@@ -116,11 +116,84 @@ begin
     do_test: process
 
     	-- Define variables here
+        variable seed1, seed2, rand : real;
     	variable sin_val : real;
-    	variable freq, freq_lo, freq_hi : real;
+    	variable freq, freq_lo, freq_hi, reported_freq : real;
     	variable time_count : real;
+        variable old_divider, new_divider : integer;
 
     begin
+
+        -- Test a random frequency. Begin with the divider to ten, the value for the
+        --  top of the vocal frequency range. After each iteration, 
+        --  the new divider is equal to the old divider times the result divided by 512. Stop
+        --  when the divider is the same between consecutive runs. 
+        --
+        -- Once stopped, the frequency is equal to 100MHz/divider/result. Assert that the error is 
+        --  less than 0.1%. 
+        --
+        while (END_SIM = FALSE) loop
+
+            -- Get a random value on the interval [0,1].
+            UNIFORM(seed1, seed2, rand);
+            -- Map the random value to [25, 20000]
+            rand_freq := INTEGER(TRUNC(rand1*19975.0)) + 25.0;
+
+            new_divider := 10;
+            old_divider := 0;
+
+            while (new_divider /= old_divider) loop
+
+                -- Set the divider to the new value
+                test_clk_div <= std_logic_vector(to_unsigned(new_divider), test_clk_div'length);
+
+                -- Need to reset at beginning of time. 
+                test_reset <= '1';
+                wait for 60 ns;
+                test_reset <= '0';
+
+                -- Keep track of the old divider;
+                old_divider := new_divider;
+
+                -- Wait for done to go back low if it's high
+                while (test_done = '1') loop
+                    wait for 10 ns;
+                end loop;
+
+                -- Initialize the time to a random time
+                UNIFORM(seed1, seed2, time_count);
+
+                -- Test the actual frequency
+                while (test_done /= '1') loop
+
+                    -- Calculate the sine.
+                    sin_val := sin(MATH_2_PI*time_count*rand_freq);
+
+                    if (sin_val > 0.8) then
+                        test_sample <= "10";
+                    elsif (sin_val < -0.8) then
+                        test_sample <= "11";
+                    else
+                        test_sample <= "00";
+                    end if;
+
+                    -- Increment the time count and wait for 10 ns
+                    time_count := time_count + 0.00000001;
+                    wait for 10 ns;
+
+                end loop;
+
+                -- Calculate the new divider
+                new_divider = INTEGER( TRUNC( (real(old_divider)*real(to_integer(unsigned(test_max_idx)))/512) ) );
+
+            end loop;
+
+            -- Now, the done signal should be high. So assert that the frequency is within
+            --  the 0.12% limit
+            reported_freq  := 100000000.0/(old_divider*real(to_integer(unsigned(test_max_idx))));
+            assert( abs(1 - (rand_freq/reported_freq)) < 0.0012 ) report "Frequency not detected to 2 cent error bound";
+
+        end loop;
 
     	-- Loop over all of the strings
     	for curr_string in string_tests loop
