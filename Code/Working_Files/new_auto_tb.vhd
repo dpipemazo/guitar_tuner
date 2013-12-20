@@ -142,6 +142,9 @@ begin
             new_divider := 10;
             old_divider := 0;
 
+            -- Initialize the time to a random time
+            UNIFORM(seed1, seed2, time_count);
+
             while (new_divider /= old_divider) loop
 
                 -- Set the divider to the new value
@@ -159,9 +162,6 @@ begin
                 while (test_done = '1') loop
                     wait for 10 ns;
                 end loop;
-
-                -- Initialize the time to a random time
-                UNIFORM(seed1, seed2, time_count);
 
                 -- Test the actual frequency
                 while (test_done /= '1') loop
@@ -184,7 +184,9 @@ begin
                 end loop;
 
                 -- Calculate the new divider
-                new_divider := INTEGER( TRUNC( (real(old_divider)*real(to_integer(unsigned(test_max_idx)))/512.0) ) );
+                new_divider := integer( round( (real(old_divider)*real(to_integer(unsigned(test_max_idx)))/512.0) ) );
+
+                assert( new_divider >= 10 ) report "Divider moving in wrong direction"
 
             end loop;
 
