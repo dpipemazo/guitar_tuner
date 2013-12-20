@@ -186,7 +186,7 @@ begin
                 -- Calculate the new divider
                 new_divider := integer( round( (real(old_divider)*real(to_integer(unsigned(test_max_idx)))/512.0) ) );
 
-                assert( new_divider >= 10 ) report "Divider moving in wrong direction"
+                assert( new_divider >= 10 ) report "Divider moving in wrong direction";
 
             end loop;
 
