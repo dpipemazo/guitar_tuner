@@ -365,7 +365,7 @@ begin
 	clk_counter_mux <= 	(others => '0') when ( std_match(clk_counter_inc, clk_div) or (reset = '1') ) else
 						clk_counter_inc;
 	-- Sample clock is high when count is greater than divisor/2, else low
-	sample_clock_mux <= '1' when (unsigned(clk_counter) > ("0" & unsigned(clk_div(12 downto 1)))) else
+	sample_clock_mux <= '1' when (unsigned(clk_counter) < ("0" & unsigned(clk_div(12 downto 1)))) else
 						'0';
 
 	--
