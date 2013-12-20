@@ -187,7 +187,7 @@ begin
                 if (to_integer(unsigned(test_max_idx)) = 1) then
                     new_divider := old_divider * 2;
                 else
-                    new_divider := integer( round( (real(old_divider)*real(to_integer(unsigned(test_max_idx)))/512.0) ) );
+                    new_divider := integer( round( (real(old_divider)*real(to_integer(unsigned(test_max_idx)))/1000.0) ) );
                 end if;
 
                 assert( new_divider >= 10 ) report "Divider moving in wrong direction";
