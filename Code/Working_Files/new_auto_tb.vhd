@@ -163,8 +163,8 @@ begin
             test_reset <= '0';
 
     		-- Calculate freq_lo and freq_hi
-    		freq_lo := 0.995*freq;
-    		freq_hi := 1.005*freq;
+    		freq_lo := 0.999*freq;
+    		freq_hi := 1.001*freq;
 
             -- Wait for done to go back low if it's high
             while (test_done = '1') loop
