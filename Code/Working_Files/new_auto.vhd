@@ -378,9 +378,9 @@ begin
 	--	units. Make the input samples to the main unit the input samples
 	--	to the array of units. 
 	samples(0) 	<= sample;
-	-- Set the operation equal to bit 9 of the counter. Bit 9 will be
-	--	high after 256 iterations, and will stay high until reset. 
-	ops(0) 		<= samp_counter(8);
+	-- Set the operation equal to bit 10 of the counter. Bit 10 will be
+	--	high after 1024 iterations, and will stay high until reset. 
+	ops(0) 		<= samp_counter(10);
 
 	-- First, string together autocorrelation units
 	genautos: for i in 0 to 1023 generate 
