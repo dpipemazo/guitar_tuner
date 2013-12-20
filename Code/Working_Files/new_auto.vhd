@@ -448,15 +448,15 @@ begin
 		hamming_7s(i) <= std_logic_vector(("0" & unsigned(hamming_6s(2*i))) + ("0" & unsigned(hamming_6s(2*i + 1))));
 	end generate genham7s;
 
-	genham7s: for i in 0 to 3 generate
+	genham8s: for i in 0 to 3 generate
 	begin
 		hamming_8s(i) <= std_logic_vector(("0" & unsigned(hamming_7s(2*i))) + ("0" & unsigned(hamming_7s(2*i + 1))));
-	end generate genham7s;
+	end generate genham8s;
 
-		genham7s: for i in 0 to 1 generate
+	genham9s: for i in 0 to 1 generate
 	begin
 		hamming_9s(i) <= std_logic_vector(("0" & unsigned(hamming_8s(2*i))) + ("0" & unsigned(hamming_8s(2*i + 1))));
-	end generate genham7s;
+	end generate genham9s;
 
 	-- Put together the final adder, and then we have our value!
 	final_hamming <= std_logic_vector(("0" & unsigned(hamming_9s(0))) + ("0" & unsigned(hamming_9s(1))));
@@ -473,7 +473,7 @@ begin
 	new_max <= 	'1' when (unsigned(final_hamming) > unsigned(max_auto_val)) else
 				'0';
 
-	valid_auto <= '1' when ( (samp_counter(10) = '1') and  (OR_REDUCE(samp_counter(9 downto 0) = '0')) ) else
+	valid_auto <= '1' when ( (samp_counter(10) = '1') and  (OR_REDUCE(samp_counter(9 downto 0)) = '0') ) else
 				  '0';
 				  
 
