@@ -122,12 +122,6 @@ begin
 
     begin
 
-        -- Need to reset at beginning of time. 
-        test_reset <= '1';
-        wait for 100 ns;
-        test_reset <= '0';
-
-
     	-- Loop over all of the strings
     	for curr_string in string_tests loop
 
@@ -162,6 +156,11 @@ begin
     			test_clk_div <= std_logic_vector(to_unsigned(0, test_clk_div'length));
     			freq := 0.0;
     		end if;
+
+            -- Need to reset at beginning of time. 
+            test_reset <= '1';
+            wait for 100 ns;
+            test_reset <= '0';
 
     		-- Calculate freq_lo and freq_hi
     		freq_lo := 0.995*freq;
