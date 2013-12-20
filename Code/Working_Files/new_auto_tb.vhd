@@ -184,7 +184,11 @@ begin
                 end loop;
 
                 -- Calculate the new divider
-                new_divider := integer( round( (real(old_divider)*real(to_integer(unsigned(test_max_idx)))/512.0) ) );
+                if (to_integer(unsigned(test_max_idx)) = 1) then
+                    new_divider := old_divider * 10;
+                else
+                    new_divider := integer( round( (real(old_divider)*real(to_integer(unsigned(test_max_idx)))/512.0) ) );
+                end if;
 
                 assert( new_divider >= 10 ) report "Divider moving in wrong direction";
                 assert false report "Completed one test cycle";
