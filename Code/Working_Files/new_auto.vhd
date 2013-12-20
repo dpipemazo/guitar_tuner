@@ -383,7 +383,7 @@ begin
 	ops(0) 		<= samp_counter(8);
 
 	-- First, string together autocorrelation units
-	genautos: for i in 0 to 1024 generate 
+	genautos: for i in 0 to 1023 generate 
 	begin
 
 		autox: SINGLE_AUTO
