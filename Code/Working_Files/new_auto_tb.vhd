@@ -136,8 +136,8 @@ begin
 
             -- Get a random value on the interval [0,1].
             UNIFORM(seed1, seed2, rand);
-            -- Map the random value to [25, 20000]
-            rand_freq := rand*19975.0 + 25.0;
+            -- Map the random value to [25, 10000]
+            rand_freq := rand*9975.0 + 25.0;
 
             new_divider := 5;
             old_divider := 0;
@@ -185,7 +185,7 @@ begin
 
                 -- Calculate the new divider
                 if (to_integer(unsigned(test_max_idx)) = 1) then
-                    new_divider := old_divider + 1;
+                    new_divider := old_divider * 2;
                 else
                     new_divider := integer( round( (real(old_divider)*real(to_integer(unsigned(test_max_idx)))/1000.0) ) );
                 end if;
