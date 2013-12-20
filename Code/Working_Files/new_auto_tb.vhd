@@ -139,7 +139,7 @@ begin
             -- Map the random value to [25, 10000]
             rand_freq := rand*9975.0 + 25.0;
 
-            new_divider := 5;
+            new_divider := 10;
             old_divider := 0;
 
             -- Initialize the time to a random time
@@ -187,7 +187,7 @@ begin
                 if (to_integer(unsigned(test_max_idx)) = 1) then
                     new_divider := old_divider * 2;
                 else
-                    new_divider := integer( round( (real(old_divider)*real(to_integer(unsigned(test_max_idx)))/1000.0) ) );
+                    new_divider := integer( round( (real(old_divider)*real(to_integer(unsigned(test_max_idx)))/900.0) ) );
                 end if;
 
                 assert false report "Completed one test cycle";
