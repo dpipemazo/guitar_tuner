@@ -29,10 +29,10 @@ architecture TB_ARCHITECTURE of new_auto_tb is
 		port (
 			-- Inputs
 			clock 	: in std_logic;						-- the system clock, 100MHz. 
-			clk_div	: in std_logic_vector(13 downto 0); -- Divider from system clock
+			clk_div	: in std_logic_vector(12 downto 0); -- Divider from system clock
 														--	to create the sample clock
-														-- 	from. 14 bits allows
-														--	from frequencies from ~50Hz 
+														-- 	from. 13 bits allows
+														--	from frequencies from ~25Hz 
 														--	and up to be detected. Assumes
 														--	system clock is 100MHz.
 			sample  : in std_logic_vector(1 downto 0);	-- sample input
@@ -41,7 +41,7 @@ architecture TB_ARCHITECTURE of new_auto_tb is
 														--	will stay in a reset state, 
 
 			-- Output
-			max_idx : out std_logic_vector(7 downto 0); -- Index of sample which 
+			max_idx : out std_logic_vector(9 downto 0); -- Index of sample which 
 														-- had maximum autocorrelation
 														-- value. Frequency is then
 														-- equal to the sampling
@@ -54,10 +54,10 @@ architecture TB_ARCHITECTURE of new_auto_tb is
 
 	-- Signals to map to I/) of the component
 	signal test_clock 		: std_logic;
-	signal test_clk_div 	: std_logic_vector(13 downto 0);
+	signal test_clk_div 	: std_logic_vector(12 downto 0);
 	signal test_sample 		: std_logic_vector(1 downto 0);
 	signal test_reset 		: std_logic;
-	signal test_max_idx 	: std_logic_vector(7 downto 0);
+	signal test_max_idx 	: std_logic_vector(9 downto 0);
 	signal test_done 		: std_logic; 
 
 	--Signal used to stop clock signal generators. should always be FALSE
@@ -129,27 +129,27 @@ begin
     		-- Map out the variables based on the frequency
     		--
     		if (curr_string = STRING_E2) then
-    			test_clk_div <= std_logic_vector(to_unsigned(9480, test_clk_div'length));
+    			test_clk_div <= std_logic_vector(to_unsigned(2370, test_clk_div'length));
     			freq := 82.41;
 
     		elsif (curr_string = STRING_A) then
-    			test_clk_div <= std_logic_vector(to_unsigned(7102, test_clk_div'length));
+    			test_clk_div <= std_logic_vector(to_unsigned(1776, test_clk_div'length));
     			freq := 110.0;
 
     		elsif (curr_string = STRING_D) then
-    			test_clk_div <= std_logic_vector(to_unsigned(5322, test_clk_div'length));
+    			test_clk_div <= std_logic_vector(to_unsigned(1330, test_clk_div'length));
     			freq := 146.8;
 
     		elsif (curr_string = STRING_G) then
-    			test_clk_div <= std_logic_vector(to_unsigned(3986, test_clk_div'length));
+    			test_clk_div <= std_logic_vector(to_unsigned(996, test_clk_div'length));
     			freq := 196.0;
 
     		elsif (curr_string = STRING_B) then
-    			test_clk_div <= std_logic_vector(to_unsigned(3164, test_clk_div'length));
+    			test_clk_div <= std_logic_vector(to_unsigned(791, test_clk_div'length));
     			freq := 246.9;
 
     		elsif (curr_string = STRING_E4) then
-    			test_clk_div <= std_logic_vector(to_unsigned(2370, test_clk_div'length));
+    			test_clk_div <= std_logic_vector(to_unsigned(593, test_clk_div'length));
     			freq := 329.6;
 
     		else 
@@ -188,8 +188,8 @@ begin
 
     		end loop;
 
-    		-- Now, the done signal should be high. So assert that the bin was 128
-    		assert(to_integer(unsigned(test_max_idx)) = 128) report "Did not correctly detect frequency";
+    		-- Now, the done signal should be high. So assert that the bin was 512
+    		assert(to_integer(unsigned(test_max_idx)) = 512) report "Did not correctly detect frequency";
 
     		-- Assert the reset for a few clocks to clear everything
     		test_reset <= '1';
@@ -218,8 +218,8 @@ begin
 
     		end loop;
 
-    		-- Now, the done signal should be high. So make sure that the bin is not 128
-    		assert(to_integer(unsigned(test_max_idx)) /= 128) report "False positive on low bound";
+    		-- Now, the done signal should be high. So make sure that the bin is not 512
+    		assert(to_integer(unsigned(test_max_idx)) /= 512) report "False positive on low bound";
 
     		-- Assert the reset for a few clocks to clear everything
     		test_reset <= '1';
@@ -248,8 +248,8 @@ begin
 
     		end loop;
 
-    		-- Now, the done signal should be high. So make sure that the bin is not 128
-    		assert(to_integer(unsigned(test_max_idx)) /= 128) report "False positive on high bound";
+    		-- Now, the done signal should be high. So make sure that the bin is not 512
+    		assert(to_integer(unsigned(test_max_idx)) /= 512) report "False positive on high bound";
 
     	end loop;
 
