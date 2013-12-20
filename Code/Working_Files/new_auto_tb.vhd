@@ -190,7 +190,6 @@ begin
                     new_divider := integer( round( (real(old_divider)*real(to_integer(unsigned(test_max_idx)))/1000.0) ) );
                 end if;
 
-                assert( new_divider >= 10 ) report "Divider moving in wrong direction";
                 assert false report "Completed one test cycle";
 
             end loop;
@@ -199,9 +198,9 @@ begin
             --  the 0.12% limit
             reported_freq  := 100000000.0/(real(old_divider)*real(to_integer(unsigned(test_max_idx))));
             if ( abs(1.0 - (rand_freq/reported_freq)) < 0.0012 ) then
-                assert false report "Frequency correctly detected to within 2 cents";
+                assert false report "SUCCESS: Frequency correctly detected to within 2 cents";
             else
-                assert false report "Frequency incorrectly detected";
+                assert false report "ERROR: Frequency incorrectly detected";
             end if;
 
         end loop;
