@@ -116,9 +116,9 @@ begin
     do_test: process
 
     	-- Define variables here
-        variable seed1, seed2, rand : real;
-    	variable sin_val : real;
-    	variable freq, freq_lo, freq_hi, reported_freq : real;
+        variable seed1, seed2 : positive;
+    	variable sin_val, rand : real;
+    	variable freq, freq_lo, freq_hi, reported_freq, rand_freq : real;
     	variable time_count : real;
         variable old_divider, new_divider : integer;
 
@@ -184,13 +184,13 @@ begin
                 end loop;
 
                 -- Calculate the new divider
-                new_divider := INTEGER( TRUNC( (real(old_divider)*real(to_integer(unsigned(test_max_idx)))/512) ) );
+                new_divider := INTEGER( TRUNC( (real(old_divider)*real(to_integer(unsigned(test_max_idx)))/512.0) ) );
 
             end loop;
 
             -- Now, the done signal should be high. So assert that the frequency is within
             --  the 0.12% limit
-            reported_freq  := 100000000.0/(old_divider*real(to_integer(unsigned(test_max_idx))));
+            reported_freq  := 100000000.0/(real(old_divider)*real(to_integer(unsigned(test_max_idx))));
             assert( abs(1 - (rand_freq/reported_freq)) < 0.0012 ) report "Frequency not detected to 2 cent error bound";
 
         end loop;
