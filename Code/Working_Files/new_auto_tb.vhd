@@ -122,7 +122,9 @@ begin
 
     begin
 
-        -- We don't need the reset here
+        -- Need to reset at beginning of time. 
+        test_reset <= '1';
+        wait for 100 ns;
         test_reset <= '0';
 
 
