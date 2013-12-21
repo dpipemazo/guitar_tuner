@@ -145,6 +145,10 @@ begin
         --  At this point, the resulting frequency is equal to 100MHz/divider/result, and will
         --  be within 1.5 cents (guaranteed 2 cents if noise and such) of the correct result
         --
+
+        -- Give the system a clock to reset itself
+        wait for 20 ps;
+
         while (END_SIM = FALSE) loop
 
             -- Get a random value on the interval [0,1].
