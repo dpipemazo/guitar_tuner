@@ -26,38 +26,39 @@ architecture TB_ARCHITECTURE of new_auto_tb is
 	-- The autocorrelation component
 	component AUTOCORRELATE is 
 
-		port (
-			-- Inputs
-			clock 	: in std_logic;						-- the system clock, 100MHz. 
-			clk_div	: in std_logic_vector(12 downto 0); -- Divider from system clock
-														--	to create the sample clock
-														-- 	from. 13 bits allows
-														--	from frequencies from ~15Hz 
-														--	and up to be detected. Assumes
-														--	system clock is 100MHz.
-			sample  : in std_logic_vector(1 downto 0);	-- sample input
-			reset   : in std_logic;						-- active high. System will run
-														--  as long as this is low, else
-														--	will stay in a reset state, 
+        port (
+            -- Inputs
+            clock       : in std_logic;                     -- the system clock, 100MHz. 
 
-			-- Output
-			max_idx : out std_logic_vector(9 downto 0); -- Index of sample which 
-														-- had maximum autocorrelation
-														-- value. Frequency is then
-														-- equal to the sampling
-														-- frequency divided by this value.
-			done	: out std_logic						-- Signal which indicates that
-														--	autocorrelation and sampling 
-														-- is complete and that the data
-		);
+            sample      : in std_logic_vector(1 downto 0);  -- sample input
+
+            do_sample   : in std_logic;                     -- active high. Just needs 
+                                                            --  to be high for one 
+                                                            --  system (100 MHZ) clock
+                                                            --  and it will begin a sampling
+                                                            --  process
+
+            -- Outputs
+            result_div  : out std_logic_vector(12 downto 0);-- Divider used which gets
+                                                            -- close to 1024xf_interest 
+
+            result_idx  : out std_logic_vector(10 downto 0);-- Index of the sample
+                                                            -- which had the maximum
+                                                            -- autocorrelation value. Should
+                                                            -- be close to 1024.
+
+            done        : out std_logic                     -- Sampling is complete and the 
+                                                            --  frequency has been found
+        );
+
 	end component;
 
 	-- Signals to map to I/) of the component
 	signal test_clock 		: std_logic;
-	signal test_clk_div 	: std_logic_vector(12 downto 0);
 	signal test_sample 		: std_logic_vector(1 downto 0);
-	signal test_reset 		: std_logic;
-	signal test_max_idx 	: std_logic_vector(9 downto 0);
+	signal test_do_sample	: std_logic;
+    signal test_result_div  : std_logic_vector(12 downto 0);
+	signal test_result_idx	: std_logic_vector(10 downto 0);
 	signal test_done 		: std_logic; 
 
 	--Signal used to stop clock signal generators. should always be FALSE
@@ -81,10 +82,10 @@ begin
 	UUT: AUTOCORRELATE
 		port map(
 			clock 		=> test_clock,
-			clk_div 	=> test_clk_div,
-			sample 		=> test_sample,
-			reset 		=> test_reset,
-			max_idx 	=> test_max_idx,
+			sample 	    => test_sample,
+			do_sample 	=> test_do_sample,
+			result_div 	=> test_result_div,
+			result_idx 	=> test_result_idx,
 			done 		=> test_done
 		);
 
@@ -92,18 +93,18 @@ begin
 	-- Make the system clock
 	make_clock: process
 	begin
-        -- this process generates a 10 ns period, 50% duty cycle clock, 
+        -- this process generates a 10 ps period, 50% duty cycle clock, 
         -- which is equivalent to the clock which we will have in our system. 
         if END_SIM = FALSE then
             test_clock <= '1';
-            wait for 5 ns;
+            wait for 5 ps;
         else
             wait;
         end if;
 
         if END_SIM = FALSE then
             test_clock <= '0';
-            wait for 5 ns;
+            wait for 5 ps;
         else
             wait;
         end if;
@@ -150,68 +151,52 @@ begin
             -- Map the random value to [25, 10000]
             rand_freq := rand*9975.0 + 25.0;
 
-            new_divider := 10;
-            old_divider := 0;
-
             -- Initialize the time to a random time
             UNIFORM(seed1, seed2, time_count);
 
-            while (new_divider /= old_divider) loop
+            --
+            -- Need to tell the system to sample. 
+            --  So send do_sample high for two system
+            --  clocks and then wait for done to clear
+            --
+            do_sample <= '1';
+            wait for 20 ps;
+            do_sample <= '0';
 
-                -- Set the divider to the new value
-                test_clk_div <= std_logic_vector(to_unsigned(new_divider, test_clk_div'length));
+            while (test_done = '1') loop
+                wait for 10 ps;
+            end loop;
 
-                -- Need to reset at beginning of time. 
-                test_reset <= '1';
-                wait for 60 ns;
-                test_reset <= '0';
+            -- Now, just output the frequency until done 
+            --  goes high
+            while (test_done /= '1') loop
 
-                -- Keep track of the old divider;
-                old_divider := new_divider;
+                -- Calculate the sine.
+                sin_val := sin(MATH_2_PI*time_count*rand_freq);
 
-                -- Wait for done to go back low if it's high
-                while (test_done = '1') loop
-                    wait for 10 ns;
-                end loop;
-
-                -- Test the actual frequency
-                while (test_done /= '1') loop
-
-                    -- Calculate the sine.
-                    sin_val := sin(MATH_2_PI*time_count*rand_freq);
-
-                    if (sin_val > 0.8) then
-                        test_sample <= "10";
-                    elsif (sin_val < -0.8) then
-                        test_sample <= "11";
-                    else
-                        test_sample <= "00";
-                    end if;
-
-                    -- Increment the time count and wait for 10 ns
-                    time_count := time_count + 0.00000001;
-                    wait for 10 ns;
-
-                end loop;
-
-                -- Calculate the new divider
-                if (to_integer(unsigned(test_max_idx)) = 1) then
-                    new_divider := old_divider * 2;
+                if (sin_val > 0.8) then
+                    test_sample <= "10";
+                elsif (sin_val < -0.8) then
+                    test_sample <= "11";
                 else
-                    new_divider := integer( round( (real(old_divider)*real(to_integer(unsigned(test_max_idx)))/900.0) ) );
+                    test_sample <= "00";
                 end if;
 
-                assert false report "Completed one test cycle";
+                -- Increment the time count and wait for 10 ps
+                time_count := time_count + 0.00000000001;
+                wait for 10 ps;
 
             end loop;
 
             -- Now, the done signal should be high. So assert that the frequency is within
             --  the 0.12% limit
-            reported_freq  := 100000000.0/(real(old_divider)*real(to_integer(unsigned(test_max_idx))));
-            if ( abs(1.0 - (rand_freq/reported_freq)) < 0.001 ) then
-                assert false report "SUCCESS: Frequency correctly detected to within .1%";
+            reported_freq  := 100000000.0/(real(to_integer(unsigned(test_result_div)))*real(to_integer(unsigned(test_result_idx))));
+            if ( abs(1.0 - (rand_freq/reported_freq)) < 0.00057 ) then
+                assert false report "SUCCESS: Frequency correctly detected to within 1 cent";
+            elsif ( (abs(round(rand_freq/reported_freq) - (rand_freq/reported_freq)) < 0.01) and (round(rand_freq/repoerted_freq) > 1) ) then
+                assert false report "ERROR: Reported Harmonic, not actual frequency";
             else
-                assert false report "ERROR: Frequency incorrectly detected";
+                assert false report "ERROR: Incorrectly detected frequency";
             end if;
 
         end loop;
