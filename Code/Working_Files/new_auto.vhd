@@ -415,7 +415,7 @@ begin
 	-- We are done with a cycle when the cycle counter has reached its maximum
 	--	or once we find a maximum autocorrelation value which is not the 
 	--	first index. 
-	cycle_done_mux 	<= '1' when ( (samp_counter(11) and samp_counter(7)) = '1' ) or
+	cycle_done_mux 	<= '1' when ( (samp_counter(11) = '1') and (second_half = '0') ) or
 						   ( (new_max = '0') and (had_max = '1') and (max_idx_one = '0') ) else
 					   '0';
 
