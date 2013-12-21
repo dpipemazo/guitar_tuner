@@ -372,9 +372,9 @@ begin
 
 	-- We want to catch a pulse on the do_sample clock and keep it until
 	--	we have gotten a sample clock to acknowledge that it happened. 
-	do_sample_latch_mux <= 	do_sample 	when (do_sample_latch = '0') else
-							'0' 		when (samp_reset = '1') else
-							do_sample_latch;
+	do_sample_latch_mux <= 	'0' 			when (samp_reset = '1') else
+							do_sample_latch when (do_sample = '0') else
+							'1';
 
 	-- Have samp_reset go high for a single clock after a reset pulse is generated
 	samp_reset_mux 		<= 	do_sample_latch when (samp_reset = '0') else
