@@ -328,7 +328,7 @@ architecture behavioral of AUTOCORRELATE is
 	-- Index at which maximum occurred. Needs to be same bitwidth as max_idx
 	signal max_idx_mux 		: std_logic_vector(10 downto 0);
 	signal max_idx_val		: std_logic_vector(10 downto 0);
-	signal max_idx_result 	: std_logic_vector(10 downto 0);
+	signal max_idx_result 	: std_logic_vector(11 downto 0);
 	-- Maximum autocorrelation value. Needs to be same bitwidth as final_hamming
 	signal max_auto_mux		: std_logic_vector(10 downto 0);
 	signal max_auto_val 	: std_logic_vector(10 downto 0);
@@ -564,7 +564,7 @@ begin
 
 	-- Want to use the new index if we have a new max, keep the value if we don't have a new max, 
 	--	and reset it else
-	max_idx_mux <= 	max_idx_result	when ((new_max = '1') and (valid_auto = '1')) else
+	max_idx_mux <= 	max_idx_result(10 downto 0)	when ((new_max = '1') and (valid_auto = '1')) else
 					max_idx_val 	when ((valid_auto = '1') or (cycle_done = '1')) else
 					(others => '0');
 
