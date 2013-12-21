@@ -337,6 +337,8 @@ architecture behavioral of AUTOCORRELATE is
 	signal valid_auto		: std_logic;
 	signal second_half		: std_logic;
 	signal done_sig			: std_logic;
+	signal had_max			: std_logic;
+	signal cycle_done_mux 	: std_logic;
 
 	-- The SINGLE_AUTO component
 	component SINGLE_AUTO
@@ -402,17 +404,17 @@ begin
 	-- We are done with a cycle when the cycle counter has reached its maximum
 	--	or once we find a maximum autocorrelation value which is not the 
 	--	first index. 
-	cycle_done <= '1' when ( (samp_counter(11) and samp_counter(7)) = '1' ) or
-						   ( (valid_auto = '1') and 
-						   	 (not std_match(max_idx_val, std_logic_vector(to_unsigned(1, max_idx_val'length)))) and
-						   	 (not std_match(max_idx_val, std_logic_vector(to_unsigned(0, max_idx_val'length)))) ) else
-				  '0';
+	cycle_done_mux 	<= '1' when ( (samp_counter(11) and samp_counter(7)) = '1' ) or
+						   ( (new_max = '0') and (had_max = '1') and not std_match(max_idx_val, std_logic_vector(to_unsigned(1, max_isx_val'length))))
+
+				  	'0';
 
 	-- We are completely done when the old divider is equal to the new divider and 
 	--	we are at the end of a cycle
-	done_sig <= '1' when std_match(new_clk_div, clk_div) and (cycle_done = '1') else
-				'0';
-	done <= done_sig;
+	done_sig 		<= 	'1' when std_match(new_clk_div, clk_div) and (cycle_done = '1') else
+						'0';
+	-- Put the done signal on the line a clock after. 
+	done 			<= done_sig;
 
 
 	--
@@ -550,9 +552,13 @@ begin
 	---
 	--
 
-	-- We want a new maximum 
-	new_max <= 	'1' when (unsigned(final_hamming) > unsigned(max_auto_val)) else
-				'0';
+	--
+	-- We are looking for the final maximum in the first string of maximums
+	--	which exceeds the autocorrelation value at the first index.
+	--	
+	-- We cannot simply look for the first maximum, it must be the final one,
+	--	since otherwise we sacrifice accuracy
+	--
 
 	-- We have valid autocorrelate values from 1089 to 2175 (yes, we're missing 1088). This
 	--	is because we need a clock of lead-time to do the shift and we should really make up
@@ -560,8 +566,13 @@ begin
 	valid_auto <= 	'1' when (second_half = '1') and not std_match(samp_counter, std_logic_vector(to_unsigned(1088, samp_counter'length))) else
 					'0';	  
 
+
+	-- We have had a valid new maximum autocorrelation value
+	new_max <= 	'1' when ((unsigned(final_hamming) > unsigned(max_auto_val)) and (valid_auto = '1')) else
+				'0';
+
 	-- Want max_auto to be 0 when not in the final 256 clocks, 
-	max_auto_mux <= final_hamming 	when ((new_max = '1') and (valid_auto = '1')) else
+	max_auto_mux <= final_hamming 	when (new_max = '1') else
 					max_auto_val	when ((valid_auto = '1') or (cycle_done = '1')) else
 					(others => '0');
 
@@ -570,7 +581,7 @@ begin
 
 	-- Want to use the new index if we have a new max, keep the value if we don't have a new max, 
 	--	and reset it else
-	max_idx_mux <= 	max_idx_result(10 downto 0)	when ((new_max = '1') and (valid_auto = '1')) else
+	max_idx_mux <= 	max_idx_result(10 downto 0)	when (new_max = '1') else
 					max_idx_val 	when ((valid_auto = '1') or (cycle_done = '1')) else
 					(others => '0');
 
@@ -604,6 +615,12 @@ begin
 			max_idx_val 	<= max_idx_mux;
 			max_auto_val 	<= max_auto_mux;
 			clk_div 		<= clk_div_mux;
+
+			-- Latch whether or not we just had a maximum
+			had_max 		<= new_max;
+
+			-- Latch if we are done with the current cycle
+			cycle_done		<= cycle_done_mux;
 
 		end if;
 
