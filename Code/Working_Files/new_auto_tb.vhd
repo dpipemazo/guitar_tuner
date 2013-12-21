@@ -177,7 +177,7 @@ begin
             while (test_done /= '1') loop
 
                 -- Calculate the sine.
-                sin_val := sin(MATH_2_PI*time_count*rand_freq*1000);
+                sin_val := sin(MATH_2_PI*time_count*rand_freq*1000.0);
 
                 if (sin_val > 0.8) then
                     test_sample <= "10";
