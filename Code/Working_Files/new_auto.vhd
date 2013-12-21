@@ -338,6 +338,7 @@ architecture behavioral of AUTOCORRELATE is
 	signal done_sig			: std_logic;
 	signal had_max			: std_logic;
 	signal cycle_done_mux 	: std_logic;
+	signal max_idx_one		: std_logic;
 
 	-- The SINGLE_AUTO component
 	component SINGLE_AUTO
@@ -387,10 +388,21 @@ begin
 
     -- Do the multiplexing for the clock divider. When reset is high, set the divider 
     --	to the maximum. If reset is not high and we are sampling, keep the divider, 
-    --	otherwise if we are done, then use the new divider.
-    clk_div_mux 	<= 	(others => '1') when (reset = '1') or (done_sig = '1') else
-    					new_clk_div		when (cycle_done = '1') else
+    --	otherwise if we are done, then use the new divider. 
+    -- Need to error-check. If we picked up an overtone, then our maximum value 
+    --	will be 1. In this instance, since we think we picked up an overtone, 
+    --	multiply the divider by 2. 
+    clk_div_mux 	<= 	(others => '1') 				when (reset = '1') or (done_sig = '1') else
+    					new_clk_div						when ( (cycle_done = '1') and (max_idx_one = '0') ) else
+    					(clk_div(10 downto 0) & "0")	when ( (cycle_done = '1') and (max_idx_one = '1') ) else
     					clk_div;
+
+    --
+    -- Signal saying that the max index is not one, we need this for 
+    --	error-checking
+    --
+    max_idx_one <=  '1' when std_match(max_idx_val, std_logic_vector(to_unsigned(1, max_idx_val'length))) else
+    				'0'; 
 
 	--
 	-- Logic for which sample we are currently taking. The sample counter
@@ -404,7 +416,7 @@ begin
 	--	or once we find a maximum autocorrelation value which is not the 
 	--	first index. 
 	cycle_done_mux 	<= '1' when ( (samp_counter(11) and samp_counter(7)) = '1' ) or
-						   ( (new_max = '0') and (had_max = '1') and not std_match(max_idx_val, std_logic_vector(to_unsigned(1, max_idx_val'length)))) else
+						   ( (new_max = '0') and (had_max = '1') and (max_idx_one = '0') ) else
 					   '0';
 
 	-- We are completely done when the old divider is equal to the new divider or
