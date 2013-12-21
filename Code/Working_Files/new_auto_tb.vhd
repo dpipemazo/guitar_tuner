@@ -6,6 +6,9 @@
 --	so they do take a while, but use the same values as will be used 
 --	in the real system. 
 --
+-- 12/20/13 -- Tests passing! Can detect frequencies from 25Hz to 
+--              10Khz within 2 cents. (really 1ish cent)
+--
 
 library ieee;
 use ieee.std_logic_1164.all;
