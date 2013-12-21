@@ -271,7 +271,6 @@ architecture behavioral of AUTOCORRELATE is
 	signal clk_div_x_idx  	: std_logic_vector(23 downto 0);
 	signal clk_div			: std_logic_vector(12 downto 0);
 	signal clk_div_mux 		: std_logic_vector(12 downto 0);
-	signal clk_div_result	: std_logic_vector(13 downto 0);
 	signal new_clk_div		: std_logic_vector(12 downto 0);
 
 	-- Counter for our sample clock. Needs to be same bitwidth as 
@@ -380,7 +379,7 @@ begin
     --	clk_div by max_idx_val and then shift the result right by 10.
     --	We will add 1 to the result if bit 9 of the multiply result was set
     --	in order to round it. 
-    clk_div_x_idx 	<= 	std_logic_vector(unsigned(clk_div) * unsigned(max_idx_mux));
+    clk_div_x_idx 	<= 	std_logic_vector(unsigned(clk_div) * unsigned(max_idx_val));
 
     -- Perform the divide by 1024 with rounding
     new_clk_div 	<= 	clk_div_x_idx(22 downto 10) when (clk_div_x_idx(9) = '0') else
@@ -575,7 +574,7 @@ begin
 
 
 	-- We have had a valid new maximum autocorrelation value
-	new_max <= 	'1' when ((unsigned(final_hamming) > unsigned(max_auto_val)) and (valid_auto = '1')) else
+	new_max <= 	'1' when ((unsigned(final_hamming) > unsigned(max_auto_val)) and (valid_auto = '1') and (cycle_done = '0')) else
 				'0';
 
 	-- Want max_auto to be 0 when not in the final 256 clocks, 
