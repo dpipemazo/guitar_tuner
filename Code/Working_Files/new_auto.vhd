@@ -408,9 +408,17 @@ begin
 						   ( (new_max = '0') and (had_max = '1') and not std_match(max_idx_val, std_logic_vector(to_unsigned(1, max_idx_val'length)))) else
 					   '0';
 
-	-- We are completely done when the old divider is equal to the new divider and 
-	--	we are at the end of a cycle
-	done_sig 		<= 	'1' when std_match(new_clk_div, clk_div) and (cycle_done = '1') else
+	-- We are completely done when the old divider is equal to the new divider or
+	--	the index found is >= 1024 at the end of any given cycle. The second
+	--	clause provides termination when the frequency is in-between dividers and oscillates.
+	--	This prevents the divider from ever increasing, but the array was calculated 
+	--	to have a length such that it should never have to. Also, there
+	--	is higher accuracy in indieces in the array past 1024, so that's
+	--	all we really care about. This won't work if the current strategy
+	--	of cycling up from the lowest frequency is abandoned. 
+	done_sig 		<= 	'1' when ( (std_match(new_clk_div, clk_div) or 
+									(unsigned(max_idx_val) >= to_unsigned(1024, max_idx_val'length))
+								   ) and (cycle_done = '1') ) else
 						'0';
 	-- Put the done signal on the line a clock after. 
 	done 			<= done_sig;
