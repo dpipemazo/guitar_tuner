@@ -603,6 +603,15 @@ begin
 
 	end process UpdateSampleCounter;
 
+	--
+	---
+	---- Results!
+	---
+	--
+
+	result_div <= clk_div;
+	result_idx <= max_idx_val;
+
 end architecture;
 
 
