@@ -61,9 +61,6 @@ architecture TB_ARCHITECTURE of new_auto_tb is
 	signal test_result_idx	: std_logic_vector(10 downto 0);
 	signal test_done 		: std_logic; 
 
-	--Signal used to stop clock signal generators. should always be FALSE
-    signal  END_SIM  :  BOOLEAN := FALSE;
-
     --
     -- OPCODE TYPE DEFINITION ENUM
     --
@@ -92,6 +89,9 @@ begin
 
 	-- Make the system clock
 	make_clock: process
+
+        variable END_SIM : boolean := FALSE;
+
 	begin
         -- this process generates a 10 ps period, 50% duty cycle clock, 
         -- which is equivalent to the clock which we will have in our system. 
@@ -122,6 +122,7 @@ begin
     	variable freq, freq_lo, freq_hi, reported_freq, rand_freq : real;
     	variable time_count : real;
         variable old_divider, new_divider : integer;
+        variable END_SIM : boolean := FALSE;
 
     begin
 
@@ -188,15 +189,17 @@ begin
 
             end loop;
 
-            -- Now, the done signal should be high. So assert that the frequency is within
-            --  the 0.12% limit
+            -- Calculate the reported frequency by dividing the input clock (100MHz) by the result divider and index
             reported_freq  := 100000000.0/(real(to_integer(unsigned(test_result_div)))*real(to_integer(unsigned(test_result_idx))));
+
+            -- See if we (1) got it right to 1 cent or (2) got a harmonic or (3) failed miserably
             if ( abs(1.0 - (rand_freq/reported_freq)) < 0.00057 ) then
                 assert false report "SUCCESS: Frequency correctly detected to within 1 cent";
             elsif ( (abs(round(rand_freq/reported_freq) - (rand_freq/reported_freq)) < 0.01) and (round(rand_freq/repoerted_freq) > 1) ) then
                 assert false report "ERROR: Reported Harmonic, not actual frequency";
             else
                 assert false report "ERROR: Incorrectly detected frequency";
+                END_SIM := TRUE;
             end if;
 
         end loop;

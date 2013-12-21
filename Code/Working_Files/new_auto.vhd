@@ -555,7 +555,7 @@ begin
 	final_hamming_1024 	<= std_logic_vector(("0" & unsigned(hamming_9s_1024(0))) + ("0" & unsigned(hamming_9s_1024(1))));
 	final_hamming_64 	<= std_logic_vector(("0" & unsigned(hamming_5s_64(0))) + ("0" & unsigned(hamming_5s_64(1))));
 	-- Do not need to worry about overflow out of 11 bits, since 11 bits can hold 2048 max and out max is 1088
-	final_hamming 		<= std_logic_vector(unsigned(final_hamming_1024) + ("0000" & unsigned(final_hamming_64)))
+	final_hamming 		<= std_logic_vector(unsigned(final_hamming_1024) + ("0000" & unsigned(final_hamming_64)));
 
 	--
 	---
@@ -580,7 +580,7 @@ begin
 					(others => '0');
 
 	-- Need to subtract 1088 from the sample counter to get the current sample's index.
-	max_idx_result <= std_logic_vector(unsigned(samp_counter) - to_unsigned(1088, samp_counter'length)));
+	max_idx_result <= std_logic_vector(unsigned(samp_counter) - to_unsigned(1088, samp_counter'length));
 
 	-- Want to use the new index if we have a new max, keep the value if we don't have a new max, 
 	--	and reset it else
