@@ -401,7 +401,7 @@ begin
 
 	-- We are done with a cycle when the cycle counter has reached its maximum
 	--	or once we find a maximum autocorrelation value which is not one. 
-	cycle_done <= '1' when (samp_counter(11) and samp_counter(7)) or
+	cycle_done <= '1' when ((samp_counter(11) and samp_counter(7)) = '1') or
 						   ((valid_auto = '1') and not std_match(max_idx_val, std_logic_vector(to_unsigned(1, max_idx_val'length)))) else
 				  '0';
 
