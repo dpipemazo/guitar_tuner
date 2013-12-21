@@ -335,6 +335,7 @@ architecture behavioral of AUTOCORRELATE is
 	-- Signals for seeing if it is a valid cycle to store results or if we have a new maximum	
 	signal new_max			: std_logic;
 	signal valid_auto		: std_logic;
+	signal second_half		: std_logic;
 
 	-- Logic to catch the do_sample pulse from the controller
 	signal do_sample_latch		: std_logic;
@@ -376,7 +377,7 @@ begin
 							do_sample_latch;
 
 	-- Have samp_reset go high for a single clock after a reset pulse is generated
-	samp_reset_mux 		<= 	do_sampe_latch when (samp_reset = '0') else
+	samp_reset_mux 		<= 	do_sample_latch when (samp_reset = '0') else
 							'0';
 
 	--
@@ -402,7 +403,7 @@ begin
 
     -- Perform the divide by 1024 with rounding
     new_clk_div 	<= 	clk_div_x_idx(23 downto 11) when (clk_div_x_idx(10) = '0') else
-    					std_logic_vector(unsigned(clk_div_idx(23 downto 11)) + 1);
+    					std_logic_vector(unsigned(clk_div_x_idx(23 downto 11)) + 1);
 
     -- Do the multiplexing for the clock divider. When reset is high, set the divider 
     --	to the maximum. If reset is not high and we are sampling, keep the divider, 
@@ -534,7 +535,7 @@ begin
 	begin
 		hamming_7s_1024(i) 	<= std_logic_vector(("0" & unsigned(hamming_6s_1024(2*i))) + ("0" & unsigned(hamming_6s_1024(2*i + 1))));
 
-		hamming_3s_64(i) 	<= std_logic_vector(("0" & unsigned(hammind_2s_64(2*i))) + ("0" & unsigned(hammind_2s_64(2*i + 1))));
+		hamming_3s_64(i) 	<= std_logic_vector(("0" & unsigned(hamming_2s_64(2*i))) + ("0" & unsigned(hamming_2s_64(2*i + 1))));
 	end generate genham7s;
 
 	genham8s: for i in 0 to 3 generate
@@ -572,7 +573,8 @@ begin
 	-- We have valid autocorrelate values from 1089 to 2175 (yes, we're missing 1088). This
 	--	is because we need a clock of lead-time to do the shift and we should really make up
 	--	for it on the back end but we don't really care about losing one off of the back. 
-	valid_auto <= '1' when (second_half = '1') and not std_match(samp_counter, std_logic_vector(to_unsigned(1088, samp_counter'length)));	  
+	valid_auto <= 	'1' when (second_half = '1') and not std_match(samp_counter, std_logic_vector(to_unsigned(1088, samp_counter'length))) else
+					'0';	  
 
 	-- Want max_auto to be 0 when not in the final 256 clocks, 
 	max_auto_mux <= final_hamming 	when ((new_max = '1') and (valid_auto = '1')) else
