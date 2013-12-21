@@ -380,8 +380,8 @@ begin
     clk_div_x_idx 	<= 	std_logic_vector(unsigned(clk_div) * unsigned(max_idx_val));
 
     -- Perform the divide by 1024 with rounding
-    new_clk_div 	<= 	clk_div_x_idx(23 downto 11) when (clk_div_x_idx(10) = '0') else
-    					std_logic_vector(unsigned(clk_div_x_idx(23 downto 11)) + 1);
+    new_clk_div 	<= 	clk_div_x_idx(22 downto 10) when (clk_div_x_idx(9) = '0') else
+    					std_logic_vector(unsigned(clk_div_x_idx(22 downto 10)) + 1);
 
     -- Do the multiplexing for the clock divider. When reset is high, set the divider 
     --	to the maximum. If reset is not high and we are sampling, keep the divider, 
