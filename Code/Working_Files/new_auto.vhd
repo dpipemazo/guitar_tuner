@@ -212,7 +212,7 @@ entity AUTOCORRELATE is
 														--	process
 
 		-- Outputs
-		result_div  : out std_logic_vector(12 downto 0);-- Divider used which gets
+		result_div  : out std_logic_vector(11 downto 0);-- Divider used which gets
 														-- close to 1024xf_interest	
 
 		result_idx	: out std_logic_vector(10 downto 0);-- Index of the sample
@@ -268,16 +268,16 @@ architecture behavioral of AUTOCORRELATE is
 	attribute buffer_type of sample_clock : signal is "BUFG";
 
 	-- Signals for figuring out the clock divider
-	signal clk_div_x_idx  	: std_logic_vector(23 downto 0);
-	signal clk_div			: std_logic_vector(12 downto 0);
-	signal clk_div_mux 		: std_logic_vector(12 downto 0);
-	signal new_clk_div		: std_logic_vector(12 downto 0);
+	signal clk_div_x_idx  	: std_logic_vector(22 downto 0);
+	signal clk_div			: std_logic_vector(11 downto 0);
+	signal clk_div_mux 		: std_logic_vector(11 downto 0);
+	signal new_clk_div		: std_logic_vector(11 downto 0);
 
 	-- Counter for our sample clock. Needs to be same bitwidth as 
 	--	the divider
-	signal clk_counter 		: std_logic_vector(12 downto 0);
-	signal clk_counter_mux 	: std_logic_vector(12 downto 0);
-	signal clk_counter_inc  : std_logic_vector(12 downto 0);
+	signal clk_counter 		: std_logic_vector(11 downto 0);
+	signal clk_counter_mux 	: std_logic_vector(11 downto 0);
+	signal clk_counter_inc  : std_logic_vector(11 downto 0);
 
 	-- Signals to link together the autocorrelation units
 	type sample_array 	is array(1088 downto 0) of std_logic_vector(1 downto 0);
@@ -382,8 +382,8 @@ begin
     clk_div_x_idx 	<= 	std_logic_vector(unsigned(clk_div) * unsigned(max_idx_val));
 
     -- Perform the divide by 1024 with rounding
-    new_clk_div 	<= 	clk_div_x_idx(22 downto 10) when (clk_div_x_idx(9) = '0') else
-    					std_logic_vector(unsigned(clk_div_x_idx(22 downto 10)) + 1);
+    new_clk_div 	<= 	clk_div_x_idx(21 downto 10) when (clk_div_x_idx(9) = '0') else
+    					std_logic_vector(unsigned(clk_div_x_idx(21 downto 10)) + 1);
 
     -- Do the multiplexing for the clock divider. When reset is high, set the divider 
     --	to the maximum. If reset is not high and we are sampling, keep the divider, 
@@ -435,7 +435,7 @@ begin
 	clk_counter_mux <= 	clk_counter_inc when (unsigned(clk_counter_inc) <  unsigned(clk_div)) else
 						(others => '0');
 	-- Sample clock is high when count is greater than divisor/2, else low
-	sample_clock_mux <= '1' when ((unsigned(clk_counter) < ("0" & unsigned(clk_div(12 downto 1)))) or (reset = '1')) else
+	sample_clock_mux <= '1' when ((unsigned(clk_counter) < ("0" & unsigned(clk_div(11 downto 1)))) or (reset = '1')) else
 						'0';
 
 	--

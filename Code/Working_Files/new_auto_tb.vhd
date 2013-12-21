@@ -39,7 +39,7 @@ architecture TB_ARCHITECTURE of new_auto_tb is
                                                             --  process
 
             -- Outputs
-            result_div  : out std_logic_vector(12 downto 0);-- Divider used which gets
+            result_div  : out std_logic_vector(11 downto 0);-- Divider used which gets
                                                             -- close to 1024xf_interest 
 
             result_idx  : out std_logic_vector(10 downto 0);-- Index of the sample
@@ -57,7 +57,7 @@ architecture TB_ARCHITECTURE of new_auto_tb is
 	signal test_clock 		: std_logic;
 	signal test_sample 		: std_logic_vector(1 downto 0);
 	signal test_reset	: std_logic;
-    signal test_result_div  : std_logic_vector(12 downto 0);
+    signal test_result_div  : std_logic_vector(11 downto 0);
 	signal test_result_idx	: std_logic_vector(10 downto 0);
 	signal test_done 		: std_logic; 
 
