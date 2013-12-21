@@ -32,7 +32,7 @@ architecture TB_ARCHITECTURE of new_auto_tb is
 
             sample      : in std_logic_vector(1 downto 0);  -- sample input
 
-            do_sample   : in std_logic;                     -- active high. Just needs 
+            reset   : in std_logic;                     -- active high. Just needs 
                                                             --  to be high for one 
                                                             --  system (100 MHZ) clock
                                                             --  and it will begin a sampling
@@ -56,7 +56,7 @@ architecture TB_ARCHITECTURE of new_auto_tb is
 	-- Signals to map to I/) of the component
 	signal test_clock 		: std_logic;
 	signal test_sample 		: std_logic_vector(1 downto 0);
-	signal test_do_sample	: std_logic;
+	signal test_reset	: std_logic;
     signal test_result_div  : std_logic_vector(12 downto 0);
 	signal test_result_idx	: std_logic_vector(10 downto 0);
 	signal test_done 		: std_logic; 
@@ -80,7 +80,7 @@ begin
 		port map(
 			clock 		=> test_clock,
 			sample 	    => test_sample,
-			do_sample 	=> test_do_sample,
+			reset 	    => test_reset,
 			result_div 	=> test_result_div,
 			result_idx 	=> test_result_idx,
 			done 		=> test_done
@@ -149,6 +149,17 @@ begin
         -- Give the system a clock to reset itself
         wait for 20 ps;
 
+        --
+        -- Need to tell the system to reset
+        --  So send reset high for a clock
+        --  After this, it will continuously sample
+        --  and the output can be latched into a FIFO.
+        --  using the done signal
+        --
+        test_reset <= '1';
+        wait for 20 ps;
+        test_reset <= '0';
+
         while (END_SIM = FALSE) loop
 
             -- Get a random value on the interval [0,1].
@@ -158,15 +169,6 @@ begin
 
             -- Initialize the time to a random time
             UNIFORM(seed1, seed2, time_count);
-
-            --
-            -- Need to tell the system to sample. 
-            --  So send do_sample high for two system
-            --  clocks and then wait for done to clear
-            --
-            test_do_sample <= '1';
-            wait for 20 ps;
-            test_do_sample <= '0';
 
             while (test_done = '1') loop
                 wait for 10 ps;

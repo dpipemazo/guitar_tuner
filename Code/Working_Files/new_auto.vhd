@@ -205,7 +205,7 @@ entity AUTOCORRELATE is
 
 		sample  	: in std_logic_vector(1 downto 0);	-- sample input
 
-		do_sample   : in std_logic;						-- active high. Just needs 
+		reset   	: in std_logic;						-- active high. Just needs 
 														--	to be high for one 
 														--	system (100 MHZ) clock
 														--	and it will begin a sampling
@@ -336,6 +336,7 @@ architecture behavioral of AUTOCORRELATE is
 	signal new_max			: std_logic;
 	signal valid_auto		: std_logic;
 	signal second_half		: std_logic;
+	signal done_sig			: std_logic;
 
 	-- The SINGLE_AUTO component
 	component SINGLE_AUTO
@@ -386,7 +387,7 @@ begin
     -- Do the multiplexing for the clock divider. When reset is high, set the divider 
     --	to the maximum. If reset is not high and we are sampling, keep the divider, 
     --	otherwise if we are done, then use the new divider.
-    clk_div_mux 	<= 	(others => '1') when (do_sample = '1') else
+    clk_div_mux 	<= 	(others => '1') when (reset = '1') or (done_sig = '1') else
     					new_clk_div		when (cycle_done = '1') else
     					clk_div;
 
@@ -395,7 +396,7 @@ begin
 	--	will reset to 0 after reset is asserted and will stick at the 
 	--	maximum value until reset is asserted, else, increment. 
 	--
-	samp_counter_mux <= (others => '0') when ((cycle_done = '1') or (do_sample = '1')) else
+	samp_counter_mux <= (others => '0') when ((cycle_done = '1') or (reset = '1')) else
 						std_logic_vector(unsigned(samp_counter) + 1);
 
 	-- We are done with a cycle when the cycle counter has reached its maximum
@@ -403,8 +404,9 @@ begin
 
 	-- We are completely done when the old divider is equal to the new divider and 
 	--	we are at the end of a cycle
-	done <= '1' when std_match(new_clk_div, clk_div) and (cycle_done = '1') else
-			'0';
+	done_sig <= '1' when std_match(new_clk_div, clk_div) and (cycle_done = '1') else
+				'0';
+	done <= done_sig;
 
 
 	--
@@ -419,7 +421,7 @@ begin
 	clk_counter_mux <= 	clk_counter_inc when (unsigned(clk_counter_inc) <  unsigned(clk_div)) else
 						(others => '0');
 	-- Sample clock is high when count is greater than divisor/2, else low
-	sample_clock_mux <= '1' when ((unsigned(clk_counter) < ("0" & unsigned(clk_div(12 downto 1)))) or (do_sample = '1')) else
+	sample_clock_mux <= '1' when ((unsigned(clk_counter) < ("0" & unsigned(clk_div(12 downto 1)))) or (reset = '1')) else
 						'0';
 
 	--
