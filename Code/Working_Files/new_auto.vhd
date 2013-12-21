@@ -337,12 +337,6 @@ architecture behavioral of AUTOCORRELATE is
 	signal valid_auto		: std_logic;
 	signal second_half		: std_logic;
 
-	-- Logic to catch the do_sample pulse from the controller
-	signal do_sample_latch		: std_logic;
-	signal do_sample_latch_mux	: std_logic;
-	signal samp_reset			: std_logic;
-	signal samp_reset_mux		: std_logic;
-
 	-- The SINGLE_AUTO component
 	component SINGLE_AUTO
 		port(
@@ -363,22 +357,6 @@ architecture behavioral of AUTOCORRELATE is
 	end component;
 
 begin
-
-	--
-	---
-	---- Logic to start sampling/reset
-	---
-	--
-
-	-- We want to catch a pulse on the do_sample clock and keep it until
-	--	we have gotten a sample clock to acknowledge that it happened. 
-	do_sample_latch_mux <= 	'0' 			when (samp_reset = '1') else
-							do_sample_latch when (do_sample = '0') else
-							'1';
-
-	-- Have samp_reset go high for a single clock after a reset pulse is generated
-	samp_reset_mux 		<= 	do_sample_latch when (samp_reset = '0') else
-							'0';
 
 	--
 	---
@@ -408,7 +386,7 @@ begin
     -- Do the multiplexing for the clock divider. When reset is high, set the divider 
     --	to the maximum. If reset is not high and we are sampling, keep the divider, 
     --	otherwise if we are done, then use the new divider.
-    clk_div_mux 	<= 	(others => '1') when (samp_reset = '1') else
+    clk_div_mux 	<= 	(others => '1') when (do_sample = '1') else
     					new_clk_div		when (cycle_done = '1') else
     					clk_div;
 
@@ -417,7 +395,7 @@ begin
 	--	will reset to 0 after reset is asserted and will stick at the 
 	--	maximum value until reset is asserted, else, increment. 
 	--
-	samp_counter_mux <= (others => '0') when ((cycle_done = '1') or (samp_reset = '1')) else
+	samp_counter_mux <= (others => '0') when ((cycle_done = '1') or (do_sample = '1')) else
 						std_logic_vector(unsigned(samp_counter) + 1);
 
 	-- We are done with a cycle when the cycle counter has reached its maximum
@@ -441,7 +419,7 @@ begin
 	clk_counter_mux <= 	clk_counter_inc when (unsigned(clk_counter_inc) <  unsigned(clk_div)) else
 						(others => '0');
 	-- Sample clock is high when count is greater than divisor/2, else low
-	sample_clock_mux <= '1' when (unsigned(clk_counter) < ("0" & unsigned(clk_div(12 downto 1)))) else
+	sample_clock_mux <= '1' when ((unsigned(clk_counter) < ("0" & unsigned(clk_div(12 downto 1)))) or (do_sample = '1')) else
 						'0';
 
 	--
@@ -606,9 +584,6 @@ begin
 			clk_counter 	<= clk_counter_mux;
 			sample_clock 	<= sample_clock_mux;
 
-			-- Latch the do sample 
-			do_sample_latch <= do_sample_latch_mux;
-
 		end if;
 
 	end process MakeSampleClock;
@@ -623,9 +598,6 @@ begin
 			max_idx_val 	<= max_idx_mux;
 			max_auto_val 	<= max_auto_mux;
 			clk_div 		<= clk_div_mux;
-
-			-- Latch the reset line
-			samp_reset 		<= samp_reset_mux;
 
 		end if;
 
