@@ -415,7 +415,7 @@ begin
 	-- We are done with a cycle when the cycle counter has reached its maximum
 	--	or once we find a maximum autocorrelation value which is not the 
 	--	first index. 
-	cycle_done_mux 	<= '1' when ( (samp_counter(11) = '1') and (second_half = '0') ) or
+	cycle_done_mux 	<= '1' when ( (samp_counter(11) = '1') and (samp_counter(7) = '1') ) or
 						   ( (new_max = '0') and (had_max = '1') and (max_idx_one = '0') ) else
 					   '0';
 
@@ -461,9 +461,11 @@ begin
 	--	to the array of units. 
 	samples(0) 	<= sample;
 
-	-- We are in the second half of the autocorrelation when we are between 1088 and 2175
-	second_half <= (samp_counter(10) and (samp_counter(9) or samp_counter(8) or samp_counter(7) or samp_counter(6))) or
-				  (samp_counter(11) and (not samp_counter(7)));
+	-- We are in the second half of the autocorrelation when we are between 1088 and 2176
+	second_half <= (	(samp_counter(10) and (samp_counter(9) or samp_counter(8) or samp_counter(7) or samp_counter(6))) 	or
+				  		(samp_counter(11) and (not samp_counter(7))) 														or
+				  		std_match(samp_counter, std_logic_vector(to_unsigned(2176, samp_counter'length)))
+				  	);
 
 	-- The operation can be the same as the valid_auto bit, since we want to do the second
 	--	type of operation for the second half of the sampling
@@ -578,9 +580,7 @@ begin
 	--	since otherwise we sacrifice accuracy
 	--
 
-	-- We have valid autocorrelate values from 1089 to 2175 (yes, we're missing 1088). This
-	--	is because we need a clock of lead-time to do the shift and we should really make up
-	--	for it on the back end but we don't really care about losing one off of the back. 
+	-- We have valid autocorrelate values from 1089 to 2176. 
 	valid_auto <= 	'1' when (second_half = '1') and not std_match(samp_counter, std_logic_vector(to_unsigned(1088, samp_counter'length))) else
 					'0';	  
 
