@@ -417,7 +417,7 @@ begin
 	--	all we really care about. This won't work if the current strategy
 	--	of cycling up from the lowest frequency is abandoned. 
 	done_sig 		<= 	'1' when ( (std_match(new_clk_div, clk_div) or 
-									(unsigned(max_idx_val) >= to_unsigned(1024, max_idx_val'length))
+								   (std_match(max_idx_val, std_logic_vector(to_unsigned(1025, max_idx_val'length))))
 								   ) and (cycle_done = '1') ) else
 						'0';
 	-- Put the done signal on the line a clock after. 
