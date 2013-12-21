@@ -403,7 +403,7 @@ begin
 	--	or once we find a maximum autocorrelation value which is not the 
 	--	first autocorrelation sample (sample_counter = 1089)
 	cycle_done <= '1' when ((samp_counter(11) and samp_counter(7)) = '1') or
-						   ((valid_auto = '1') and (new_max = '1') and not std_match(max_idx_val, std_logic_vector(to_unsigned(1089, max_idx_val'length)))) else
+						   ((valid_auto = '1') and (new_max = '1') and not std_match(samp_counter, std_logic_vector(to_unsigned(1089, samp_counter'length)))) else
 				  '0';
 
 	-- We are completely done when the old divider is equal to the new divider and 
