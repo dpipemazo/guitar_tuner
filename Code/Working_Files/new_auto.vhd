@@ -462,10 +462,10 @@ begin
 	samples(0) 	<= sample;
 
 	-- We are in the second half of the autocorrelation when we are between 1088 and 2176
-	second_half <= (	(samp_counter(10) and (samp_counter(9) or samp_counter(8) or samp_counter(7) or samp_counter(6))) 	or
-				  		(samp_counter(11) and (not samp_counter(7))) 														or
-				  		std_match(samp_counter, std_logic_vector(to_unsigned(2176, samp_counter'length)))
-				  	);
+	second_half <= 	'1' when (	((samp_counter(10) and (samp_counter(9) or samp_counter(8) or samp_counter(7) or samp_counter(6))) = '1') 	or
+				  				((samp_counter(11) and (not samp_counter(7))) = '1') 														or
+				  				std_match(samp_counter, std_logic_vector(to_unsigned(2176, samp_counter'length))) ) 						else
+					'0';
 
 	-- The operation can be the same as the valid_auto bit, since we want to do the second
 	--	type of operation for the second half of the sampling
