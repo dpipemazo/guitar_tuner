@@ -442,7 +442,7 @@ begin
 	ops(0) 		<= second_half;
 
 	-- First, string together autocorrelation units
-	genautos: for i in 0 to 1023 generate 
+	genautos: for i in 0 to 1087 generate 
 	begin
 
 		autox: SINGLE_AUTO
