@@ -165,7 +165,7 @@ begin
             -- Get a random value on the interval [0,1].
             UNIFORM(seed1, seed2, rand);
             -- Map the random value to [25, 10000]
-            rand_freq := rand*9975.0 + 25.0;
+            rand_freq := rand*475.0 + 25.0;
 
             -- Initialize the time to a random time
             UNIFORM(seed1, seed2, time_count);
