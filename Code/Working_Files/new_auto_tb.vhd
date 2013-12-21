@@ -199,7 +199,7 @@ begin
             reported_freq  := 100000000.0/(real(to_integer(unsigned(test_result_div)))*real(to_integer(unsigned(test_result_idx))));
 
             -- See if we (1) got it right to 1 cent or (2) got a harmonic or (3) failed miserably
-            if ( abs(1.0 - (rand_freq/reported_freq)) < 0.00057 ) then
+            if ( abs(1.0 - (rand_freq/reported_freq)) < 0.001156 ) then
                 assert false report "SUCCESS: Frequency correctly detected to within 1 cent";
             elsif ( (abs(round(rand_freq/reported_freq) - (rand_freq/reported_freq)) < 0.01) and (round(rand_freq/reported_freq) > 1.5) ) then
                 assert false report "ERROR: Reported Harmonic, not actual frequency";
