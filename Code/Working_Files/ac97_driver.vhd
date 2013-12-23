@@ -447,7 +447,7 @@ entity ac97_driver is
 		volume			: in  std_logic_vector(4  downto 0);			-- unsigned volume. 31 is max
 		source			: in  std_logic_vector(2 downto 0);				-- 000 for Microphone, 100 for line in. 
 
-		-- outputs to go to the LM4550 pins
+		-- I/O to go to the LM4550 pins
 		audsdi			: in std_logic;
 		audsdo 			: out std_logic;
 		sync			: out std_logic;
@@ -467,13 +467,6 @@ architecture behavioral of ac97_driver is
 	signal cmd_data 	: std_logic_vector(15 downto 0);
 	signal ready 		: std_logic;
 	signal latching_cmd : std_logic;
-
-	-- I/O to the codec
-	signal sync			: std_logic;
-	signal bitclk		: std_logic;
-	signal audrst 		: std_logic;
-	signal audsdo		: std_logic;
-	signal aydsdi		: std_logic;
 
 begin
 
