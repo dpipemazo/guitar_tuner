@@ -36,7 +36,14 @@ entity system is
         -- leds
         led         : out std_logic_vector(7 downto 0);
         -- switches
-        sw          : in  std_logic_vector(7 downto 0)
+        sw          : in  std_logic_vector(7 downto 0);
+
+        -- Need to declare I/O for audio here
+        AUDSDI          : in std_logic;
+        AUDSDO          : out std_logic;
+        SYNC            : out std_logic;
+        AUDRST          : out std_logic;
+        BITCLK          : in std_logic
 
     );
 end system;
