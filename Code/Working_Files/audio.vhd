@@ -189,7 +189,7 @@ begin
 
 				-- If the sync clock counter is at a maximum, then we need to
 				--	output the max and min values
-				if (sync_clk_counter = (others => '1')) then
+				if (std_match(sync_clk_counter, "1111111111")) then
 					-- Clock the new max/min
 					auto_sample_max <= temp_max;
 					auto_sample_min <= temp_min;
