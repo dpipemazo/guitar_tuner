@@ -78,13 +78,16 @@ architecture structural of system is
 
     -- Resets
     signal auto_reset  :  std_logic;
+    signal audio_reset :  std_logic;
 
 begin
 
     --
     -- Various reset logic
     --
-    auto_reset <= not btn(0);
+    auto_reset  <= db_buttons(0);
+    audio_reset <= not db_buttons(0);
+
 
     --
     -- The button debouncing unit
@@ -108,7 +111,7 @@ begin
     audo: entity AUDIO
         port map(
             clock           => clk,
-            n_reset         => btn(0),
+            n_reset         => audio_reset,
             auto_sample     => sample,
             sample_valid    => sample_valid,
             raw_sample_out  => output_sample,
@@ -183,19 +186,24 @@ begin
     -- Output the current button in the high 3 bits of the LEDs and the 
     --  count in 5 to 4
     
-    led(7 downto 5) <=  "001" when std_match(curr_button, "000001") else
-                        "010" when std_match(curr_button, "000010") else
-                        "011" when std_match(curr_button, "000100") else
-                        "100" when std_match(curr_button, "001000") else
-                        "101" when std_match(curr_button, "010000") else
-                        "110" when std_match(curr_button, "100000") else
-                        "111" when (not std_match(curr_button, "000000")) else
-                        "000";
+    -- led(7 downto 5) <=  "001" when std_match(curr_button, "000001") else
+    --                     "010" when std_match(curr_button, "000010") else
+    --                     "011" when std_match(curr_button, "000100") else
+    --                     "100" when std_match(curr_button, "001000") else
+    --                     "101" when std_match(curr_button, "010000") else
+    --                     "110" when std_match(curr_button, "100000") else
+    --                     "111" when (not std_match(curr_button, "000000")) else
+    --                     "000";
 
-    led(4 downto 0) <= button_count;
+    -- led(4 downto 0) <= button_count;
 
     -- led(5 downto 0) <= db_buttons;
     -- led(7 downto 6) <= "00";
+
+    --
+    -- See if we can see the sample coming in
+    --
+    led(7 downto 0) <= input_sample(7 downto 0);
 
 
 

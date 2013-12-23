@@ -371,44 +371,44 @@ begin
 				else																-- Otherwise mute it
 					cmd <= X"02_8000"; 
 				end if;					
-				next_state <= S2;													 
+				next_state <= S1;													 
 			when S1 => 
 				if ((play_samples = '1') and (play_output = '0')) then				-- If we want to turn on playback
-					cmd <= X"02" & "000" & atten & "000" & atten;  					-- set the headphone volume to the volume input
+					cmd <= X"04" & "000" & atten & "000" & atten;  					-- set the headphone volume to the volume input
 				else																-- Otherwise mute the master volume
-					cmd <= X"02_8000"; 
+					cmd <= X"04_8000"; 
 				end if;		
-				next_state <= S4;
+				next_state <= S2;
 			when S2 => 
 				cmd <= X"0A_0000";  												-- Set pc_beep volume
-				next_state <= S11;
+				next_state <= S3;
 			when S3 => 
 				cmd <= X"0E_8048";  												-- Mic Volume set to gain of +20db
-				next_state <= S10;
+				next_state <= S4;
 			when S4 => 
 				cmd <= X"18_0808";  												-- PCM volume
-				next_state <= S6;
+				next_state <= S5;
 			when S5 =>
 				cmd <= X"1A" & "00000" & source & "00000" & source;  				-- Record select reg 000->Mic, 001->CD in l/r, 010->Video in l/r, 011->aux in l/r
-				next_state <= S7;													-- 100->line_in l/r, 101->stereo mix, 110->mono mix, 111->phone input
+				next_state <= S6;													-- 100->line_in l/r, 101->stereo mix, 110->mono mix, 111->phone input
 			when S6 =>
 				cmd <= X"1C_0F0F";  												-- Record gain set to max (22.5dB gain)
-				next_state <= S8;	
+				next_state <= S7;	
 			when S7 =>
 				cmd <= X"20_8000";  												-- PCM out path 3D audio bypassed
-				next_state <= S0;
+				next_state <= S8;
 			when S8 => 
 				cmd <= X"2C_BB80";   												-- DAC rate 48 KHz,	can be set to 1F40 = 8Khz, 2B11 = 11.025KHz, 3E80 = 16KHz,											 
-				next_state <= S5;													-- 5622 = 22.05KHz, AC44 = 44.1KHz, BB80 = 48KHz
+				next_state <= S9;													-- 5622 = 22.05KHz, AC44 = 44.1KHz, BB80 = 48KHz
 			when S9 =>
 				cmd <= X"32_BB80";  												-- ADC rate 48 KHz,	can be set to 1F40 = 8Khz, 2B11 = 11.025KHz, 3E80 = 16KHz,									 
-				next_state <= S3;													-- 5622 = 22.05KHz, AC44 = 44.1KHz, BB80 = 48KHz	
+				next_state <= S10;													-- 5622 = 22.05KHz, AC44 = 44.1KHz, BB80 = 48KHz	
 			when S10 =>
 				cmd <= X"80_0000";  							  					
-				next_state <= S9;
+				next_state <= S11;
 			when S11 =>
 				cmd <= X"80_0000";  												
-				next_state <= S1;
+				next_state <= S0;
 		end case;
 	 
   end process;
