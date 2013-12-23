@@ -26,7 +26,9 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 use IEEE.numeric_std.all;
-use work.ac97_driver.all;
+
+library work;
+use work.ac97_driver;
 
 --
 -- Declare the IO
