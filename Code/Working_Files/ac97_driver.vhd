@@ -445,7 +445,15 @@ entity ac97_driver is
 		L_in           	: out std_logic_vector(17 downto 0);			-- lt chan data coming in from LM4550
 		R_in           	: out std_logic_vector(17 downto 0);			-- rt chan data coming in from LM4550
 		volume			: in  std_logic_vector(4  downto 0);			-- unsigned volume. 31 is max
-		source			: in  std_logic_vector(2 downto 0)				-- 000 for Microphone, 100 for line in. 
+		source			: in  std_logic_vector(2 downto 0);				-- 000 for Microphone, 100 for line in. 
+
+		-- outputs to go to the LM4550 pins
+		audsdi			: in std_logic;
+		audsdo 			: out std_logic;
+		sync			: out std_logic;
+		audrst			: out std_logic;
+		bitclk			: in std_logic
+
 	);
 
 end ac97_driver;
@@ -459,14 +467,15 @@ architecture behavioral of ac97_driver is
 	signal cmd_data 	: std_logic_vector(15 downto 0);
 	signal ready 		: std_logic;
 	signal latching_cmd : std_logic;
-	signal sync_sig		: std_logic;
+
+	-- I/O to the codec
+	signal sync			: std_logic;
+	signal bitclk		: std_logic;
+	signal audrst 		: std_logic;
+	signal audsdo		: std_logic;
+	signal aydsdi		: std_logic;
 
 begin
-
-	-- Need to send sync to the external pin and also outside of this
-	--	system to act as a 48khz clock
-	AUDSYNC 	<= sync_sig;
-	sync 		<= sync_sig;
 
 	-- INSTANTIATE BOTH THE MAIN DRIVER AND AC97 CHIP CONFIGURATION STATE-MACHINE 
 	-------------------------------------------------------------------------------
@@ -474,12 +483,12 @@ begin
 		port map(
 			n_reset => n_reset,					-- User input
 			clk => clk,							-- system clock
-			ac97_sdata_out => AUDSDO,			-- External pin
-			ac97_sdata_in => AUDSDI,			-- External pin
+			ac97_sdata_out => audsdo,			-- External pin
+			ac97_sdata_in => audsdi,			-- External pin
 			latching_cmd => latching_cmd,		-- Controller input
-			ac97_sync => sync_sig,				-- 48KHz clock			
-			ac97_bitclk => BITCLK,				-- External pin
-			ac97_n_reset => AUDRST,				-- External pin
+			ac97_sync => sync,					-- 48KHz clock			
+			ac97_bitclk => bitclk,				-- External pin
+			ac97_n_reset => audrst,				-- External pin
 			ac97_ready_sig => ready,			-- Controller input
 			L_out => L_out,						-- left channel sample out,  User input				
 			R_out => R_out,						-- right channel sample out, User input

@@ -108,7 +108,12 @@ begin
             raw_sample_out  => output_sample,
             raw_sample_in   => input_sample,
             play_samples    => play_samples,
-            play_output     => play_output
+            play_output     => play_output,
+            audsdi          => AUDSDI,  
+            audsdo          => AUDSDO,  
+            sync            => AUDSYNC,  
+            audrst          => AUDRST,  
+            bitclk          => BITCLK 
         );
 
     corr: entity AUTOCORRELATE

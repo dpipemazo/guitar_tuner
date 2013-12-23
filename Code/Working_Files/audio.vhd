@@ -58,6 +58,13 @@ entity AUDIO is
 		play_samples	: in std_logic;							-- Active high. Turns playback on.
 		play_output		: in std_logic							-- 1 = line out, 0 = headphones
 
+		-- Signals to be connected to I/O
+		audsdi			: in std_logic;
+		audsdo 			: out std_logic;
+		sync			: out std_logic;
+		audrst			: out std_logic;
+		bitclk			: in std_logic
+
 	);
 
 end entity;
@@ -65,7 +72,7 @@ end entity;
 --
 -- The architecture of the sampling unit
 --
-architecture behavioral of SAMPLING is
+architecture behavioral of AUDIO is
 	
 	-- We need to hook up the ac97 unit
 	signal codec_sample_r_out	: std_logic_vector(17 downto 0);
@@ -122,7 +129,12 @@ begin
 			L_in           	=> codec_sample_l_in,
 			R_in           	=> codec_sample_r_in,
 			volume			=> volume_control,
-			source			=> source_control
+			source			=> source_control,
+			audsdi			=> audsdi,
+			audsdo 			=> audsdo,
+			sync			=> sync,
+			audrst			=> audrst,
+			bitclk			=> bitclk
 		);
 
 	--
