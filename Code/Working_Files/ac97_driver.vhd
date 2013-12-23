@@ -30,36 +30,6 @@
 --										a single plug-and-play component,
 --										ac97_driver. 
 
-
-library IEEE;
-use IEEE.STD_LOGIC_1164.all;
-use IEEE.numeric_std.all;
-
---
--- This is the package you want to use
---
-package ac97_driver is
-	
-	component  ac97_driver 
-		port (
-			n_reset        	: in  std_logic;								-- active low reset
-			clk            	: in  std_logic;								-- System clock
-			play_samples	: in  std_logic;								-- Active high. Turn on playback
-			play_output		: in  std_logic;								-- Playback output. 1 for line out, 0 for headphones
-			sync     	   	: out std_logic;								-- SYNC signal to ac97. Latch
-																			--	audio data on the rising edge
-																			--	of this signal
-			L_out          	: in  std_logic_vector(17 downto 0);			-- lt chan data going out to LM4550
-			R_out          	: in  std_logic_vector(17 downto 0);			-- rt chan data going out to LM4550
-			L_in           	: out std_logic_vector(17 downto 0);			-- lt chan data coming in from LM4550
-			R_in           	: out std_logic_vector(17 downto 0);			-- rt chan data coming in from LM4550
-			volume			: in  std_logic_vector(4  downto 0);			-- unsigned volume. 31 is max
-			source			: in  std_logic_vector(2 downto 0)				-- 000 for Microphone, 100 for line in. 
-		);
-	end component;
-
-end ac97_driver;
-
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 use IEEE.numeric_std.all;
