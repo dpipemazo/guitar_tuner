@@ -102,7 +102,7 @@ architecture behavioral of AUDIO is
 	signal sample_low_threshold	  : std_logic_vector(17 downto 0);
 
 	-- Sync signal. Will be acting like a clock so let's buffer it
-	signal sync_clk	: std_logic;
+	signal 	  sync_clk	: std_logic;
 	attribute buffer_type : string;
 	attribute buffer_type of sync_clk : signal is "BUFG";
 
@@ -112,6 +112,10 @@ architecture behavioral of AUDIO is
 
 begin
 
+	--
+	-- Need to pass the sync signal through as well
+	--
+	sync <= sync_clk;
 
 	--
 	-- Hook up the AC97 driver
@@ -123,7 +127,6 @@ begin
 			clk            	=> clock,
 			play_samples	=> play_samples,
 			play_output		=> play_output,
-			sync     	   	=> sync_clk,
 			L_out          	=> codec_sample_l_out,
 			R_out          	=> codec_sample_r_out,
 			L_in           	=> codec_sample_l_in,
@@ -132,7 +135,7 @@ begin
 			source			=> source_control,
 			audsdi			=> audsdi,
 			audsdo 			=> audsdo,
-			sync			=> sync,
+			sync			=> sync_clk,
 			audrst			=> audrst,
 			bitclk			=> bitclk
 		);

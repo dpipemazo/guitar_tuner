@@ -439,9 +439,7 @@ entity ac97_driver is
 		clk            	: in  std_logic;								-- System clock
 		play_samples	: in  std_logic;								-- Active high. 1 = playback on, 0 = playback off
 		play_output		: in  std_logic;								-- Playback output select. 1 = line out, 0 = headphones. 
-		sync     	   	: out std_logic;								-- SYNC signal to ac97. Latch
-																		--	audio data on the rising edge
-																		--	of this signal
+
 		L_out          	: in  std_logic_vector(17 downto 0);			-- lt chan data going out to LM4550
 		R_out          	: in  std_logic_vector(17 downto 0);			-- rt chan data going out to LM4550
 		L_in           	: out std_logic_vector(17 downto 0);			-- lt chan data coming in from LM4550
