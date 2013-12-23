@@ -137,10 +137,15 @@ begin
         );
 
     --
-    -- Map the input samples right back to the output samples, 
-    --  to do loopback if we want to try to get that working.
-    --
-    output_sample <= input_sample;
+    -- Generate a ~350 hz output wave and see if
+    --  we can hear it on the headphones
+    doOutput: process(clk)
+    begin
+        if (rising_edge(clk)) then
+            output_sample <= std_logic_vector(unsigned(output_sample) + 1);
+        end if;
+    end process;
+
     -- Play the looped back audio with switch 0
     play_samples <= sw(0);
     -- Choose the play output with switch 1
@@ -182,28 +187,9 @@ begin
 
     end process;
 
-    --
-    -- Output the current button in the high 3 bits of the LEDs and the 
-    --  count in 5 to 4
-    
-    -- led(7 downto 5) <=  "001" when std_match(curr_button, "000001") else
-    --                     "010" when std_match(curr_button, "000010") else
-    --                     "011" when std_match(curr_button, "000100") else
-    --                     "100" when std_match(curr_button, "001000") else
-    --                     "101" when std_match(curr_button, "010000") else
-    --                     "110" when std_match(curr_button, "100000") else
-    --                     "111" when (not std_match(curr_button, "000000")) else
-    --                     "000";
+    -- Get the autocorrelation stage to synthesize.
+    led(7) <= auto_done;
 
-    -- led(4 downto 0) <= button_count;
-
-    -- led(5 downto 0) <= db_buttons;
-    -- led(7 downto 6) <= "00";
-
-    --
-    -- See if we can see the sample coming in
-    --
-    led(7 downto 0) <= input_sample(7 downto 0);
 
 
 
