@@ -196,7 +196,7 @@ begin
 
     -- Put the raw samples onto the LED to get sign of life
     led(5 downto 0) <= btn(5 downto 0);
-    led(7 downto 6) <= '1';
+    led(7 downto 6) <= "11";
 
 
 
