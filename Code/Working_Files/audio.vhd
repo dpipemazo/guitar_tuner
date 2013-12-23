@@ -175,7 +175,7 @@ begin
 				if (sync_clk_counter = (others => '1')) then
 					-- Clock the new max/min
 					auto_sample_max <= temp_max;
-					50_hx_min <= temp_min;
+					auto_sample_min <= temp_min;
 					sample_avg <= std_logic_vector(signed(temp_max) + signed(temp_min));
 
 					-- reset the temporary max/min
