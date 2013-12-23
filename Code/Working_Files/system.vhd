@@ -62,9 +62,9 @@ architecture structural of system is
     signal sample_valid : std_logic;
 
     -- Sample to output to the DAC
-    signal output_sample : std_logic_vector(18 downto 0);
+    signal output_sample : std_logic_vector(17 downto 0);
     -- Sample coming in from the ADC
-    signal input_sample  : std_logic_vector(18 downto 0);
+    signal input_sample  : std_logic_vector(17 downto 0);
 
     -- signals controlling playback
     signal play_samples  : std_logic; -- active high to play samples
