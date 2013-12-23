@@ -155,16 +155,16 @@ begin
         if (rising_edge(clk)) then
 
             -- Latch the buttons to catch a rising edge
-            button_latch <= button_db;
+            button_latch <= db_buttons;
 
             -- If we got a rising edge on a new button
-            if (not std_match(button_latch, button_db)) then
+            if (not std_match(button_latch, db_buttons)) then
 
-                if (std_match(curr_button, (button_latch xor button_db))) then
+                if (std_match(curr_button, (button_latch xor db_buttons))) then
 
                     button_count <= std_logic_vector(unsigned(button_count) + 1);
                 else
-                    curr_button <= button_latch xor button_db;
+                    curr_button <= button_latch xor db_buttons;
                     button_count <= "01";
                 end if;
             end if;
