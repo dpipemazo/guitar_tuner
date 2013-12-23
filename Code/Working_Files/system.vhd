@@ -147,9 +147,9 @@ begin
     --
 
     -- Output the valid sample onto the bottom LED
-    led(0) <= sample_valid;
+    -- led(0) <= sample_valid;
     -- Output the sample itself onto the next 2 LEDs
-    led(2 downto 1) <= sample(1 downto 0);
+    -- led(2 downto 1) <= sample(1 downto 0);
 
     --
     -- Make sure that the button debouncing is working
@@ -183,16 +183,19 @@ begin
     -- Output the current button in the high 3 bits of the LEDs and the 
     --  count in 5 to 4
     --
-    led(7 downto 5) <=  "001" when std_match(curr_button, "000001") else
-                        "010" when std_match(curr_button, "000010") else
-                        "011" when std_match(curr_button, "000100") else
-                        "100" when std_match(curr_button, "001000") else
-                        "101" when std_match(curr_button, "010000") else
-                        "110" when std_match(curr_button, "100000") else
-                        "111" when (not std_match(curr_button, "000000")) else
-                        "000";
+    --led(7 downto 5) <=  "001" when std_match(curr_button, "000001") else
+                        -- "010" when std_match(curr_button, "000010") else
+                        -- "011" when std_match(curr_button, "000100") else
+                        -- "100" when std_match(curr_button, "001000") else
+                        -- "101" when std_match(curr_button, "010000") else
+                        -- "110" when std_match(curr_button, "100000") else
+                        -- "111" when (not std_match(curr_button, "000000")) else
+                        -- "000";
 
-    led(4 downto 3) <= button_count;
+    --led(4 downto 3) <= button_count;
+
+    -- Put the raw samples onto the LED to get sign of life
+    led(7 downto 0) <= input_sample(7 downto 0);
 
 
 
