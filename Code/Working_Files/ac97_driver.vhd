@@ -501,7 +501,7 @@ begin
 			cmd_data => cmd_data,				-- Output from other entity
 			volume => volume,					-- User input
 			source => source,					-- User input
-			atching_cmd => latching_cmd			-- Output from other entity
+			latching_cmd => latching_cmd			-- Output from other entity
 		); 
 
 end architecture; 
