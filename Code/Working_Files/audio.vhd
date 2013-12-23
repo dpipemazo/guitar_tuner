@@ -56,7 +56,7 @@ entity AUDIO is
 		raw_sample_in	: out std_logic_vector(17 downto 0); 	-- 18-bit samples coming from the codec 
 																--  will be clocked at 48KHz 
 		play_samples	: in std_logic;							-- Active high. Turns playback on.
-		play_output		: in std_logic							-- 1 = line out, 0 = headphones
+		play_output		: in std_logic;							-- 1 = line out, 0 = headphones
 
 		-- Signals to be connected to I/O
 		audsdi			: in std_logic;
