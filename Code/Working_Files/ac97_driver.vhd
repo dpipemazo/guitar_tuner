@@ -60,6 +60,9 @@ package ac97_driver is
 
 end ac97_driver;
 
+library IEEE;
+use IEEE.STD_LOGIC_1164.all;
+use IEEE.numeric_std.all;
 
 --
 -- This package is the helper components for the AC97 driver

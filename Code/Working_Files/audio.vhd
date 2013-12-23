@@ -186,13 +186,13 @@ begin
 				else
 
 					-- If we got a new max
-					if (signed(48_khz_l_in) > signed(temp_max)) then
-						temp_max <= 48_khz_l_in;
+					if (signed(codec_sample_l_in) > signed(temp_max)) then
+						temp_max <= codec_sample_l_in;
 					end if;
 
 					-- If we got a new min. 
-					if (signed(48_khz_l_in) < signed(temp_min)) then
-						temp_min <= 48_khz_l_in;
+					if (signed(codec_sample_l_in) < signed(temp_min)) then
+						temp_min <= codec_sample_l_in;
 					end if;
 
 				end if;
