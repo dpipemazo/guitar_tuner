@@ -182,20 +182,20 @@ begin
     --
     -- Output the current button in the high 3 bits of the LEDs and the 
     --  count in 5 to 4
-    --
-    -- led(7 downto 5) <=  "001" when std_match(curr_button, "000001") else
-    --                     "010" when std_match(curr_button, "000010") else
-    --                     "011" when std_match(curr_button, "000100") else
-    --                     "100" when std_match(curr_button, "001000") else
-    --                     "101" when std_match(curr_button, "010000") else
-    --                     "110" when std_match(curr_button, "100000") else
-    --                     "111" when (not std_match(curr_button, "000000")) else
-    --                     "000";
+    
+    led(7 downto 5) <=  "001" when std_match(curr_button, "000001") else
+                        "010" when std_match(curr_button, "000010") else
+                        "011" when std_match(curr_button, "000100") else
+                        "100" when std_match(curr_button, "001000") else
+                        "101" when std_match(curr_button, "010000") else
+                        "110" when std_match(curr_button, "100000") else
+                        "111" when (not std_match(curr_button, "000000")) else
+                        "000";
 
-    -- led(4 downto 0) <= button_count;
+    led(4 downto 0) <= button_count;
 
-    led(5 downto 0) <= db_buttons;
-    led(7 downto 6) <= "11";
+    -- led(5 downto 0) <= db_buttons;
+    -- led(7 downto 6) <= "00";
 
 
 

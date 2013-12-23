@@ -114,9 +114,12 @@ begin
 					-- Reset the counter and set the compare to auto-repeat
 					debounce_counter <= (others => '0');
 					debounce_compare <= std_logic_vector(to_unsigned(auto_rep_clocks, debounce_compare'length));
+					-- Set the output high
+					debounced_out <= '1';
 				else
-					-- Just increment the counter
+					-- Just increment the counter and reset the debounced output
 					debounce_counter <= std_logic_vector(unsigned(debounce_counter) + 1);
+					debounced_out <= '0';
 				end if;
 
 			-- If the button is low
