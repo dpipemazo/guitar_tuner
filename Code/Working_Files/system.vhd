@@ -41,7 +41,7 @@ entity system is
         -- Need to declare I/O for audio here
         AUDSDI          : in std_logic;
         AUDSDO          : out std_logic;
-        SYNC            : out std_logic;
+        AUDSYNC         : out std_logic;
         AUDRST          : out std_logic;
         BITCLK          : in std_logic
 
