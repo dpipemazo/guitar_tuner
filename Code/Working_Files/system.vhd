@@ -15,7 +15,7 @@
 library work;
 use work.audio;
 use work.debounce;
-use work.autocorrelation;
+use work.autocorrelate;
 
 
 library ieee;
