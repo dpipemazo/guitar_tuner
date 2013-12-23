@@ -16,11 +16,20 @@
 -- DIGI-KEY ALSO DISCLAIMS ANY LIABILITY FOR PATENT OR COPYRIGHT
 -- INFRINGEMENT.
 --
--- Version History
+-- Version History	
 -- Version 1.0 				12/06/2011 Tony Storey
--- 							Initial Public Release
--- Modifications 			12/22/2013 Dan Pipe-Mazo
---							Renamed some things 
+-- 									Initial Public Release
+--
+-- Version 1.1 				12/22/2013 Dan Pipe-Mazo
+--									Did some renaming of signals
+--
+--									Allowed option for playback, and 
+--										within playback, which audio
+--										output source.
+--							
+--									Compiled ac97 and ac97_cmd into 
+--										a single plug-and-play component,
+--										ac97_driver. 
 
 
 library IEEE;
