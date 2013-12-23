@@ -68,9 +68,17 @@ architecture structural of system is
     signal auto_result_idx : std_logic_vector(10 downto 0);
     signal auto_done       : std_logic;
 
-    -- 
+    -- Resets
+    signal audio_reset :  std_logic;
+    signal auto_reset  :  std_logic;
 
 begin
+
+    --
+    -- Various reset logic
+    --
+    audio_reset <= not db_buttons(0);
+    auto_reset <= db_buttons(0) or (not sample_valid);
 
     --
     -- The button debouncing unit
@@ -94,7 +102,7 @@ begin
     audo: entity AUDIO
         port map(
             clock           => clk,
-            n_reset         => not db_buttons(0),
+            n_reset         => audio_reset,
             2_bit_sample    => sample,
             sample_valid    => sample_valid,
             raw_sample_out  => output_sample,
@@ -107,7 +115,7 @@ begin
         port map(
             clock       => clk,
             sample      => sample,
-            reset       => db_buttons(0) or (not sample_valid),
+            reset       => auto_reset,
             result_div  => auto_result_div,
             result_idx  => auto_result_idx,
             done        => auto_done

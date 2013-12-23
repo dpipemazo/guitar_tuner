@@ -51,7 +51,7 @@ entity SINGLE_DEBOUNCE is
 	--	given is number of debounce clocks to wait for 
 	--	the named event to happen. Valid range is [1, 1023]
 	generic (
-        debounce_clocks : integer := 20     -- clocks to wait for debounce
+        debounce_clocks : integer := 20;     -- clocks to wait for debounce
         auto_rep_clocks : integer := 600    -- clocks to wait for auto-repeat
     );
 
@@ -211,7 +211,7 @@ architecture behavioral of DEBOUNCE is
 	signal db_outs	: std_logic_vector(5 downto 0);
 
 	-- Need a counter for the debounce clock
-	signal db_clock_counter : std_logic_vector(15 downto 0);]
+	signal db_clock_counter : std_logic_vector(15 downto 0);
 
 	-- Need the actual debounce clock
 	signal db_clock : std_logic;
