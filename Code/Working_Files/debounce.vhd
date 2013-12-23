@@ -104,7 +104,7 @@ begin
 	--	value to see if an event needs to be fired. This value will be 
 	--	'1' when hte debounce counter has reached the compare value, 
 	-- 	else '0'
-	debounce_compare_bool <= 	'1' when (std_match(debounce_couter, debounce_compare)) else
+	debounce_compare_bool <= 	'1' when (std_match(debounce_counter, debounce_compare)) else
 								'0';
 
 	-- The debounce counter should be set to 0 when the button input is
