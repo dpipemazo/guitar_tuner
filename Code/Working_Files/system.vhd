@@ -52,7 +52,8 @@ architecture structural of system is
 
     -- Individual button signals
     signal db_buttons   : std_logic_vector(5 downto 0);
-    signal button_latch : std_logic_vector(5 downto 0);
+    signal button_latch_1 : std_logic_vector(5 downto 0);
+    signal button_latch_2 : std_logic_vector(5 downto 0);
     signal curr_button  : std_logic_vector(5 downto 0);
     signal button_count : std_logic_vector(4 downto 0);
 
