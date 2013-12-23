@@ -146,7 +146,7 @@ begin
 	-- Set the volume to max for now, and set the source to mic
 	--
 	volume_control <= (others => '1');
-	source <= (others => '0');
+	source_control <= (others => '0');
 
 	--
 	-- Map samples coming in and out to the I/O of this unit. Since
@@ -237,7 +237,7 @@ begin
 	-- 	of (2^17 - 1) = 131071, of which 20% is roughly 26,000. 16K is good enough, 
 	--	since that is 14 bits, and random noise shouldn't be able to get above 
 	--	the 13th bit (hopefully).
-	sample_valid <= '1' when (signed(auto_sample_max) > signed(16384, auto_sample_max'length)) else
+	sample_valid <= '1' when (signed(auto_sample_max) > to_signed(16384, auto_sample_max'length)) else
 					'0';
 
 	--
@@ -247,8 +247,8 @@ begin
 	--
 
 	-- Result will be 18 bits + 3 bits = 21 bits. 
-	sample_max_mult_result <= std_logic_vector(signed(auto_sample_max) * signed("011"));
-	sample_min_mult_result <= std_logic_vector(signed(auto_sample_min) * signed("011"));
+	sample_max_mult_result <= std_logic_vector(signed(auto_sample_max) * to_signed(3, 3));
+	sample_min_mult_result <= std_logic_vector(signed(auto_sample_min) * to_signed(3, 3));
 	-- Now divide by 4 to get the threshold
 	sample_high_threshold <= sample_max_mult_result(20 downto 3);
 	sample_low_threshold <= sample_min_mult_result(20 downto 3);
