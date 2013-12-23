@@ -103,7 +103,7 @@ begin
         port map(
             clock           => clk,
             n_reset         => audio_reset,
-            2_bit_sample    => sample,
+            auto_sample     => sample,
             sample_valid    => sample_valid,
             raw_sample_out  => output_sample,
             raw_sample_in   => input_sample,

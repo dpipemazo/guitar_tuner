@@ -40,7 +40,7 @@ entity AUDIO is
 		n_reset			: in std_logic;	-- Active low reset
 
 		-- Outputs for autocorrelation
-		2_bit_sample	: out std_logic_vector(1 downto 0) 	-- The 48KHz sample bitstream, 
+		auto_sample	: out std_logic_vector(1 downto 0); 	-- The 48KHz sample bitstream, 
 															-- thresholded and converted
 															-- from 18-bits to 2 for the
 															-- autocorrelation algorithm
@@ -68,10 +68,10 @@ end entity;
 architecture behavioral of SAMPLING is
 	
 	-- We need to hook up the ac97 unit
-	signal 48khz_sample_r_out	: std_logic_vector(17 downto 0);
-	signal 48khz_sample_l_out	: std_logic_vector(17 downto 0);
-	signal 48khz_sample_r_in	: std_logic_vector(17 downto 0);
-	signal 48khz_sample_l_in	: std_logic_vector(17 downto 0);
+	signal codec_sample_r_out	: std_logic_vector(17 downto 0);
+	signal codec_sample_l_out	: std_logic_vector(17 downto 0);
+	signal codec_sample_r_in	: std_logic_vector(17 downto 0);
+	signal codec_sample_l_in	: std_logic_vector(17 downto 0);
 
 	-- Volume control. Eventually attach to switches
 	signal volume_control 		: std_logic_vector(4 downto 0);
@@ -84,8 +84,8 @@ architecture behavioral of SAMPLING is
 	signal sync_clk_counter : std_logic_vector(9 downto 0); -- 10-bit counter divides down by 1024
 	signal temp_max			: std_logic_vector(17 downto 0);
 	signal temp_min			: std_logic_vector(17 downto 0);
-	signal 50_hz_max		: std_logic_vector(17 downto 0);
-	signal 50_hz_min		: std_logic_vector(17 downto 0);
+	signal auto_sample_max		: std_logic_vector(17 downto 0);
+	signal auto_sample_min		: std_logic_vector(17 downto 0);
 	signal sample_avg		: std_logic_vector(17 downto 0);
 
 	-- Signals for finsing the threshold
@@ -100,7 +100,7 @@ architecture behavioral of SAMPLING is
 	attribute buffer_type of sync_clk : signal is "BUFG";
 
 	-- Signal to do the sample thresholding
-	signal 2_bit_sample_mux : std_logic_vector(1 downto 0);
+	signal auto_sample_mux : std_logic_vector(1 downto 0);
 
 
 begin
@@ -117,10 +117,10 @@ begin
 			play_samples	=> play_samples,
 			play_output		=> play_output,
 			sync     	   	=> sync_clk,
-			L_out          	=> 48khz_sample_l_out,
-			R_out          	=> 48khz_sample_r_out,
-			L_in           	=> 48khz_sample_l_in,
-			R_in           	=> 48khz_sample_r_in,
+			L_out          	=> codec_sample_l_out,
+			R_out          	=> codec_sample_r_out,
+			L_in           	=> codec_sample_l_in,
+			R_in           	=> codec_sample_r_in,
 			volume			=> volume_control,
 			source			=> source_control
 		);
@@ -136,9 +136,9 @@ begin
 	--	the mic is mono, map both the output to L and R and map the 
 	--	input to either L or R. 
 	--
-	48khz_sample_l_out <= raw_sample_out;
-	48khz_sample_r_out <= raw_sample_out;
-	raw_sample_in <= 48khz_sample_l_in;
+	codec_sample_l_out <= raw_sample_out;
+	codec_sample_r_out <= raw_sample_out;
+	raw_sample_in <= codec_sample_l_in;
 
 	--
 	-- Now need to do the 2-bit sample processing
@@ -174,7 +174,7 @@ begin
 				--	output the max and min values
 				if (sync_clk_counter = (others => '1')) then
 					-- Clock the new max/min
-					50_hz_max <= temp_max;
+					auto_sample_max <= temp_max;
 					50_hx_min <= temp_min;
 					sample_avg <= std_logic_vector(signed(temp_max) + signed(temp_min));
 
@@ -201,7 +201,7 @@ begin
 				-- Latch the sample. The fist sample will be valid
 				--	on the first sample clock after sample_valid is high.
 				--
-				2_bit_sample <= 2_bit_sample_mux;
+				auto_sample <= auto_sample_mux;
 
 			end if;
 
@@ -220,7 +220,7 @@ begin
 	-- 	of (2^17 - 1) = 131071, of which 20% is roughly 26,000. 16K is good enough, 
 	--	since that is 14 bits, and random noise shouldn't be able to get above 
 	--	the 13th bit (hopefully).
-	sample_valid <= '1' when (signed(50_hz_max) > signed(16384, 50_hz_max'length)) else
+	sample_valid <= '1' when (signed(auto_sample_max) > signed(16384, auto_sample_max'length)) else
 					'0';
 
 	--
@@ -230,8 +230,8 @@ begin
 	--
 
 	-- Result will be 18 bits + 3 bits = 21 bits. 
-	sample_max_mult_result <= std_logic_vector(signed(50_hz_max) * signed("011"));
-	sample_min_mult_result <= std_logic_vector(signed(50_hz_min) * signed("011"));
+	sample_max_mult_result <= std_logic_vector(signed(auto_sample_max) * signed("011"));
+	sample_min_mult_result <= std_logic_vector(signed(auto_sample_min) * signed("011"));
 	-- Now divide by 4 to get the threshold
 	sample_high_threshold <= sample_max_mult_result(20 downto 3);
 	sample_low_threshold <= sample_min_mult_result(20 downto 3);
@@ -239,9 +239,9 @@ begin
 	--
 	-- And finally we can do our sample thresholding
 	--
-	2_bit_sample_mux <= "11" when (signed(48khz_sample_l_in) < signed(sample_low_threshold)) else 	-- Sample below min thresh
-						"01" when (signed(48khz_sample_l_in) > signed(sample_high_threshold)) else 	-- Sample above max thresh
-						"00" when (signed(48khz_sample_l_in) > signed(sample_avg)) else				-- Sample not either of the above but above average
+	auto_sample_mux <= "11" when (signed(codec_sample_l_in) < signed(sample_low_threshold)) else 	-- Sample below min thresh
+						"01" when (signed(codec_sample_l_in) > signed(sample_high_threshold)) else 	-- Sample above max thresh
+						"00" when (signed(codec_sample_l_in) > signed(sample_avg)) else				-- Sample not either of the above but above average
 						"10";
 
 
