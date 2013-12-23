@@ -1,6 +1,5 @@
---//////////Package file for AC97 Talkthrough //////////////////////////--
 -- ***********************************************************************
--- FileName: Talkthrough_Parts.vhd
+-- FileName: ac97_driver.vhd
 -- FPGA: Xilinx Spartan 6
 -- IDE: Xilinx ISE 13.1 
 --
@@ -21,7 +20,7 @@
 -- 									Initial Public Release
 --
 -- Version 1.1 				12/22/2013 Dan Pipe-Mazo
---									Did some renaming of signals
+--									Did some renaming of signals and file
 --
 --									Allowed option for playback, and 
 --										within playback, which audio
@@ -493,7 +492,7 @@ begin
 
 	-- Need to send sync to the external pin and also outside of this
 	--	system to act as a 48khz clock
-	AC97_SYNC 	<= sync_sig;
+	AUDSYNC 	<= sync_sig;
 	sync 		<= sync_sig;
 
 	-- INSTANTIATE BOTH THE MAIN DRIVER AND AC97 CHIP CONFIGURATION STATE-MACHINE 
@@ -502,12 +501,12 @@ begin
 		port map(
 			n_reset => n_reset,					-- User input
 			clk => clk,							-- system clock
-			ac97_sdata_out => SDATA_OUT,		-- External pin
-			ac97_sdata_in => SDATA_IN,			-- External pin
+			ac97_sdata_out => AUDSDO,			-- External pin
+			ac97_sdata_in => AUDSDI,			-- External pin
 			latching_cmd => latching_cmd,		-- Controller input
 			ac97_sync => sync_sig,				-- 48KHz clock			
-			ac97_bitclk => BIT_CLK,				-- External pin
-			ac97_n_reset => AC97_n_RESET,		-- External pin
+			ac97_bitclk => BITCLK,				-- External pin
+			ac97_n_reset => AUDRST,				-- External pin
 			ac97_ready_sig => ready,			-- Controller input
 			L_out => L_out,						-- left channel sample out,  User input				
 			R_out => R_out,						-- right channel sample out, User input

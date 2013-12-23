@@ -1,21 +1,27 @@
 --
 -- System-level VHDL setup
 --
+-- Currently just testing the ac97 driver, button debouncing
+--  and autocorrelation algorithm. 
+--
+--
+-- All this system should do at the moment:
+--  1. Grab samples from codec
+--  2. Threshold samples based on max/min
+--  3. Feed samples to autocorrelation
+--  4. Get divider and index result from autocorrelation
+--  5. Light up some LEDs based on however debugging is currently planned.
 
 library work;
-use work.control;
-use work.sampling;
-use work.display_constants.all;
-use work.display;
-use work.bin2bcd;
-use work.gaincontrol;
-use work.steppercontrol;
-use work.clockdiv;
+use work.audio;
+use work.debounce;
+use work.autocorrelation;
+
 
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_misc.all;
-use ieee.std_logic_arith.all;
+use ieee.numeric_std.all;
 
 -- Entity declaration
 entity system is 
@@ -23,225 +29,104 @@ entity system is
     port(
 
         -- system clock
-        clk         : in std_logic;
+        clk         : in  std_logic;
 
         -- pushbuttons
-        btn         : in std_logic_vector(5 downto 0);
-
-        -- display I/O
-        lcd_rs      : out std_logic;
-        lcd_rw      : out std_logic;
-        lcd_e       : out std_logic;
-        lcd_data    : out std_logic_vector(7 downto 0);
-
-        -- Serial I/O
-        FlashCLK        : out std_logic; 
-        FlashCS         : out std_logic;   
-        FlashDQ0        : out std_logic;
-        FlashDQ1        : in std_logic;
-
-        -- Stepper Motor I/0
-        step            : out std_logic;
-        dir             : out std_logic;
-        enable          : out std_logic;
-        sw0             : in std_logic;
-
-        -- Adjustable potentiometer I/O
-        gain_pot_cs     : out std_logic;
-        gain_pot_data   : out std_logic;
-        gain_pot_clk    : out std_logic;
-
-        -- LEDs (uncomment to eventually use them or 
-        --  use them for debugging)
-        -- Led             : out std_logic_vector(7 downto 0);
-
-        -- Comparator results
-        sig_above_pos : in std_logic;
-        sig_below_neg : in std_logic
+        btn         : in  std_logic_vector(5 downto 0);
+        -- leds
+        led         : out std_logic_vector(7 downto 0);
+        -- switches
+        sw          : in  std_logic_vector(7 downto 0)
 
     );
 end system;
 
 architecture structural of system is 
 
-    -- Sampling signals
-    signal sample_start : std_logic;
-    signal sample_done : std_logic;
-    signal detected_freq : std_logic_vector(31 downto 0);
+    -- Individual button signals
+    signal db_buttons   : std_logic_vector(5 downto 0);
 
-    -- BCD conversion signals
-    signal bcd_conv_start : std_logic;
-    signal bcd_conv_done : std_logic;
-    signal bcd_freq : std_logic_vector(51 downto 0);
+    -- Samples from the audio unit
+    signal sample       : std_logic_vector(1 downto 0);
+    signal sample_valid : std_logic;
 
-    -- Display signals
-    signal display_line_start  : std_logic;
-    signal display_char_start  : std_logic;
-    signal display_reset_start : std_logic;
-    signal display_done        : std_logic;
-    signal display_ack         : std_logic;
-    signal display_data        : std_logic_vector(7 downto 0);
-    signal line_to_update      : std_logic_vector(1 downto 0);
-    signal char_to_update      : std_logic_vector(4 downto 0);
-    signal display_clk         : std_logic;
+    -- Sample to output to the DAC
+    signal output_sample : std_logic_vector(18 downto 0);
+    -- Sample coming in from the ADC
+    signal input_sample  : std_logic_vector(18 downto 0);
 
-    -- Gain control signals
-    signal gain_start          : std_logic;
-    signal gain_inc_dec        : std_logic;
-    signal gain_reset          : std_logic;
-    signal gain_done           : std_logic;
-    signal gain_diff           : std_logic_vector(12 downto 0);
+    -- signals controlling playback
+    signal play_samples  : std_logic; -- active high to play samples
+    signal play_output   : std_logic; -- 1 = line out, 0 = headphones
 
-    -- constants and force an update
-    constant num_samples : integer := 5120;
+    -- Autocorrelation results
+    signal auto_result_div : std_logic_vector(11 downto 0);
+    signal auto_result_idx : std_logic_vector(10 downto 0);
+    signal auto_done       : std_logic;
 
-    -- stepper signals
-    signal string_num           : std_logic_vector(2 downto 0);
-    signal auto_start           : std_logic;
-    signal auto_done            : std_logic;
-    signal auto_first           : std_logic;
-    signal auto_ack             : std_logic;
-    signal tuned                : std_logic;
-
-    -- Diluted clocks
-    signal clk_400khz   : std_logic;
-    signal clk_200khz   : std_logic;
-    signal clk_100khz   : std_logic;
+    -- 
 
 begin
 
     --
-    -- TODO: SYNC CLOCK SIGNALS WITH DFFS
+    -- The button debouncing unit
     --
-
-    --
-    -- Divider for creating clocks which we need.
-    --
-    -- We need:
-    --
-    --  A 400 KHz clock for the stepper motor unit
-    --  A 200 KHz clock for debouncing buttons and for
-    --      the display unit
-    --  A 100 KHz clock for sampling
-    --  
-    clkdiv: entity CLOCKDIV
+    dbounce: entity DEBOUNCE
+    
         port map(
-            clk_100mhz => clk,
-            clk_400khz => clk_400khz, 
-            clk_200khz => clk_200khz, 
-            clk_100khz => clk_100khz
+            clock       => clk,
+            buttons     => btn,
+            button_0    => db_buttons(0),
+            button_1    => db_buttons(1),
+            button_2    => db_buttons(2),
+            button_3    => db_buttons(3),
+            button_4    => db_buttons(4),
+            button_5    => db_buttons(5)
         );
 
     --
-    -- Wire up all of our individual units
-    -- 
-    crtl: entity CONTROL 
+    -- The audio processing unit
+    --
+    audo: entity AUDIO
         port map(
-            clk                 => clk,
-            debounce_clk        => clk_200khz, 
-            btn                 => btn,   
-            sample_start        => sample_start,
-            sample_done         => sample_done, 
-            bcd_conv_start      => bcd_conv_start, 
-            bcd_conv_done       => bcd_conv_done, 
-            display_line_start  => display_line_start ,
-            display_char_start  => display_char_start ,
-            display_reset_start => display_reset_start,
-            display_done        => display_done,
-            display_ack         => display_ack,
-            display_data        => display_data,
-            line_to_update      => line_to_update,
-            char_to_update      => char_to_update,            
-            bcd_freq            => bcd_freq, 
-            string_num          => string_num, 
-            auto_start          => auto_start, 
-            auto_done           => auto_done,
-            tuned               => tuned
+            clock           => clk,
+            n_reset         => not db_buttons(0),
+            2_bit_sample    => sample,
+            sample_valid    => sample_valid,
+            raw_sample_out  => output_sample,
+            raw_sample_in   => input_sample,
+            play_samples    => play_samples,
+            play_output     => play_output
         );
 
-    smpl: entity SAMPLING 
-        generic map(
-            -- Take 5120 sampples
-            num_samples => num_samples,
-            -- Do the autocorrelation in blocks of 128
-            auto_block_size => 128
-        )
-        
+    corr: entity AUTOCORRELATE
         port map(
-            clk                 => clk, 
-            sample_clock        => clk_100khz,
-            start               => sample_start,
-            done                => sample_done,
-            sig_pos             => sig_above_pos,
-            sig_neg             => sig_below_neg,
-            detected_freq       => detected_freq,
-            gain_start          => gain_start,
-            gain_inc_dec        => gain_inc_dec,
-            gain_reset          => gain_reset,
-            gain_done           => gain_done,
-            gain_diff           => gain_diff
+            clock       => clk,
+            sample      => sample,
+            reset       => db_buttons(0) or (not sample_valid),
+            result_div  => auto_result_div,
+            result_idx  => auto_result_idx,
+            done        => auto_done
+                                                            
         );
 
-    bcd: entity BIN2BCD 
-        port map(
-            clk                 => clk, 
-            start               => bcd_conv_start, 
-            done                => bcd_conv_done, 
-            binary_in           => detected_freq, 
-            bcd_out             => bcd_freq
-        );
+    --
+    -- Map the input samples right back to the output samples, 
+    --  to do loopback if we want to try to get that working.
+    --
+    output_sample <= input_sample;
+    -- Play the looped back audio with switch 0
+    play_samples <= sw(0);
+    -- Choose the play output with switch 1
+    play_output <= sw(1);
 
-    dsply: entity DISPLAY
-        port map(
-            clk                 => clk_200khz, 
-            lcd_rs              => lcd_rs, 
-            lcd_rw              => lcd_rw, 
-            lcd_e               => lcd_e, 
-            lcd_data            => lcd_data,
-            FlashCLK            => FlashCLK,
-            FlashCS             => FlashCS,
-            FlashDQ0            => FlashDQ0,
-            FlashDQ1            => FlashDQ1,
-            start_line_update   => display_line_start,
-            start_char_update   => display_char_start,
-            do_reset            => display_reset_start,
-            done                => display_done,
-            command_ack         => display_ack,
-            display_data        => display_data,
-            line_to_update      => line_to_update,
-            char_to_update      => char_to_update
-        );
+    --
+    -- Now, light up some LEDs with some status info
+    --
 
-    gainctrl : entity GAINCONTROL
-        generic map(
-            num_samples => conv_std_logic_vector(num_samples, 13)
-        )
-
-        port map(
-            clk                 => clk, 
-            pot_cs              => gain_pot_cs,
-            pot_data            => gain_pot_data,
-            pot_clk             => gain_pot_clk,
-            start               => gain_start,
-            done                => gain_done,
-            reset               => gain_reset,
-            inc_dec             => gain_inc_dec,
-            gain_diff           => gain_diff
-        );
-
-    sptctrl : entity STEPPERCONTROL
-        port map(
-            clk                 => clk, 
-            step_clk            => clk_400khz,
-            step                => step, 
-            dir                 => dir, 
-            enable              => enable, 
-            dir_switch          => sw0, 
-            freq_detected       => detected_freq(12 downto 0),
-            string_num          => string_num,
-            run_motor           => auto_start, 
-            motor_done          => auto_done, 
-            tuned               => tuned
-        );
+    -- Output the valid sample onto the bottom LED
+    led(0) <= sample_valid;
+    -- Output the sample itself onto the next 2 LEDs
+    led(2 downto 1) <= sample(1 downto 0);
 
 end structural;
