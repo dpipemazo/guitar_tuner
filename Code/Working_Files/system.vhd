@@ -195,7 +195,7 @@ begin
     --led(4 downto 3) <= button_count;
 
     -- Put the raw samples onto the LED to get sign of life
-    led(7 downto 0) <= input_sample(7 downto 0);
+    led(5 downto 0) <= btn(5 downto 0);
 
 
 
