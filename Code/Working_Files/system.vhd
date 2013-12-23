@@ -165,7 +165,7 @@ begin
             button_latch_2 <= button_latch_1;
 
             -- If we got a rising edge on a new button
-            if (not std_match(button_latch_1, button_latch_2)) then
+            if ( not std_match(((button_latch_1 xor button_latch_2) and (button_latch_2)), "000000" ) ) then
 
                 if (std_match(curr_button, (button_latch_1 xor button_latch_2))) then
 
