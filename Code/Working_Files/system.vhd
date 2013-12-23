@@ -195,7 +195,7 @@ begin
     -- led(4 downto 0) <= button_count;
 
     led(5 downto 0) <= db_buttons;
-    led(7 downto 6) <= '1';
+    led(7 downto 6) <= "11";
 
 
 
