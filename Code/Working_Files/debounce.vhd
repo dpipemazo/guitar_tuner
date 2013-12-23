@@ -91,37 +91,11 @@ architecture behavioral of SINGLE_DEBOUNCE is
 
 	-- Debounce counter
 	signal debounce_counter		: std_logic_vector(9 downto 0);
-	signal debounce_counter_mux	: std_logic_vector(9 downto 0);
 
 	-- Debounce compare register
 	signal debounce_compare		 : std_logic_vector(9 downto 0);
-	signal debounce_compare_mux  : std_logic_vector(9 downto 0);
-	signal debounce_compare_bool : std_logic;
 
 begin
-
-	-- Perform the compare of the debounce counter to the compare
-	--	value to see if an event needs to be fired. This value will be 
-	--	'1' when hte debounce counter has reached the compare value, 
-	-- 	else '0'
-	debounce_compare_bool <= 	'1' when (std_match(debounce_counter, debounce_compare)) else
-								'0';
-
-	-- The debounce counter should be set to 0 when the button input is
-	--	0 or the counter has reached the compare value, else it should
-	--	be 0. 
-	debounce_counter_mux <= (others => '0') when ( (sync_2 = '0') or
-												   (debounce_compare_bool = '1')) else
-							std_logic_vector(unsigned(debounce_counter) + 1);
-
-	-- Need to multiplex the input to the compare register. The compare 
-	--	register should be set to the default debounce value when the
-	--	input is 0, should change to the auto-repeat value when 
-	--	the input is '1' and the comparison boolean is '1' and should
-	--	hold value else
-	debounce_compare_mux <= std_logic_vector(to_unsigned(debounce_clocks, debounce_compare'length)) when (sync_2 = '0') else
-							std_logic_vector(to_unsigned(auto_rep_clocks, debounce_compare'length)) when ((sync_2 = '1') and (debounce_compare_bool = '1')) else
-							debounce_compare;
 
 	-- Synchronize the inputs and DFF the muxes. 
 	doDFF: process(debounce_clock)
@@ -133,14 +107,25 @@ begin
 			sync_1 <= button_in;
 			sync_2 <= sync_1;
 
-			-- Latch the debounce counter
-			debounce_counter <= debounce_counter_mux;
+			-- If the button is high
+			if (sync_2 = '1') then
+				-- If the counter has reached the compare
+				if (std_match(debounce_counter, debounce_compare)) then
+					-- Reset the counter and set the compare to auto-repeat
+					debounce_counter <= (others => '0');
+					debounce_compare <= std_logic_vector(to_unsigned(auto_rep_clocks, debounce_compare'length));
+				else
+					-- Just increment the counter
+					debounce_counter <= std_logic_vector(unsigned(debounce_counter) + 1);
+				end if;
 
-			-- Latch the debounced comparison
-			debounced_out <= debounce_compare_bool;
+			-- If the button is low
+			else
+				-- reset the compare to the debounce clocks and reset the counter
+				debounce_compare <= std_logic_vector(to_unsigned(debounce_clocks, debounce_compare'length));
+				debounce_counter <= (others => '0');
+			end if;
 
-			-- Latch the compare register
-			debounce_compare <= debounce_compare_mux;
 		end if;
 
 	end process;
@@ -238,9 +223,6 @@ architecture behavioral of DEBOUNCE is
 
 begin
 
-	-- Assign the debounce clock to the high bit of the debounce clock counter
-	db_clock <= db_clock_counter(15);
-
 	-- Generate each of the single debounce units
 	genDBs: for i in 0 to 5 generate
 	begin
@@ -274,6 +256,9 @@ begin
 
 			-- Every clock, increment the debounce clock counter 
 			db_clock_counter <= std_logic_vector(unsigned(db_clock_counter) + 1);
+
+			-- Assign the debounce clock to the high bit of the debounce clock counter
+			db_clock <= db_clock_counter(15);
 
 		end if;
 

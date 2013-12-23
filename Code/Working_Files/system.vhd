@@ -54,7 +54,7 @@ architecture structural of system is
     signal db_buttons   : std_logic_vector(5 downto 0);
     signal button_latch : std_logic_vector(5 downto 0);
     signal curr_button  : std_logic_vector(5 downto 0);
-    signal button_count : std_logic_vector(1 downto 0);
+    signal button_count : std_logic_vector(4 downto 0);
 
 
     -- Samples from the audio unit
@@ -160,20 +160,19 @@ begin
         if (rising_edge(clk)) then
 
             -- Latch the buttons to catch a rising edge
-            button_latch <= db_buttons;
+            button_latch_1 <= db_buttons;
+            button_latch_2 <= button_latch_1;
 
             -- If we got a rising edge on a new button
-            if (not std_match(button_latch, db_buttons)) then
+            if (not std_match(button_latch_1, button_latch_2)) then
 
-                if (std_match(curr_button, (button_latch xor db_buttons))) then
+                if (std_match(curr_button, (button_latch_1 xor button_latch_2))) then
 
                     button_count <= std_logic_vector(unsigned(button_count) + 1);
                 else
-                    curr_button <= button_latch xor db_buttons;
-                    button_count <= "01";
+                    curr_button <= button_latch_1 xor button_latch_2;
+                    button_count <= "00001";
                 end if;
-            else
-                button_count <= "00";
             end if;
         end if;
 
@@ -183,20 +182,16 @@ begin
     -- Output the current button in the high 3 bits of the LEDs and the 
     --  count in 5 to 4
     --
-    --led(7 downto 5) <=  "001" when std_match(curr_button, "000001") else
-                        -- "010" when std_match(curr_button, "000010") else
-                        -- "011" when std_match(curr_button, "000100") else
-                        -- "100" when std_match(curr_button, "001000") else
-                        -- "101" when std_match(curr_button, "010000") else
-                        -- "110" when std_match(curr_button, "100000") else
-                        -- "111" when (not std_match(curr_button, "000000")) else
-                        -- "000";
+    led(7 downto 5) <=  "001" when std_match(curr_button, "000001") else
+                        "010" when std_match(curr_button, "000010") else
+                        "011" when std_match(curr_button, "000100") else
+                        "100" when std_match(curr_button, "001000") else
+                        "101" when std_match(curr_button, "010000") else
+                        "110" when std_match(curr_button, "100000") else
+                        "111" when (not std_match(curr_button, "000000")) else
+                        "000";
 
-    --led(4 downto 3) <= button_count;
-
-    -- Put the raw samples onto the LED to get sign of life
-    led(5 downto 0) <= btn(5 downto 0);
-    led(7 downto 6) <= "11";
+    led(4 downto 0) <= button_count;
 
 
 
