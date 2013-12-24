@@ -185,7 +185,7 @@ begin
 						lcd_data <= reset_reg_function_set;
 					elsif( unsigned(reset_count) = 110 ) then
 						lcd_data <= reset_display_set;
-					elsif( unsigned(reset_count = 112) ) then 
+					elsif( unsigned(reset_count) = 112 ) then 
 						lcd_data <= reset_display_clear;
 					elsif( unsigned(reset_count) = 114 ) then
 						lcd_data <= reset_entry_mode_set;
