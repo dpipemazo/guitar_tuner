@@ -80,11 +80,11 @@ begin
     do_test: process
 
     	-- Need a random divider and bin
-    	variable divider, bin : integer;
+    	variable divider, bin, expected : integer;
     	-- Need seeds for the random generator
     	variable seed1, seed2 : positive;
     	-- Need a real for the random variable
-    	variable rand : real;
+    	variable rand, result_freq : real;
     	-- Loop unti this goes false
     	variable END_SIM : boolean := FALSE;
 
@@ -99,8 +99,13 @@ begin
             divider := integer(round(rand*4085.0 + 10.0));
             -- Get a random value on the interval [0,1].
             UNIFORM(seed1, seed2, rand);
-            -- calculate the expected bin, range [980, 1050]
-            bin := integer(round(rand*70.0 + 980.0));
+            -- calculate the expected bin, range [1001, 1061]
+            bin := integer(round(rand*60 + 1001.0));
+
+            --
+            -- Calculate the random frequency
+            --
+            result_freq := (100000000.0)/(divider*bin);
 
             --
             -- Put the bin and divider on the line and send the done flag high
@@ -115,8 +120,134 @@ begin
             -- send the sample done signal low
             test_sample_done <= '0';
 
-            -- Wait for 100 clocks
-            wait for 1000 ns;
+            -- Wait until test_disp_wr_en goes high
+            while (test_disp_wr_en /= '1') loop
+            	wait for 10 ns;
+            end loop;
+
+            --
+            -- Check the thousands digit
+            --
+
+            expected := integer(trunc(result_freq/1000.0));
+            result_freq := result_freq - expected;
+            -- Check that the row is 4 and the column is 0 to start with
+            assert(test_disp_data(15 downto 13) = "100") report "Thousands digit row invalid";
+            assert(test_disp_data(12 downto 8) = "00000")  report "Thousands digit column invalid";
+            -- Check that the character is in ASCII form
+            assert(test_disp_data(7 downto 4) = "0011") report "Thousands digit not in ASCII format";
+            -- Finally, check the digit itself
+            assert(to_integer(unsigned(test_disp_data(3 downto 0))) = expected);
+
+            wait for 10 ns;
+
+            --
+            -- Check the Hundreds digit
+            --
+
+            expected := integer(trunc(result_freq/100.0));
+            result_freq := result_freq - expected;
+            -- Check that the row is 4 and the column is 1
+            assert(test_disp_data(15 downto 13) = "100") report "Hundreds digit row invalid";
+            assert(test_disp_data(12 downto 8) = "00001")  report "Hundreds digit column invalid";
+            -- Check that the character is in ASCII form
+            assert(test_disp_data(7 downto 4) = "0011") report "Hundreds digit not in ASCII format";
+            -- Finally, check the digit itself
+            assert(to_integer(unsigned(test_disp_data(3 downto 0))) = expected);
+
+            wait for 10 ns;
+
+            --
+            -- Check the Tens digit
+            --
+
+            expected := integer(trunc(result_freq/10.0));
+            result_freq := result_freq - expected;
+            -- Check that the row is 4 and the column is 2
+            assert(test_disp_data(15 downto 13) = "100") report "Tens digit row invalid";
+            assert(test_disp_data(12 downto 8) = "00010")  report "Tens digit column invalid";
+            -- Check that the character is in ASCII form
+            assert(test_disp_data(7 downto 4) = "0011") report "Tens digit not in ASCII format";
+            -- Finally, check the digit itself
+            assert(to_integer(unsigned(test_disp_data(3 downto 0))) = expected);
+
+            wait for 10 ns;
+
+            --
+            -- Check the Ones digit
+            --
+
+            expected := integer(trunc(result_freq/1.0));
+            result_freq := result_freq - expected;
+            -- Check that the row is 4 and the column is 3
+            assert(test_disp_data(15 downto 13) = "100") report "Ones digit row invalid";
+            assert(test_disp_data(12 downto 8) = "00011")  report "Ones digit column invalid";
+            -- Check that the character is in ASCII form
+            assert(test_disp_data(7 downto 4) = "0011") report "Ones digit not in ASCII format";
+            -- Finally, check the digit itself
+            assert(to_integer(unsigned(test_disp_data(3 downto 0))) = expected);
+
+            wait for 10 ns;
+
+            --
+            -- Check the decimal place
+            --
+
+            -- Check that the row is 4 and the column is 4
+            assert(test_disp_data(15 downto 13) = "100") report "Decimal place row invalid";
+            assert(test_disp_data(12 downto 8) = "00100")  report "Decimal place column invalid";
+            -- Check the decimal
+            assert(test_disp_data(7 downto 0) = X"2E");
+
+            wait for 10 ns;
+
+            --
+            -- Check the tenths digit
+            --
+
+            expected := integer(trunc(result_freq/0.1));
+            result_freq := result_freq - expected;
+            -- Check that the row is 4 and the column is 3
+            assert(test_disp_data(15 downto 13) = "100") report "Tenths digit row invalid";
+            assert(test_disp_data(12 downto 8) = "00101")  report "Tenths digit column invalid";
+            -- Check that the character is in ASCII form
+            assert(test_disp_data(7 downto 4) = "0011") report "Tenths digit not in ASCII format";
+            -- Finally, check the digit itself
+            assert(to_integer(unsigned(test_disp_data(3 downto 0))) = expected);
+
+            wait for 10 ns;
+
+            --
+            -- Check the hundredths digit
+            --
+
+            expected := integer(trunc(result_freq/0.01));
+            result_freq := result_freq - expected;
+            -- Check that the row is 4 and the column is 3
+            assert(test_disp_data(15 downto 13) = "100") report "Hundredths digit row invalid";
+            assert(test_disp_data(12 downto 8) = "00110")  report "Hundredths digit column invalid";
+            -- Check that the character is in ASCII form
+            assert(test_disp_data(7 downto 4) = "0011") report "Hundredths digit not in ASCII format";
+            -- Finally, check the digit itself
+            assert(to_integer(unsigned(test_disp_data(3 downto 0))) = expected);
+
+            wait for 10 ns;
+
+            --
+            -- Finally, check the thousandths digit
+            --
+
+            expected := integer(trunc(result_freq/0.001));
+            result_freq := result_freq - expected;
+            -- Check that the row is 4 and the column is 3
+            assert(test_disp_data(15 downto 13) = "100") report "Thousandths digit row invalid";
+            assert(test_disp_data(12 downto 8) = "00111")  report "Thousandths digit column invalid";
+            -- Check that the character is in ASCII form
+            assert(test_disp_data(7 downto 4) = "0011") report "Thousandths digit not in ASCII format";
+            -- Finally, check the digit itself
+            assert(to_integer(unsigned(test_disp_data(3 downto 0))) = expected);
+
+            wait for 10 ns;
 
         end loop;
 
