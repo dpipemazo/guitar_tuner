@@ -218,7 +218,7 @@ begin
             wait for 10 ns;
 
             --
-            -- Check the hundredths digit
+            -- Check the hundredths digit 
             --
 
             expected := integer(trunc(result_freq/0.01));
