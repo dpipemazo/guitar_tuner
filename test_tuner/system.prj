@@ -1,0 +1,5 @@
+vhdl work "../Code/Working_Files/ac97_driver.vhd"
+vhdl work "../Code/Working_Files/debounce.vhd"
+vhdl work "../Code/Working_Files/auto.vhd"
+vhdl work "../Code/Working_Files/audio.vhd"
+vhdl work "../Code/Working_Files/system.vhd"
