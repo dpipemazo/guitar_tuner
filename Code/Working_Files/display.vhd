@@ -23,6 +23,7 @@ use ieee.numeric_std.all;
 
 library work;
 use work.display_constants.all;
+use work.display_fifo;
 
 entity DISPLAY is 
 	
@@ -73,7 +74,7 @@ architecture behavioral of DISPLAY is
 
 	type disp_states is (
 		IDLE, 
-		RESET, 
+		DO_RESET, 
 		SEND_ADDR_SET_RS,
 		SEND_ADDR_SET_DATA,
 		SEND_ADDR_DROP_EN,
@@ -84,8 +85,9 @@ architecture behavioral of DISPLAY is
 
 	signal curr_state : disp_states;
 
-	-- Need a counter for the stupid reset
-	signal reset_counter : std_logic_vector(6 downto 0);
+	-- Need a counter for the reset. Reset takes something
+	--	like 116 display clocks
+	signal reset_count : std_logic_vector(6 downto 0);
 
 begin
 
@@ -154,7 +156,7 @@ begin
 					--	latch the data and send it out
 					if (fifo_empty = '0') then
 						if (reset = '1') then
-							curr_state <= RESET_1;
+							curr_state <= DO_RESET;
 						else
 							curr_state <= SEND_ADDR_SET_RS;
 						end if;
@@ -163,7 +165,7 @@ begin
 					else
 						curr_state <= IDLE;
 						lcd_e 	<= '0';
-						ffo_ack <= '0';
+						fifo_ack <= '0';
 						reset_count <= (others => '0');
 					end if;
 
@@ -171,7 +173,7 @@ begin
 				-- Perform the reset
 				--
 
-				when RESET =>
+				when DO_RESET =>
 
 					-- The RS line is always 0 on reset
 					lcd_rs <= '0';
@@ -215,7 +217,7 @@ begin
 						curr_state <= IDLE;
 						reset_count <= (others => '0');
 					else
-						curr_state <= RESET;
+						curr_state <= DO_RESET;
 						reset_count <= std_logic_vector(unsigned(reset_count) + 1);
 					end if;
 
