@@ -59,7 +59,7 @@ component FREQ_DIVIDER
 	rdy: out std_logic;
 	rfd: out std_logic;
 	dividend: in std_logic_vector(27 downto 0);
-	divisor: in std_logic_vector(22 downto 0);
+	divisor: in std_logic_vector(23 downto 0);
 	quotient: out std_logic_vector(27 downto 0);
 	fractional: out std_logic_vector(9 downto 0));
 end component;

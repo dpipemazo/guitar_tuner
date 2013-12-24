@@ -920,7 +920,7 @@
             <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.DIVIDEND_AND_QUOTIENT_WIDTH">28</spirit:configurableElementValue>
             <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.CE">false</spirit:configurableElementValue>
             <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.REMAINDER_TYPE">Fractional</spirit:configurableElementValue>
-            <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.DIVISOR_WIDTH">23</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.DIVISOR_WIDTH">24</spirit:configurableElementValue>
             <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.ALGORITHM_TYPE">High_Radix</spirit:configurableElementValue>
             <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.CLOCKS_PER_DIVISION">1</spirit:configurableElementValue>
             <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.SCLR_CE_PRIORITY">SCLR_overrides_CE</spirit:configurableElementValue>
@@ -934,7 +934,7 @@
             <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.DIVCLK_SEL">1</spirit:configurableElementValue>
             <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.FRACTIONAL_B">1</spirit:configurableElementValue>
             <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_LATENCY">-1</spirit:configurableElementValue>
-            <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.DIVISOR_WIDTH">23</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.DIVISOR_WIDTH">24</spirit:configurableElementValue>
             <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.ALGORITHM_TYPE">3</spirit:configurableElementValue>
             <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_HAS_SCLR">0</spirit:configurableElementValue>
             <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_HAS_CE">0</spirit:configurableElementValue>
@@ -983,19 +983,19 @@
                   <xilinx:name>apply_current_project_options_generator</xilinx:name>
                </xilinx:fileSet>
                <xilinx:fileSet>
-                  <xilinx:name>customization_generator</xilinx:name>
+                  <xilinx:name>model_parameter_resolution_generator</xilinx:name>
                </xilinx:fileSet>
                <xilinx:fileSet>
-                  <xilinx:name>model_parameter_resolution_generator</xilinx:name>
+                  <xilinx:name>customization_generator</xilinx:name>
                </xilinx:fileSet>
                <xilinx:fileSet>
                   <xilinx:name>ip_xco_generator</xilinx:name>
                   <xilinx:file>
                      <xilinx:name>./FREQ_DIVIDER.xco</xilinx:name>
                      <xilinx:userFileType>xco</xilinx:userFileType>
-                     <xilinx:timeStamp>Tue Dec 24 06:42:20 GMT 2013</xilinx:timeStamp>
-                     <xilinx:checkSum>0xE0DF9955</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:timeStamp>Tue Dec 24 07:11:23 GMT 2013</xilinx:timeStamp>
+                     <xilinx:checkSum>0x28120F6F</xilinx:checkSum>
+                     <xilinx:generationId>generationID_152152107</xilinx:generationId>
                   </xilinx:file>
                </xilinx:fileSet>
                <xilinx:fileSet>
@@ -1003,24 +1003,24 @@
                   <xilinx:file>
                      <xilinx:name>./FREQ_DIVIDER.ngc</xilinx:name>
                      <xilinx:userFileType>ngc</xilinx:userFileType>
-                     <xilinx:timeStamp>Tue Dec 24 06:44:28 GMT 2013</xilinx:timeStamp>
-                     <xilinx:checkSum>0x01BE027E</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:timeStamp>Tue Dec 24 07:13:31 GMT 2013</xilinx:timeStamp>
+                     <xilinx:checkSum>0x60269998</xilinx:checkSum>
+                     <xilinx:generationId>generationID_152152107</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./FREQ_DIVIDER.vhd</xilinx:name>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
                      <xilinx:userFileType>vhdlSynthesis</xilinx:userFileType>
-                     <xilinx:timeStamp>Tue Dec 24 06:44:29 GMT 2013</xilinx:timeStamp>
-                     <xilinx:checkSum>0xF3CC1FCF</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:timeStamp>Tue Dec 24 07:13:33 GMT 2013</xilinx:timeStamp>
+                     <xilinx:checkSum>0xDEA0E663</xilinx:checkSum>
+                     <xilinx:generationId>generationID_152152107</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./FREQ_DIVIDER.vho</xilinx:name>
                      <xilinx:userFileType>vho</xilinx:userFileType>
-                     <xilinx:timeStamp>Tue Dec 24 06:44:16 GMT 2013</xilinx:timeStamp>
-                     <xilinx:checkSum>0x2381A8AE</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:timeStamp>Tue Dec 24 07:13:19 GMT 2013</xilinx:timeStamp>
+                     <xilinx:checkSum>0x2B63267A</xilinx:checkSum>
+                     <xilinx:generationId>generationID_152152107</xilinx:generationId>
                   </xilinx:file>
                </xilinx:fileSet>
                <xilinx:fileSet>
@@ -1028,9 +1028,9 @@
                   <xilinx:file>
                      <xilinx:name>./FREQ_DIVIDER.vho</xilinx:name>
                      <xilinx:userFileType>vho</xilinx:userFileType>
-                     <xilinx:timeStamp>Tue Dec 24 06:44:30 GMT 2013</xilinx:timeStamp>
-                     <xilinx:checkSum>0x2381A8AE</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:timeStamp>Tue Dec 24 07:13:33 GMT 2013</xilinx:timeStamp>
+                     <xilinx:checkSum>0x2B63267A</xilinx:checkSum>
+                     <xilinx:generationId>generationID_152152107</xilinx:generationId>
                   </xilinx:file>
                </xilinx:fileSet>
                <xilinx:fileSet>
@@ -1038,9 +1038,9 @@
                   <xilinx:file>
                      <xilinx:name>./FREQ_DIVIDER.asy</xilinx:name>
                      <xilinx:userFileType>asy</xilinx:userFileType>
-                     <xilinx:timeStamp>Tue Dec 24 06:44:30 GMT 2013</xilinx:timeStamp>
-                     <xilinx:checkSum>0x80BDB82F</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:timeStamp>Tue Dec 24 07:13:33 GMT 2013</xilinx:timeStamp>
+                     <xilinx:checkSum>0x2FDF13BB</xilinx:checkSum>
+                     <xilinx:generationId>generationID_152152107</xilinx:generationId>
                   </xilinx:file>
                </xilinx:fileSet>
                <xilinx:fileSet>
@@ -1049,9 +1049,9 @@
                      <xilinx:name>./FREQ_DIVIDER_xmdf.tcl</xilinx:name>
                      <xilinx:userFileType>tclXmdf</xilinx:userFileType>
                      <xilinx:userFileType>tcl</xilinx:userFileType>
-                     <xilinx:timeStamp>Tue Dec 24 06:44:30 GMT 2013</xilinx:timeStamp>
+                     <xilinx:timeStamp>Tue Dec 24 07:13:33 GMT 2013</xilinx:timeStamp>
                      <xilinx:checkSum>0x4BB7EC1F</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_152152107</xilinx:generationId>
                   </xilinx:file>
                </xilinx:fileSet>
                <xilinx:fileSet>
@@ -1060,25 +1060,25 @@
                      <xilinx:name>./FREQ_DIVIDER.gise</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>gise</xilinx:userFileType>
-                     <xilinx:timeStamp>Tue Dec 24 06:44:33 GMT 2013</xilinx:timeStamp>
+                     <xilinx:timeStamp>Tue Dec 24 07:13:37 GMT 2013</xilinx:timeStamp>
                      <xilinx:checkSum>0xC3AD1C09</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_152152107</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./FREQ_DIVIDER.xise</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>xise</xilinx:userFileType>
-                     <xilinx:timeStamp>Tue Dec 24 06:44:33 GMT 2013</xilinx:timeStamp>
-                     <xilinx:checkSum>0x1C92AB5F</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:timeStamp>Tue Dec 24 07:13:36 GMT 2013</xilinx:timeStamp>
+                     <xilinx:checkSum>0x893569FD</xilinx:checkSum>
+                     <xilinx:generationId>generationID_152152107</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./_xmsgs/pn_parser.xmsgs</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Tue Dec 24 06:44:33 GMT 2013</xilinx:timeStamp>
+                     <xilinx:timeStamp>Tue Dec 24 07:13:36 GMT 2013</xilinx:timeStamp>
                      <xilinx:checkSum>0xB2698A02</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_152152107</xilinx:generationId>
                   </xilinx:file>
                </xilinx:fileSet>
                <xilinx:fileSet>
@@ -1088,9 +1088,9 @@
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>txtReadme</xilinx:userFileType>
                      <xilinx:userFileType>txt</xilinx:userFileType>
-                     <xilinx:timeStamp>Tue Dec 24 06:44:33 GMT 2013</xilinx:timeStamp>
-                     <xilinx:checkSum>0x3EE22ACE</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:timeStamp>Tue Dec 24 07:13:37 GMT 2013</xilinx:timeStamp>
+                     <xilinx:checkSum>0xF00D6B7F</xilinx:checkSum>
+                     <xilinx:generationId>generationID_152152107</xilinx:generationId>
                   </xilinx:file>
                </xilinx:fileSet>
                <xilinx:fileSet>
@@ -1100,9 +1100,9 @@
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>txtFlist</xilinx:userFileType>
                      <xilinx:userFileType>txt</xilinx:userFileType>
-                     <xilinx:timeStamp>Tue Dec 24 06:44:33 GMT 2013</xilinx:timeStamp>
+                     <xilinx:timeStamp>Tue Dec 24 07:13:37 GMT 2013</xilinx:timeStamp>
                      <xilinx:checkSum>0xAC7E0286</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_152152107</xilinx:generationId>
                   </xilinx:file>
                </xilinx:fileSet>
                <xilinx:fileSet>

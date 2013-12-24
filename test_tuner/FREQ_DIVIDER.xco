@@ -1,7 +1,7 @@
 ##############################################################
 #
 # Xilinx Core Generator version 14.5
-# Date: Tue Dec 24 06:42:20 2013
+# Date: Tue Dec 24 07:11:23 2013
 #
 ##############################################################
 #
@@ -45,7 +45,7 @@ CSET clocks_per_division=1
 CSET component_name=FREQ_DIVIDER
 CSET divide_by_zero_detect=false
 CSET dividend_and_quotient_width=28
-CSET divisor_width=23
+CSET divisor_width=24
 CSET fractional_width=10
 CSET latency=26
 CSET latency_configuration=Automatic
@@ -58,4 +58,4 @@ CSET sclr_ce_priority=SCLR_overrides_CE
 MISC pkg_timestamp=2013-03-27T03:45:13Z
 # END Extra information
 GENERATE
-# CRC: 251b671e
+# CRC: 69c676e4

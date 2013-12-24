@@ -12,7 +12,7 @@ PINATTR PinName dividend[27:0]
 PINATTR Polarity IN
 LINE Wide 0 240 32 240
 PIN 0 240 LEFT 36
-PINATTR PinName divisor[22:0]
+PINATTR PinName divisor[23:0]
 PINATTR Polarity IN
 LINE Normal 0 304 32 304
 PIN 0 304 LEFT 36
