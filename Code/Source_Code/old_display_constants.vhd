@@ -10,37 +10,6 @@ use ieee.std_logic_1164.all;
 
 package display_constants is
 
-    -- Display States
-    type display_states is(
-        -- General states
-        IDLE, 
-        RESET,
-        STATE_DONE,
-        -- States for updating a character
-        UPDATE_CHAR,
-        UPDATE_CHAR_DATA,
-        -- States for updating a line
-        UPDATE_LINE, 
-        SERIAL_GET_CHAR,
-        -- "Function Calls" for both to use
-        LCD_SET_ADDRESS, 
-        LCD_SEND_CHAR, 
-        LCD_WAIT
-    );
-
-    -- States for the state counter
-    type state_count_states is(
-        INC, 
-        DEC,
-        KEEP,
-        RESET
-    );
-
-    -- Standard wait values (assuming 200KHz clock)
-    constant wait_4_ms : std_logic_vector(9 downto 0)   := "1100100001";
-    constant wait_100_us : std_logic_vector(9 downto 0) := "0000010100";
-    constant wait_37_us : std_logic_vector(9 downto 0)  := "0000001000";
-
     -- LCD address mappings
     constant line_0_start : std_logic_vector(6 downto 0) := "0000000";
     constant line_1_start : std_logic_vector(6 downto 0) := "1000000";
