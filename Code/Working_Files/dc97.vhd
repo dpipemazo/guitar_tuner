@@ -33,14 +33,14 @@ package pkg_dc97 is
   end component;
 
   component dc97cmd 
-  port (
-    clk      : in  std_logic;
-    ready    : in  std_logic;
-    cmd_addr : out std_logic_vector(07 downto 00);
-    cmd_data : out std_logic_vector(15 downto 00);
-    volume   : in  std_logic_vector(04 downto 00);
-    source   : in  std_logic_vector(02 downto 00));
-  end component;
+    port (
+      clk      : in  std_logic;
+      ready    : in  std_logic;
+      cmd_addr : out std_logic_vector(07 downto 00);
+      cmd_data : out std_logic_vector(15 downto 00);
+      volume   : in  std_logic_vector(04 downto 00);
+      source   : in  std_logic_vector(02 downto 00));
+    end component;
   
 end pkg_dc97;
 
