@@ -99,7 +99,7 @@ architecture behavioral of FREQ_CONVERT is
 	signal convert_done		: std_logic; 	-- Pulsed high for one clock when 
 											-- the conversion is done
 	signal convert_count	: natural range 0 to 31;
-	signal convert_val		: std_logic_vector(28 downto 0);
+	signal convert_val		: std_logic_vector(27 downto 0);
 	signal divide_output	: std_logic_vector(23 downto 0);
 
 	--
@@ -157,7 +157,7 @@ begin
 				--	we care about (4 integer and 3 fractional)
 				
 				-- All digits but the last decimal digit
-				convMost: for i in  1 to 7 loop
+				convMost: for i in  2 to 7 loop
 					if (unsigned(convert_val(4*i - 2 downto 4*i - 5)) >= 5) then
 						convert_val(4*i - 1 downto 4*i - 4) <= std_logic_vector(unsigned(convert_val(4*i - 2 downto 4*i - 5)) + 3);
 					else
