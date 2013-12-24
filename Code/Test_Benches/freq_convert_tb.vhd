@@ -100,7 +100,7 @@ begin
             -- Get a random value on the interval [0,1].
             UNIFORM(seed1, seed2, rand);
             -- calculate the expected bin, range [1001, 1061]
-            bin := integer(round(rand*60 + 1001.0));
+            bin := integer(round(rand*60.0 + 1001.0));
 
             --
             -- Calculate the random frequency
@@ -130,7 +130,7 @@ begin
             --
 
             expected := integer(trunc(result_freq/1000.0));
-            result_freq := result_freq - expected;
+            result_freq := result_freq - real(expected);
             -- Check that the row is 4 and the column is 0 to start with
             assert(test_disp_data(15 downto 13) = "100") report "Thousands digit row invalid";
             assert(test_disp_data(12 downto 8) = "00000")  report "Thousands digit column invalid";
@@ -146,7 +146,7 @@ begin
             --
 
             expected := integer(trunc(result_freq/100.0));
-            result_freq := result_freq - expected;
+            result_freq := result_freq - real(expected);
             -- Check that the row is 4 and the column is 1
             assert(test_disp_data(15 downto 13) = "100") report "Hundreds digit row invalid";
             assert(test_disp_data(12 downto 8) = "00001")  report "Hundreds digit column invalid";
@@ -162,7 +162,7 @@ begin
             --
 
             expected := integer(trunc(result_freq/10.0));
-            result_freq := result_freq - expected;
+            result_freq := result_freq - real(expected);
             -- Check that the row is 4 and the column is 2
             assert(test_disp_data(15 downto 13) = "100") report "Tens digit row invalid";
             assert(test_disp_data(12 downto 8) = "00010")  report "Tens digit column invalid";
@@ -178,7 +178,7 @@ begin
             --
 
             expected := integer(trunc(result_freq/1.0));
-            result_freq := result_freq - expected;
+            result_freq := result_freq - real(expected);
             -- Check that the row is 4 and the column is 3
             assert(test_disp_data(15 downto 13) = "100") report "Ones digit row invalid";
             assert(test_disp_data(12 downto 8) = "00011")  report "Ones digit column invalid";
@@ -206,7 +206,7 @@ begin
             --
 
             expected := integer(trunc(result_freq/0.1));
-            result_freq := result_freq - expected;
+            result_freq := result_freq - real(expected);
             -- Check that the row is 4 and the column is 3
             assert(test_disp_data(15 downto 13) = "100") report "Tenths digit row invalid";
             assert(test_disp_data(12 downto 8) = "00101")  report "Tenths digit column invalid";
@@ -222,7 +222,7 @@ begin
             --
 
             expected := integer(trunc(result_freq/0.01));
-            result_freq := result_freq - expected;
+            result_freq := result_freq - real(expected);
             -- Check that the row is 4 and the column is 3
             assert(test_disp_data(15 downto 13) = "100") report "Hundredths digit row invalid";
             assert(test_disp_data(12 downto 8) = "00110")  report "Hundredths digit column invalid";
@@ -238,7 +238,7 @@ begin
             --
 
             expected := integer(trunc(result_freq/0.001));
-            result_freq := result_freq - expected;
+            result_freq := result_freq - real(expected);
             -- Check that the row is 4 and the column is 3
             assert(test_disp_data(15 downto 13) = "100") report "Thousandths digit row invalid";
             assert(test_disp_data(12 downto 8) = "00111")  report "Thousandths digit column invalid";
