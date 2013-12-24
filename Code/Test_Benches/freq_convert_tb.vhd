@@ -122,7 +122,7 @@ begin
 
             -- Wait until test_disp_wr_en goes high
             while (test_disp_wr_en /= '1') loop
-            	wait for 10 ns;
+            	wait for 5 ns;
             end loop;
 
             --
@@ -247,7 +247,7 @@ begin
             -- Finally, check the digit itself
             assert(to_integer(unsigned(test_disp_data(3 downto 0))) = expected) report "Thousandths digit incorrect";
 
-            wait for 20 ns;
+            wait for 15 ns;
 
         end loop;
 
