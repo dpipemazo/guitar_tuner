@@ -67,7 +67,7 @@ cd results
 
 echo 'Running ngdbuild'
 
-ngdbuild -p xc6vlx75t-ff484-3 -sd ../../../ DISPLAY_FIFO_exdes
+ngdbuild -p xc6slx45-csg324-3 -sd ../../../ DISPLAY_FIFO_exdes
 
 echo 'Running map'
 map DISPLAY_FIFO_exdes -o mapped.ncd

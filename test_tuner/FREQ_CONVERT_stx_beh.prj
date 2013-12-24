@@ -1,0 +1,2 @@
+vhdl isim_temp "FREQ_DIVIDER.vhd"
+vhdl isim_temp "../Code/Working_Files/freq_convert.vhd"

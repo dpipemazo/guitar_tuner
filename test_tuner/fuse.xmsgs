@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- IMPORTANT: This is an internal file that has been generated
+     by the Xilinx ISE software.  Any direct editing or
+     changes made to this file may result in unpredictable
+     behavior or data corruption.  It is strongly advised that
+     users do not edit the contents of this file. -->
+<messages>
+<msg type="error" file="HDLCompiler" num="69" delta="unknown" >"C:/Users/Dan/Documents/guitar_tuner/test_tuner/../Code/Working_Files/freq_convert.vhd" Line 84: &lt;<arg fmt="%s" index="1">sys_clk_spd</arg>&gt; is not declared.
+</msg>
+
+<msg type="error" file="HDLCompiler" num="722" delta="unknown" >"C:/Users/Dan/Documents/guitar_tuner/test_tuner/../Code/Working_Files/freq_convert.vhd" Line 84: Prefix of LENGTH attribute should be an array or array (sub)type
+</msg>
+
+<msg type="error" file="HDLCompiler" num="1731" delta="unknown" >"C:/Users/Dan/Documents/guitar_tuner/test_tuner/../Code/Working_Files/freq_convert.vhd" Line 133: found &apos;<arg fmt="%d" index="1">0</arg>&apos; definitions of operator <arg fmt="%s" index="2">&quot;*&quot;</arg>, cannot determine exact overloaded matching definition for <arg fmt="%s" index="2">&quot;*&quot;</arg>
+</msg>
+
+<msg type="error" file="HDLCompiler" num="69" delta="unknown" >"C:/Users/Dan/Documents/guitar_tuner/test_tuner/../Code/Working_Files/freq_convert.vhd" Line 188: &lt;<arg fmt="%s" index="1">display_data</arg>&gt; is not declared.
+</msg>
+
+<msg type="error" file="HDLCompiler" num="69" delta="unknown" >"C:/Users/Dan/Documents/guitar_tuner/test_tuner/../Code/Working_Files/freq_convert.vhd" Line 191: &lt;<arg fmt="%s" index="1">display_data</arg>&gt; is not declared.
+</msg>
+
+<msg type="error" file="HDLCompiler" num="69" delta="unknown" >"C:/Users/Dan/Documents/guitar_tuner/test_tuner/../Code/Working_Files/freq_convert.vhd" Line 201: &lt;<arg fmt="%s" index="1">do_display</arg>&gt; is not declared.
+</msg>
+
+<msg type="error" file="HDLCompiler" num="1728" delta="unknown" >"C:/Users/Dan/Documents/guitar_tuner/test_tuner/../Code/Working_Files/freq_convert.vhd" Line 143: Type error near <arg fmt="%s" index="1">divide_rdy</arg> ; current type <arg fmt="%s" index="2">std_logic</arg>; expected type <arg fmt="%s" index="3">boolean</arg>
+</msg>
+
+<msg type="error" file="HDLCompiler" num="854" delta="unknown" >"C:/Users/Dan/Documents/guitar_tuner/test_tuner/../Code/Working_Files/freq_convert.vhd" Line 79: Unit &lt;<arg fmt="%s" index="1">behavioral</arg>&gt; ignored due to previous errors.
+</msg>
+
+</messages>
+

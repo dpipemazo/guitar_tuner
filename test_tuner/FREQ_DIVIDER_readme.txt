@@ -1,11 +1,6 @@
 The following files were generated for 'FREQ_DIVIDER' in directory
 C:\Users\Dan\Documents\guitar_tuner\test_tuner\
 
-ISE file generator:
-   Add description here...
-
-   * FREQ_DIVIDER_flist.txt
-
 XCO file generator:
    Generate an XCO file for compatibility with legacy flows.
 

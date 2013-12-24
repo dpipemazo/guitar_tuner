@@ -1,7 +1,7 @@
 run
 -ifmt VHDL
 -ent DISPLAY_FIFO_exdes 
--p xc6vlx75t-ff484-3
+-p xc6slx45-csg324-3
 -ifn xst.prj
 -write_timing_constraints No
 -iobuf YES

@@ -1,7 +1,7 @@
 ##############################################################
 #
 # Xilinx Core Generator version 14.5
-# Date: Tue Dec 24 07:11:23 2013
+# Date: Tue Dec 24 09:37:21 2013
 #
 ##############################################################
 #
@@ -22,13 +22,13 @@ SET asysymbol = true
 SET busformat = BusFormatAngleBracketNotRipped
 SET createndf = false
 SET designentry = VHDL
-SET device = xc6vlx75t
-SET devicefamily = virtex6
+SET device = xc6slx45
+SET devicefamily = spartan6
 SET flowvendor = Other
 SET formalverification = false
 SET foundationsym = false
 SET implementationfiletype = Ngc
-SET package = ff484
+SET package = csg324
 SET removerpms = false
 SET simulationfiles = Behavioral
 SET speedgrade = -3
@@ -47,7 +47,7 @@ CSET divide_by_zero_detect=false
 CSET dividend_and_quotient_width=28
 CSET divisor_width=24
 CSET fractional_width=10
-CSET latency=26
+CSET latency=27
 CSET latency_configuration=Automatic
 CSET operand_sign=Signed
 CSET remainder_type=Fractional
@@ -58,4 +58,4 @@ CSET sclr_ce_priority=SCLR_overrides_CE
 MISC pkg_timestamp=2013-03-27T03:45:13Z
 # END Extra information
 GENERATE
-# CRC: 69c676e4
+# CRC: 948ff2dd

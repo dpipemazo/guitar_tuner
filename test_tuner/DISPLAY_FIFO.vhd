@@ -118,7 +118,7 @@ END COMPONENT;
       c_error_injection_type_wach => 0,
       c_error_injection_type_wdch => 0,
       c_error_injection_type_wrch => 0,
-      c_family => "virtex6",
+      c_family => "spartan6",
       c_full_flags_rst_val => 1,
       c_has_almost_empty => 0,
       c_has_almost_full => 0,
