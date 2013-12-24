@@ -170,7 +170,7 @@ begin
 				end loop;
 
 				-- Final decimal digit.
-				if (unsigned(convert_val(2 downto 0) & divide_output(23)) >= 5) then
+				if (unsigned(convert_val(2 downto 0) & latched_quotient(13)) >= 5) then
 					convert_val(3 downto 0) <= std_logic_vector(unsigned(convert_val(2 downto 0) & latched_quotient(13)) + 3);
 				else
 					convert_val(3 downto 0) <= convert_val(2 downto 0) & latched_quotient(13);
@@ -207,7 +207,7 @@ begin
 					disp_data <= start_row & char & X"2E";
 				-- Send out the decimal
 				else
-					temp_multiply := std_logic_vector(unsigned(latched_fractional)*unsigned("1001"));
+					temp_multiply := std_logic_vector(unsigned(latched_fractional)*to_unsigned(10, 4));
 					disp_data <= temp_multiply(13 downto 10);
 					latched_fractional <= temp_multiply(9 downto 0);
 				end if;
