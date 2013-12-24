@@ -70,14 +70,14 @@ begin
         -- this process generates a 10 ps period, 50% duty cycle clock, 
         -- which is equivalent to the clock which we will have in our system. 
         if END_SIM = FALSE then
-            test_clock <= '1';
+            test_clk <= '1';
             wait for 5 ps;
         else
             wait;
         end if;
 
         if END_SIM = FALSE then
-            test_clock <= '0';
+            test_clk <= '0';
             wait for 5 ps;
         else
             wait;
