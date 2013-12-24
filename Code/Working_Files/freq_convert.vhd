@@ -134,7 +134,7 @@ begin
 	div_x_bin <= std_logic_vector(unsigned(divider) * unsigned(bin));
 	freq_divisor <= "0" & div_x_bin;
 	-- And the dividend is equal to the system clock speed
-	freq_dividend <= std_logic_vector(to_unsigned(sys_clk_spd), freq_dividend'length);
+	freq_dividend <= std_logic_vector(to_unsigned(sys_clk_spd, freq_dividend'length));
 
 
 	-- Do the conversion from binary to BCD
