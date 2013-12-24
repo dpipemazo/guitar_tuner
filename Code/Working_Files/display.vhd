@@ -41,7 +41,8 @@ entity DISPLAY is
         -- FIFO input from freq_convert
         fifo_wr_en 		: in std_logic;
         fifo_wr_data 	: in std_logic_vector(15 downto 0);
-        fifo_rst 		: in std_logic
+
+        reset 			: in std_logic
 
 	);
 
@@ -100,7 +101,7 @@ begin
 	-- Declare the display FIFO
 	dispFIFO: entity DISPLAY_FIFO
 		port map(
-			rst  	=> fifo_rst,  
+			rst  	=> reset,  
 			wr_clk	=> clk,
 			rd_clk	=> disp_clk,
 			din  	=> fifo_wr_data,  
@@ -132,8 +133,13 @@ begin
 	makeDispClk: process(clk)
 	begin
 		if (rising_edge(clk)) then
-			disp_clk_counter <= disp_clk_inc;
-			disp_clk 		 <= disp_clk_inc(11);
+			if (reset = '1') then
+				disp_clk_counter <= (others => '0');
+				disp_clk 		 <= '0';
+			else
+				disp_clk_counter <= disp_clk_inc;
+				disp_clk 		 <= disp_clk_inc(11);
+			end if;
 		end if;
 	end process;
 
