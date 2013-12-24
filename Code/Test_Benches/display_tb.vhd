@@ -95,6 +95,8 @@ begin
     --
     testDisplay: process
     begin
+    	test_reset <= '0';
+    	wait for 10 ns;
     	-- Reset the FIFO
     	test_reset <= '1';
     	wait for 10 ns;
@@ -118,6 +120,8 @@ begin
     		wait for 10 ns;
 
     	end loop;
+
+    	wait for 1 ms;
 
     end process;
 
