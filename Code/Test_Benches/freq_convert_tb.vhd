@@ -63,25 +63,15 @@ begin
 
 	-- Make the system clock
 	make_clock: process
-
-        variable END_SIM : boolean := FALSE;
-
 	begin
         -- this process generates a 10 ps period, 50% duty cycle clock, 
         -- which is equivalent to the clock which we will have in our system. 
-        if END_SIM = FALSE then
-            test_clk <= '1';
-            wait for 5 ps;
-        else
-            wait;
-        end if;
+        test_clk <= '1';
+        wait for 5 ps;
 
-        if END_SIM = FALSE then
-            test_clk <= '0';
-            wait for 5 ps;
-        else
-            wait;
-        end if;
+        test_clk <= '0';
+        wait for 5 ps;
+
     end process; 
 
     --
