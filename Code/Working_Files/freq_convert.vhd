@@ -102,6 +102,7 @@ architecture behavioral of FREQ_CONVERT is
 	signal convert_val			: std_logic_vector(15 downto 0);
 	signal latched_quotient		: std_logic_vector(13 downto 0);
 	signal latched_fractional 	: std_logic_vector(9 downto 0);
+	signal frac_mul_10			: std_logic_vector(13 downto 0);
 
 	--
 	-- Display row and column start constants
@@ -137,6 +138,9 @@ begin
 	-- And the dividend is equal to the system clock speed
 	freq_dividend <= std_logic_vector(to_unsigned(sys_clk_spd, freq_dividend'length));
 
+
+	-- We will need this inside of the process, I can't find a better place for it 
+	frac_mul_10 <= std_logic_vector(unsigned(freq_fractional)*to_unsigned(10, 4));
 
 	-- Do the conversion from binary to BCD
 	latchDivide: process(clk)
@@ -204,9 +208,8 @@ begin
 					disp_data <= start_row & char & X"2E";
 				-- Send out the decimal
 				else
-					temp_multiply := std_logic_vector(unsigned(latched_fractional)*to_unsigned(10, 4));
-					disp_data <= start_row & char & X"03" & temp_multiply(13 downto 10);
-					latched_fractional <= temp_multiply(9 downto 0);
+					disp_data <= start_row & char & X"03" & frac_mul_10(13 downto 10);
+					latched_fractional <= frac_mul_10(9 downto 0);
 				end if;
 
 				-- Always increment the character
