@@ -208,7 +208,7 @@ begin
 				-- Send out the decimal
 				else
 					temp_multiply := std_logic_vector(unsigned(latched_fractional)*to_unsigned(10, 4));
-					disp_data <= temp_multiply(13 downto 10);
+					disp_data <= start_row & char & X"03" & temp_multiply(13 downto 10);
 					latched_fractional <= temp_multiply(9 downto 0);
 				end if;
 
