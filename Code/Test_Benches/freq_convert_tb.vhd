@@ -64,13 +64,13 @@ begin
 	-- Make the system clock
 	make_clock: process
 	begin
-        -- this process generates a 10 ps period, 50% duty cycle clock, 
+        -- this process generates a 10 ns period, 50% duty cycle clock, 
         -- which is equivalent to the clock which we will have in our system. 
         test_clk <= '1';
-        wait for 5 ps;
+        wait for 5 ns;
 
         test_clk <= '0';
-        wait for 5 ps;
+        wait for 5 ns;
 
     end process; 
 
@@ -110,13 +110,13 @@ begin
             sample_done <= '1';
 
             -- wait for a clock
-            wait for 10 ps;
+            wait for 10 ns;
 
             -- send the sample done signal low
             sample_done <= '0';
 
             -- Wait for 100 clocks
-            wait for 1000 ps;
+            wait for 1000 ns;
 
         end loop;
 
