@@ -39,7 +39,8 @@ architecture behavioral of display_tb is
 
 	        -- FIFO input from freq_convert
 	        fifo_wr_en 		: in std_logic;
-	        fifo_wr_data 	: in std_logic_vector(15 downto 0)
+	        fifo_wr_data 	: in std_logic_vector(15 downto 0);
+	        fifo_rst 		: in std_logic
 
 		);
 
@@ -53,6 +54,7 @@ architecture behavioral of display_tb is
 	signal test_lcd_data    	: std_logic_vector(7 downto 0);
 	signal test_fifo_wr_en 		: std_logic;
 	signal test_fifo_wr_data	: std_logic_vector(15 downto 0);
+	signal test_fifo_rst		: std_logic;
 
 begin
 
@@ -65,7 +67,8 @@ begin
 			lcd_e        => test_lcd_e,
 			lcd_data     => test_lcd_data,   
 			fifo_wr_en 	 => test_fifo_wr_en, 
-			fifo_wr_data => test_fifo_wr_data
+			fifo_wr_data => test_fifo_wr_data,
+			fifo_rst	 => test_fifo_rst
 		);
 
 
@@ -90,8 +93,12 @@ begin
     --
     testDisplay: process
     begin
+    	-- Reset the FIFO
+    	test_fifo_rst <= '1';
+    	wait for 10 ns;
+    	test_fifo_rst <= '0';
 
-    	-- Fisrt put the reset on the line
+    	-- Fisrt put the Display reset on the line
     	test_fifo_wr_en 	<= '1';
     	test_fifo_wr_data 	<= (others => '0');
     	wait for 10 ns;
