@@ -79,7 +79,7 @@ architecture behavioral of DISPLAY is
 		SEND_ADDR_DROP_EN,
 		SEND_DATA_SET_RS,
 		SEND_DATA_SET_DATA,
-		SEND_DATA_DROP_EN,
+		SEND_DATA_DROP_EN
 	);
 
 	signal curr_state : disp_states;
@@ -174,7 +174,7 @@ begin
 				when RESET =>
 
 					-- The RS line is always 0 on reset
-					lcd_rs <= '0'
+					lcd_rs <= '0';
 
 					-- 
 					-- Which data to put on the line
