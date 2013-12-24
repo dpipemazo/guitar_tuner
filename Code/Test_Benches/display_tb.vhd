@@ -104,7 +104,7 @@ begin
     		-- Do the column
     		test_fifo_wr_data(12 downto 8) <= std_logic_vector(to_unsigned(i mod 20, 5));
     		-- Do the character
-    		test_fifo_wr_data(7 downto 0) <= std_logic_vector(to_unsigned(48 + i), 8);
+    		test_fifo_wr_data(7 downto 0) <= std_logic_vector(to_unsigned((48 + i), 8));
 
     		wait for 10 ns;
 
