@@ -137,7 +137,7 @@ begin
             -- Check that the character is in ASCII form
             assert(test_disp_data(7 downto 4) = "0011") report "Thousands digit not in ASCII format";
             -- Finally, check the digit itself
-            assert(to_integer(unsigned(test_disp_data(3 downto 0))) = expected);
+            assert(to_integer(unsigned(test_disp_data(3 downto 0))) = expected) report "Thousands digit incorrect";
 
             wait for 10 ns;
 
@@ -153,7 +153,7 @@ begin
             -- Check that the character is in ASCII form
             assert(test_disp_data(7 downto 4) = "0011") report "Hundreds digit not in ASCII format";
             -- Finally, check the digit itself
-            assert(to_integer(unsigned(test_disp_data(3 downto 0))) = expected);
+            assert(to_integer(unsigned(test_disp_data(3 downto 0))) = expected) report "Hundreds digit incorrect";
 
             wait for 10 ns;
 
@@ -169,7 +169,7 @@ begin
             -- Check that the character is in ASCII form
             assert(test_disp_data(7 downto 4) = "0011") report "Tens digit not in ASCII format";
             -- Finally, check the digit itself
-            assert(to_integer(unsigned(test_disp_data(3 downto 0))) = expected);
+            assert(to_integer(unsigned(test_disp_data(3 downto 0))) = expected) report "Tens digit incorrect";
 
             wait for 10 ns;
 
@@ -185,7 +185,7 @@ begin
             -- Check that the character is in ASCII form
             assert(test_disp_data(7 downto 4) = "0011") report "Ones digit not in ASCII format";
             -- Finally, check the digit itself
-            assert(to_integer(unsigned(test_disp_data(3 downto 0))) = expected);
+            assert(to_integer(unsigned(test_disp_data(3 downto 0))) = expected) report "Ones digit incorrect";
 
             wait for 10 ns;
 
@@ -197,7 +197,7 @@ begin
             assert(test_disp_data(15 downto 13) = "100") report "Decimal place row invalid";
             assert(test_disp_data(12 downto 8) = "00100")  report "Decimal place column invalid";
             -- Check the decimal
-            assert(test_disp_data(7 downto 0) = X"2E");
+            assert(test_disp_data(7 downto 0) = X"2E") report "Decimal point incorrect";
 
             wait for 10 ns;
 
@@ -213,7 +213,7 @@ begin
             -- Check that the character is in ASCII form
             assert(test_disp_data(7 downto 4) = "0011") report "Tenths digit not in ASCII format";
             -- Finally, check the digit itself
-            assert(to_integer(unsigned(test_disp_data(3 downto 0))) = expected);
+            assert(to_integer(unsigned(test_disp_data(3 downto 0))) = expected) report "Tenths digit incorrect";
 
             wait for 10 ns;
 
@@ -229,7 +229,7 @@ begin
             -- Check that the character is in ASCII form
             assert(test_disp_data(7 downto 4) = "0011") report "Hundredths digit not in ASCII format";
             -- Finally, check the digit itself
-            assert(to_integer(unsigned(test_disp_data(3 downto 0))) = expected);
+            assert(to_integer(unsigned(test_disp_data(3 downto 0))) = expected) report "Hundredths digit incorrect";
 
             wait for 10 ns;
 
@@ -245,9 +245,9 @@ begin
             -- Check that the character is in ASCII form
             assert(test_disp_data(7 downto 4) = "0011") report "Thousandths digit not in ASCII format";
             -- Finally, check the digit itself
-            assert(to_integer(unsigned(test_disp_data(3 downto 0))) = expected);
+            assert(to_integer(unsigned(test_disp_data(3 downto 0))) = expected) report "Thousandths digit incorrect";
 
-            wait for 10 ns;
+            wait for 20 ns;
 
         end loop;
 
