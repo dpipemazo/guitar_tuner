@@ -94,13 +94,14 @@ architecture behavioral of FREQ_CONVERT is
 
 
 	-- Signals for conversion from binary to BCD
-	signal do_convert		: std_logic; 	-- Latched output of divide_rdy. Should 
+	signal do_convert			: std_logic; 	-- Latched output of divide_rdy. Should 
 											--	pulse high for one clock.
-	signal convert_done		: std_logic; 	-- Pulsed high for one clock when 
+	signal convert_done			: std_logic; 	-- Pulsed high for one clock when 
 											-- the conversion is done
-	signal convert_count	: natural range 0 to 31;
-	signal convert_val		: std_logic_vector(27 downto 0);
-	signal divide_output	: std_logic_vector(23 downto 0);
+	signal convert_count		: std_logic_vector(4 downto 0);
+	signal convert_val			: std_logic_vector(15 downto 0);
+	signal latched_quotient		: std_logic_vector(13 downto 0);
+	signal latched_fractional 	: std_logic_vector(9 downto 0);
 
 	--
 	-- Display row and column start constants
@@ -139,25 +140,28 @@ begin
 
 	-- Do the conversion from binary to BCD
 	latchDivide: process(clk)
+		variable temp_multiply : std_logic_vector(13 downto 0);
 	begin
 		if (rising_edge(clk)) then
 			-- Latch the output of the divider and get ready to begin the
 			--	binary-to-bcd conversion
 			if ( divide_rdy = '1' ) then 
-				divide_output <= freq_quotient(13 downto 0) & freq_fractional;
+				latched_quotient 	<= freq_quotient(13 downto 0);
+				latched_fractional 	<= freq_fractional;
 				convert_val <= (others => '0');
 				disp_wr_en  <= '0';
 				char 		<= start_col;
 				do_convert 	<= '1';
 
-			-- Need 24 clocks to do the conversion from binary to BCD
-			elsif ( (do_convert = '1') and (convert_count < 24) ) then
+			-- Need 16 clocks to do the conversion of the quotient from binary 
+			--	to BCD
+			elsif ( (do_convert = '1') and (unsigned(convert_count) < 13) ) then
 				-- Need to do all of the conversions. Implement the 
 				--	shift-1 and add 3 algorithm. We have 7 digits that
 				--	we care about (4 integer and 3 fractional)
 				
 				-- All digits but the last decimal digit
-				convMost: for i in  2 to 7 loop
+				convMost: for i in  2 to 4 loop
 					if (unsigned(convert_val(4*i - 2 downto 4*i - 5)) >= 5) then
 						convert_val(4*i - 1 downto 4*i - 4) <= std_logic_vector(unsigned(convert_val(4*i - 2 downto 4*i - 5)) + 3);
 					else
@@ -167,50 +171,64 @@ begin
 
 				-- Final decimal digit.
 				if (unsigned(convert_val(2 downto 0) & divide_output(23)) >= 5) then
-					convert_val(3 downto 0) <= std_logic_vector(unsigned(convert_val(2 downto 0) & divide_output(23)) + 3);
+					convert_val(3 downto 0) <= std_logic_vector(unsigned(convert_val(2 downto 0) & latched_quotient(13)) + 3);
 				else
-					convert_val(3 downto 0) <= convert_val(2 downto 0) & divide_output(23);
+					convert_val(3 downto 0) <= convert_val(2 downto 0) & latched_quotient(13);
 				end if;
 
 				-- Need to shift the divide output
-				divide_output <= divide_output(22 downto 0) & "0";
+				latched_quotient <= latched_quotient(12 downto 0) & "0";
 
 				-- Need to increment the convert clock
-				convert_count <= convert_count + 1;
+				convert_count <= std_logic_vector(unsigned(convert_count) + 1);
 
-			-- Need 8 clocks to write the BCD to the display
-			elsif ((do_convert = '1') and (convert_count >= 24)) then
+			-- Final convert clock, just shift everything, no add 3 if greater than 5
+			elsif ( (do_convert = '1') and (unsigned(convert_count) = 13)) then
+				convert_val <= convert_val(14 downto 0) & latched_quotient(13);
+
+
+			-- Need 8 clocks to write the BCD to the display. The clocks will be used as such:
+			--	First 4 clocks: BCD quotient
+			--	5th clock: decimal place
+			--	Last 3 clocks: Multiply fractional by 10 and take high 4 bits.
+			elsif ( (do_convert = '1') and (unsigned(convert_count) >= 14) ) then
 
 				-- Set the write enable on the display FIFO
 				disp_wr_en <= '1';
 
-				-- Set the data for the display FIFO
-				-- Need to isolate out the special case of the decimal point.
-				if (convert_count = 28) then
+				-- Send out the BCD quotient
+				if (unsigned(convert_count) < 18) then 
+					-- Output the current convert value and shift the convert value
+					disp_data <= start_row & char & X"3" & convert_val(15 downto 12);
+					convert_val  <= convert_val(11 downto 0) & "0000";
+				-- Send out the decimal place
+				elsif (unsigned(convert_count) = 18) then
 					-- Output a decimal point and do not shift the convert val
 					disp_data <= start_row & char & X"2E";
+				-- Send out the decimal
 				else
-					-- Output the current convert value and shift the convert value
-					disp_data <= start_row & char & X"3" & convert_val(27 downto 24);
-					convert_val  <= convert_val(23 downto 0) & "0000";
+					temp_multiply := std_logic_vector(unsigned(latched_fractional)*unsigned("1001"));
+					disp_data <= temp_multiply(13 downto 10);
+					latched_fractional <= temp_multiply(9 downto 0);
 				end if;
 
 				-- Always increment the character
 				char <= std_logic_vector(unsigned(char) + 1);
 
 				-- Need to increment the convert clock until we're done
-				if (convert_count = 31) then
-					convert_count <= 0;
+				if (unsigned(convert_count) = 21) then
+					convert_count <= (others => '0'));
 					do_convert <= '0';
 				else
-					convert_count <= convert_count + 1;
+					convert_count <= std_logic_vector(unsigned(convert_count) + 1);
 				end if;
 
-			-- And if something is totally wrong just reset everythin
+			-- And if something is totally wrong just reset everything
 			else
 				do_convert <= '0';
-				convert_count <= 0;
-				divide_output <= (others => '0');
+				convert_count <= (others => '0');
+				latched_quotient <= (others => '0');
+				latched_fractional <= (others => '0');
 				disp_wr_en <= '0';
 			end if;
 
