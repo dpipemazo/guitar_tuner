@@ -96,24 +96,24 @@ begin
             -- Get a random value on the interval [0,1].
             UNIFORM(seed1, seed2, rand);
             -- calculate the expected divider, range [10, 4095]
-            divider := integer(round(rand*4085 + 10));
+            divider := integer(round(rand*4085.0 + 10.0));
             -- Get a random value on the interval [0,1].
             UNIFORM(seed1, seed2, rand);
             -- calculate the expected bin, range [980, 1050]
-            bin := integer(round(rand*70 + 980));
+            bin := integer(round(rand*70.0 + 980.0));
 
             --
             -- Put the bin and divider on the line and send the done flag high
             --
             test_divider <= std_logic_vector(to_unsigned(divider, test_divider'length));
             test_bin <= std_logic_vector(to_unsigned(bin, test_bin'length));
-            sample_done <= '1';
+            test_sample_done <= '1';
 
             -- wait for a clock
             wait for 10 ns;
 
             -- send the sample done signal low
-            sample_done <= '0';
+            test_sample_done <= '0';
 
             -- Wait for 100 clocks
             wait for 1000 ns;
