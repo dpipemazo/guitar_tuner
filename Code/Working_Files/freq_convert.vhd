@@ -208,7 +208,7 @@ begin
 					disp_data <= start_row & char & X"2E";
 				-- Send out the decimal
 				else
-					disp_data <= start_row & char & X"03" & frac_mul_10(13 downto 10);
+					disp_data <= start_row & char & X"3" & frac_mul_10(13 downto 10);
 					latched_fractional <= frac_mul_10(9 downto 0);
 				end if;
 
