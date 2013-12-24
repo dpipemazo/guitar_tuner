@@ -105,7 +105,7 @@ begin
             --
             -- Calculate the random frequency
             --
-            result_freq := (100000000.0)/(divider*bin);
+            result_freq := 100000000.0/(divider*bin);
 
             --
             -- Put the bin and divider on the line and send the done flag high
