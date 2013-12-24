@@ -217,7 +217,7 @@ begin
 
 				-- Need to increment the convert clock until we're done
 				if (unsigned(convert_count) = 21) then
-					convert_count <= (others => '0'));
+					convert_count <= (others => '0');
 					do_convert <= '0';
 				else
 					convert_count <= std_logic_vector(unsigned(convert_count) + 1);
