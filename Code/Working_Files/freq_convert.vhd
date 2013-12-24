@@ -179,9 +179,6 @@ begin
 				-- Need to shift the divide output
 				latched_quotient <= latched_quotient(12 downto 0) & "0";
 
-				-- Need to increment the convert clock
-				convert_count <= std_logic_vector(unsigned(convert_count) + 1);
-
 			-- Final convert clock, just shift everything, no add 3 if greater than 5
 			elsif ( (do_convert = '1') and (unsigned(convert_count) = 13)) then
 				convert_val <= convert_val(14 downto 0) & latched_quotient(13);
@@ -215,14 +212,6 @@ begin
 				-- Always increment the character
 				char <= std_logic_vector(unsigned(char) + 1);
 
-				-- Need to increment the convert clock until we're done
-				if (unsigned(convert_count) = 21) then
-					convert_count <= (others => '0');
-					do_convert <= '0';
-				else
-					convert_count <= std_logic_vector(unsigned(convert_count) + 1);
-				end if;
-
 			-- And if something is totally wrong just reset everything
 			else
 				do_convert <= '0';
@@ -230,6 +219,16 @@ begin
 				latched_quotient <= (others => '0');
 				latched_fractional <= (others => '0');
 				disp_wr_en <= '0';
+			end if;
+
+			-- Need to increment the convert clock until we're done
+			if (do_convert = '1') then
+				if (unsigned(convert_count) = 21) then
+					convert_count <= (others => '0');
+					do_convert <= '0';
+				else
+					convert_count <= std_logic_vector(unsigned(convert_count) + 1);
+				end if;
 			end if;
 
 		end if;
