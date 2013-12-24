@@ -140,7 +140,7 @@ begin
 
 
 	-- We will need this inside of the process, I can't find a better place for it 
-	frac_mul_10 <= std_logic_vector(unsigned(freq_fractional)*to_unsigned(10, 4));
+	frac_mul_10 <= std_logic_vector(unsigned(latched_fractional)*to_unsigned(10, 4));
 
 	-- Do the conversion from binary to BCD
 	latchDivide: process(clk)
