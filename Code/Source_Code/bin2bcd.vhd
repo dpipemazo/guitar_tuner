@@ -1,18 +1,15 @@
 --
 -- Binary to BCD converter for detected frequency
 --
--- The frequency is expected in Q28.4 format
+-- The frequency is expected in Q16.10 format
 --
--- Take the top 28 bits of the incoming number and use the 
---  shift, add 3 algorithm to convert them to BCD, then
---  take the bottom 4 bits, and repeatedly multiply themby 10
---  and take the integer part to get the final BCD result
---  accurate to 1/16th of frequency. 
+-- Take the top 26 bits of the incoming number and use the 
+--  shift, add 3 algorithm to convert them to BCD,
 
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_misc.all;
-use ieee.std_logic_unsigned.all;
+use ieee.numeric_stc.all;
 
 library work;
 use work.bcdunit;

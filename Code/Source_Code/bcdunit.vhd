@@ -3,6 +3,8 @@
 --  This is a simple unit for converting binary to BCD which will perform the 
 --  shift, add 3 algorithm on 4 bits. You can string as many of these together
 --  as desired to compute BCD values as big as you want
+--
+-- Use 1 BCD unit per digit of output which you want
 
 library ieee;
 use ieee.std_logic_1164.all;
