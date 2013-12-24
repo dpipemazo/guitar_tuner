@@ -119,7 +119,7 @@ begin
 		    rfd 		=> divide_rfd,
 		    rdy 		=> divide_rdy,
 		    nd 			=> divide_nd, 
-		    clk 		=> clk
+		    clk 		=> clk,
 		    dividend 	=> sys_clk_spd,
 		    quotient 	=> freq_quotient,
 		    divisor 	=> freq_divisor,
@@ -154,7 +154,7 @@ begin
 				--	we care about (4 integer and 3 fractional)
 				
 				-- All digits but the last decimal digit
-				convMost: for i in range 1 to 7 loop
+				convMost: for i in  1 to 7 loop
 					if (unsigned(convert_val(4*i - 2 downto 4*i - 5)) >= 5) then
 						convert_val(4*i - 1 downto 4*i - 4) <= std_logic_vector(unsigned(convert_val(4*i - 2 downto 4*i - 5)) + 3);
 					else

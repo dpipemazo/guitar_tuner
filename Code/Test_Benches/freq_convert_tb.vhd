@@ -17,7 +17,7 @@ entity freq_convert_tb is
 end freq_convert_tb;
 
 -- Declare the architecture of the test bench
-architecture TB_ARCHITECTURE of new_auto_tb is
+architecture TB_ARCHITECTURE of freq_convert_tb is
 	
 	-- The autocorrelation component
 	component FREQ_CONVERT is 
