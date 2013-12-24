@@ -81,9 +81,10 @@ architecture behavioral of FREQ_CONVERT is
 	-- Multiplied result of the divider and the bin
 	signal div_x_bin		: std_logic_vector(22 downto 0);
 	-- Constant system clock speed
-	constant sys_clk_spd 	: std_logic_vector(27 downto 0) := std_logic_vector(to_unsigned(2**10, sys_clk_spd'length));
+	constant sys_clk_spd 	: integer := 100000000;
 
 	-- Divider signals
+	signal freq_dividend	: std_logic_vector(27 downto 0);
 	signal freq_divisor		: std_logic_vector(23 downto 0);
 	signal freq_quotient	: std_logic_vector(27 downto 0);
 	signal freq_fractional 	: std_logic_vector(9 downto 0);
@@ -120,7 +121,7 @@ begin
 		    rdy 		=> divide_rdy,
 		    nd 			=> divide_nd, 
 		    clk 		=> clk,
-		    dividend 	=> sys_clk_spd,
+		    dividend 	=> freq_dividend,
 		    quotient 	=> freq_quotient,
 		    divisor 	=> freq_divisor,
 		    fractional 	=> freq_fractional
@@ -130,8 +131,10 @@ begin
 	-- the divisor is the multiplied value of the bin and the divisor
 	--	these values go valid at the same time that done does, and stay
 	--	high for at least one clock
-	div_x_bin <= unsigned(divider) * unsigned(bin);
+	div_x_bin <= std_logic_vector(unsigned(divider) * unsigned(bin));
 	freq_divisor <= "0" & div_x_bin;
+	-- And the dividend is equal to the system clock speed
+	freq_dividend <= std_logic_vector(to_unsigned(sys_clk_spd), freq_dividend'length);
 
 
 	-- Do the conversion from binary to BCD
@@ -140,7 +143,7 @@ begin
 		if (rising_edge(clk)) then
 			-- Latch the output of the divider and get ready to begin the
 			--	binary-to-bcd conversion
-			if (divide_rdy) then 
+			if ( divide_rdy = '1' ) then 
 				divide_output <= freq_quotient(13 downto 0) & freq_fractional;
 				convert_val <= (others => '0');
 				disp_wr_en  <= '0';
@@ -185,10 +188,10 @@ begin
 				-- Need to isolate out the special case of the decimal point.
 				if (convert_count = 28) then
 					-- Output a decimal point and do not shift the convert val
-					display_data <= start_row & char & X"2E";
+					disp_data <= start_row & char & X"2E";
 				else
 					-- Output the current convert value and shift the convert value
-					display_data <= start_row & char & X"3" & convert_val(27 downto 24);
+					disp_data <= start_row & char & X"3" & convert_val(27 downto 24);
 					convert_val  <= convert_val(23 downto 0) & "0000";
 				end if;
 
@@ -198,7 +201,7 @@ begin
 				-- Need to increment the convert clock until we're done
 				if (convert_count = 31) then
 					convert_count <= 0;
-					do_display <= '0';
+					do_convert <= '0';
 				else
 					convert_count <= convert_count + 1;
 				end if;
