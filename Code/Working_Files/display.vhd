@@ -62,7 +62,7 @@ architecture behavioral of DISPLAY is
 
 	signal row		: std_logic_vector(2 downto 0);
 	signal column 	: std_logic_vector(4 downto 0);
-	signal reset 	: std_logic;
+	signal disp_reset : std_logic;
 	signal data 	: std_logic_vector(7 downto 0);
 	
 	-- Signals for making the display clock
@@ -122,7 +122,7 @@ begin
 
 	column 			<= fifo_dout(12 downto 8);
 	data 			<= fifo_dout(7 downto 0);
-	reset 			<= 	'1' when std_match(fifo_dout(15 downto 13), "000") else
+	disp_reset 		<= 	'1' when std_match(fifo_dout(15 downto 13), "000") else
 						'0';
 
 	--
@@ -161,7 +161,7 @@ begin
 					-- If the fifo is non-empty and not reset, then
 					--	latch the data and send it out
 					if (fifo_empty = '0') then
-						if (reset = '1') then
+						if (disp_reset = '1') then
 							curr_state <= DO_RESET;
 						else
 							curr_state <= SEND_ADDR_SET_RS;
