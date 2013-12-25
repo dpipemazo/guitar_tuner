@@ -76,7 +76,7 @@ begin
 			lcd_data     => test_lcd_data,   
 			fifo_wr_en 	 => test_fifo_wr_en, 
 			fifo_wr_data => test_fifo_wr_data,
-			fifo_full 	 => test_fifo_full
+			fifo_full 	 => test_fifo_full,
 			reset	 	 => test_reset
 		);
 
