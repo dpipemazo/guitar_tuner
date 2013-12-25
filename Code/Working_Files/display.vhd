@@ -43,7 +43,7 @@ entity DISPLAY is
         fifo_wr_data 	: in std_logic_vector(15 downto 0);
         fifo_full		: out std_logic;
 
-        reset 			: in std_logic
+        n_reset 		: in std_logic
 
 	);
 
@@ -133,7 +133,7 @@ begin
 	makeDispClk: process(clk)
 	begin
 		if (rising_edge(clk)) then
-			if (reset = '1') then
+			if (n_reset = '0') then
 				disp_clk_counter <= (others => '0');
 				disp_clk 		 <= '0';
 			else

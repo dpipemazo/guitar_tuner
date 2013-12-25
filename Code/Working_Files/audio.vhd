@@ -28,7 +28,7 @@ use IEEE.STD_LOGIC_1164.all;
 use IEEE.numeric_std.all;
 
 library work;
-use work.ac97_driver;
+use work.dc97.all;
 
 --
 -- Declare the IO
@@ -42,7 +42,7 @@ entity AUDIO is
 		n_reset			: in std_logic;	-- Active low reset
 
 		-- Outputs for autocorrelation
-		auto_sample	: out std_logic_vector(1 downto 0); 	-- The 48KHz sample bitstream, 
+		auto_sample		: out std_logic_vector(1 downto 0); -- The 48KHz sample bitstream, 
 															-- thresholded and converted
 															-- from 18-bits to 2 for the
 															-- autocorrelation algorithm
@@ -52,20 +52,16 @@ entity AUDIO is
 															--	to run the autocorrelation
 															--	algorithm off of.
 
-		-- I/O for dealing with the codec
-		raw_sample_out	: in std_logic_vector(17 downto 0); 	-- 18-bit samples to be sent to the codec
-																--	will be clocked at 48KHz
-		raw_sample_in	: out std_logic_vector(17 downto 0); 	-- 18-bit samples coming from the codec 
-																--  will be clocked at 48KHz 
-		play_samples	: in std_logic;							-- Active high. Turns playback on.
-		play_output		: in std_logic;							-- 1 = line out, 0 = headphones
-
 		-- Signals to be connected to I/O
 		audsdi			: in std_logic;
 		audsdo 			: out std_logic;
 		sync			: out std_logic;
 		audrst			: out std_logic;
-		bitclk			: in std_logic
+		bitclk			: in std_logic;
+
+		-- Source and Volume Selects
+		source			: in std_logic; -- 1 == line in, 0 == mic
+		volume			: in std_logic_vector(4 downto 0)
 
 	);
 
@@ -75,17 +71,6 @@ end entity;
 -- The architecture of the sampling unit
 --
 architecture behavioral of AUDIO is
-	
-	-- We need to hook up the ac97 unit
-	signal codec_sample_r_out	: std_logic_vector(17 downto 0);
-	signal codec_sample_l_out	: std_logic_vector(17 downto 0);
-	signal codec_sample_r_in	: std_logic_vector(17 downto 0);
-	signal codec_sample_l_in	: std_logic_vector(17 downto 0);
-
-	-- Volume control. Eventually attach to switches
-	signal volume_control 		: std_logic_vector(4 downto 0);
-	signal source_control		: std_logic_vector(2 downto 0); -- 000 for mic, 100 for line in. 
-																--	use mic unless debug.
 
 	--
 	-- Signals for finding a maximum and minimum
@@ -104,10 +89,21 @@ architecture behavioral of AUDIO is
 	signal sample_low_threshold	  : std_logic_vector(17 downto 0);
 
 	-- Sync signal. Will be acting like a clock so let's buffer it
-	signal 	  sync_clk	: std_logic;
+	signal sync_clk	: std_logic;
 
 	-- Signal to do the sample thresholding
 	signal auto_sample_mux : std_logic_vector(1 downto 0);
+
+	-- Signals to hook up the ac97 unit
+	signal ac97_sample_r_in	: std_logic_vector(17 downto 0);
+	signal ac97_sample_l_in	: std_logic_vector(17 downto 0);
+	signal ac97_rdy			: std_logic;
+	signal ac97_cmd_addr	: std_logic_vector(7 downto 0);
+	signal ac97_cmd_data	: std_logic_vector(15 downto 0);
+
+	-- Need a signal to do the source selection since we only
+	--	care about one bit
+	signal source_sig : std_logic_vector(2 downto 0);
 
 
 begin
@@ -118,45 +114,46 @@ begin
 	sync <= sync_clk;
 
 	--
-	-- Hook up the AC97 driver
+	-- Hook up the entity that will drive the AC97 connection
 	--
-	ac97_unit : entity work.ac97_driver(behavioral)
-
+	ac97_main: entity work.dc97 
 		port map(
-			n_reset        	=> n_reset,
-			clk            	=> clock,
-			play_samples	=> play_samples,
-			play_output		=> play_output,
-			L_out          	=> codec_sample_l_out,
-			R_out          	=> codec_sample_r_out,
-			L_in           	=> codec_sample_l_in,
-			R_in           	=> codec_sample_r_in,
-			volume			=> volume_control,
-			source			=> source_control,
-			audsdi			=> audsdi,
-			audsdo 			=> audsdo,
-			sync			=> sync_clk,
-			audrst			=> audrst,
-			bitclk			=> bitclk
+	      n_reset      => n_reset,
+	      clk          => clk,
+	      ac97_sdata_o => audsdo,
+	      ac97_sdata_i => audsdi,
+	      ac97_sync    => sync_clk,
+	      ac97_bitclk  => bitclk,
+	      ac97_reset   => audrst,
+	      ready        => ac97_rdy,
+	      L_o          => ac97_sample_l_in, -- For debug purposes, just
+	      R_o          => ac97_sample_r_in,	-- feed the input back out for
+	      L_i          => ac97_sample_l_in, -- the time being
+	      R_i          => ac97_sample_r_in,
+	      cmd_addr     => ac97_cmd_addr,
+	      cmd_data     => ac97_cmd_data
 		);
 
 	--
-	-- Set the volume to max for now, and set the source to mic
+	-- Hook up the state machine that helps 
 	--
-	volume_control <= (others => '1');
-	source_control <= (others => '0');
+	ac97_state: entity work.dc97cmd
+		port map(
+	      clk      => clk,
+	      ready    => ac97_ready,
+	      cmd_addr => ac97_cmd_addr,
+	      cmd_data => ac97_cmd_data,
+	      volume   => volume,
+	      source   => source_sig
+		);
+
+	-- Map the incoming source bit to the high bit of the source signal
+	source_sig <= source & "00";
 
 	--
-	-- Map samples coming in and out to the I/O of this unit. Since
-	--	the mic is mono, map both the output to L and R and map the 
-	--	input to either L or R. 
-	--
-	codec_sample_l_out <= raw_sample_out;
-	codec_sample_r_out <= raw_sample_out;
-	raw_sample_in <= codec_sample_l_in;
-
 	--
 	-- Now need to do the 2-bit sample processing
+	--
 	--
 
 	-- First, need to do maximum detection to set the threshold for the next round of samples
@@ -167,7 +164,12 @@ begin
 	-- The maximum and minimum should be signed complements of each other. If they are not, 
 	--	then calculate the difference and use it as a noise cancellation level. 
 	--
-	-- If the maximum is above the threshold for valid maximums, then 
+	-- If the maximum is above the threshold for valid maximums, then
+	--
+	-- NOTE: we are only looking at the left input sample right now. If we 
+	--	use the mic input, then the left is the same as the right and it should 
+	--	be fine. Line out of the frequency generator should also create
+	--	an equally balanced signal so again it should be fine. Time will tell. 
 	findMinMax: process(sync_clk)
 	begin
 
@@ -201,12 +203,12 @@ begin
 				else
 
 					-- If we got a new max
-					if (signed(codec_sample_l_in) > signed(temp_max)) then
+					if (signed(ac97_sample_l_in) > signed(temp_max)) then
 						temp_max <= codec_sample_l_in;
 					end if;
 
-					-- If we got a new min. 
-					if (signed(codec_sample_l_in) < signed(temp_min)) then
+					-- If we got a new min
+					if (signed(ac97_sample_l_in) < signed(temp_min)) then
 						temp_min <= codec_sample_l_in;
 					end if;
 
@@ -244,7 +246,7 @@ begin
 	--	rounding
 	--
 
-	-- Result will be 18 bits + 3 bits = 21 bits. 
+	-- Result will be 18 bits + 3 bits = 20 bits. 
 	sample_max_mult_result <= std_logic_vector(signed(auto_sample_max) * to_signed(3, 3));
 	sample_min_mult_result <= std_logic_vector(signed(auto_sample_min) * to_signed(3, 3));
 	-- Now divide by 4 to get the threshold
@@ -254,7 +256,7 @@ begin
 	--
 	-- And finally we can do our sample thresholding
 	--
-	auto_sample_mux <= "11" when (signed(codec_sample_l_in) < signed(sample_low_threshold)) else 	-- Sample below min thresh
+	auto_sample_mux <= 	"11" when (signed(codec_sample_l_in) < signed(sample_low_threshold)) else 	-- Sample below min thresh
 						"01" when (signed(codec_sample_l_in) > signed(sample_high_threshold)) else 	-- Sample above max thresh
 						"00" when (signed(codec_sample_l_in) > signed(sample_avg)) else				-- Sample not either of the above but above average
 						"10";

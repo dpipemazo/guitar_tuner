@@ -1,21 +1,20 @@
 --
 -- System-level VHDL setup
 --
--- Currently just testing the ac97 driver, button debouncing
---  and autocorrelation algorithm. 
---
---
--- All this system should do at the moment:
---  1. Grab samples from codec
---  2. Threshold samples based on max/min
---  3. Feed samples to autocorrelation
---  4. Get divider and index result from autocorrelation
---  5. Light up some LEDs based on however debugging is currently planned.
+-- The system currently 
+--  takes in samples from the ac97 driver, 
+--  passes them through min/max thresholding, 
+--  passes the 2-bit samples onto autocorrelation
+--  which will then send them to be converted into
+--  base 10 and will be put on the display.
 
 library work;
 use work.audio;
 use work.debounce;
 use work.autocorrelate;
+use work.display;
+use work.user_interface;
+use work.freq_convert;
 
 
 library ieee;
@@ -32,11 +31,14 @@ entity system is
         clk         : in  std_logic;
 
         -- pushbuttons
-        btn         : in  std_logic_vector(5 downto 0);
+        n_reset     : in  std_logic;
+        btn         : in  std_logic_vector(4 downto 0);
         -- leds
         led         : out std_logic_vector(7 downto 0);
         -- switches
-        sw          : in  std_logic_vector(7 downto 0);
+        source      : in  std_logic;
+        do_sample   : in  std_logic;
+        volume      : in  std_logic_vector(4 downto 0);
 
         -- Need to declare I/O for audio here
         AUDSDI          : in std_logic;
@@ -45,64 +47,72 @@ entity system is
         AUDRST          : out std_logic;
         BITCLK          : in std_logic
 
+        -- Need Display I/O as well
+        lcd_rs      : out std_logic;
+        lcd_rw      : out std_logic;
+        lcd_e       : out std_logic;
+        lcd_data    : out std_logic_vector(7 downto 0)
+
     );
 end system;
 
 architecture structural of system is 
 
-    -- Individual button signals
-    signal db_buttons   : std_logic_vector(5 downto 0);
-    signal button_latch_1 : std_logic_vector(5 downto 0);
-    signal button_latch_2 : std_logic_vector(5 downto 0);
-    signal curr_button  : std_logic_vector(5 downto 0);
-    signal button_count : std_logic_vector(4 downto 0);
+    -- Debounced buttons
+    signal db_buttons   : std_logic_vector(4 downto 0);
 
+    -- Signals for the display
+    signal disp_wr_en        : std_logic;
+    signal disp_data         : std_logic_vector(15 downto 0);
+    signal disp_fifo_full    : std_logic;
 
-    -- Samples from the audio unit
-    signal sample       : std_logic_vector(1 downto 0);
-    signal sample_valid : std_logic;
+    -- Signals to hook up the audio unit to the autocorrelation unit
+    signal sample           : std_logic_vector(1 downto 0);
+    signal sample_valid     : std_logic;
 
-    -- Sample to output to the DAC
-    signal output_sample : std_logic_vector(17 downto 0);
-    -- Sample coming in from the ADC
-    signal input_sample  : std_logic_vector(17 downto 0);
+    -- Signals to hook up the autocorrelation unit to the 
+    --  conversion unit
+    signal auto_result_div  : std_logic_vector(11 downto 0);
+    signal auto_result_idx  : std_logic_vector(10 downto 0);
+    signal auto_done        : std_logic;
 
-    -- signals controlling playback
-    signal play_samples  : std_logic; -- active high to play samples
-    signal play_output   : std_logic; -- 1 = line out, 0 = headphones
+    -- Signals for the frequency conversion unit to talk to 
+    --  the display
+    signal freq_convert_data    : std_logic_vector(15 downto 0);
+    signal freq_convert_wr_en   : std_logic;
+    signal sample_done_dig      : std_logic;
 
-    -- Autocorrelation results
-    signal auto_result_div : std_logic_vector(11 downto 0);
-    signal auto_result_idx : std_logic_vector(10 downto 0);
-    signal auto_done       : std_logic;
-
-    -- Resets
-    signal auto_reset  :  std_logic;
-    signal audio_reset :  std_logic;
+    -- Signals for the user interface unit to talk to the display
+    signal ui_wr_en         : std_logic;
+    signal ui_data          : std_logic_vector(15 downto 0);
 
 begin
 
     --
-    -- Various reset logic
+    -- Display Unit
     --
-    auto_reset  <= db_buttons(0);
-    audio_reset <= not db_buttons(0);
-
+    dsply: entity DISPLAY
+        port map(
+                    
+            clk             => clk,
+            lcd_rs          => lcd_rs,
+            lcd_rw          => lcd_rw,
+            lcd_e           => lcd_e,
+            lcd_data        => lcd_data,
+            fifo_wr_en      => disp_wr_en,
+            fifo_wr_data    => disp_data,
+            fifo_full       => disp_fifo_full,
+            n_reset         => n_reset
+        );
 
     --
-    -- The button debouncing unit
+    -- Button Debouncer
     --
     dbounce: entity DEBOUNCE
-    
         port map(
             clock       => clk,
             buttons     => btn,
-            button_0    => db_buttons(0),
-            button_1    => db_buttons(1),
-            button_2    => db_buttons(2),
-            button_3    => db_buttons(3),
-            button_4    => db_buttons(4),
-            button_5    => db_buttons(5)
+            db_buttons  => db_buttons
         );
 
     --
@@ -111,86 +121,84 @@ begin
     audo: entity AUDIO
         port map(
             clock           => clk,
-            n_reset         => audio_reset,
+            n_reset         => n_reset,
             auto_sample     => sample,
             sample_valid    => sample_valid,
-            raw_sample_out  => output_sample,
-            raw_sample_in   => input_sample,
-            play_samples    => play_samples,
-            play_output     => play_output,
             audsdi          => AUDSDI,  
             audsdo          => AUDSDO,  
             sync            => AUDSYNC,  
             audrst          => AUDRST,  
-            bitclk          => BITCLK 
+            bitclk          => BITCLK,
+            source          => source,
+            volume          => volume 
         );
+
+    --
+    -- The autocorrelation unit
+    --
 
     corr: entity AUTOCORRELATE
         port map(
             clock       => clk,
             sample      => sample,
-            reset       => auto_reset,
+            n_reset     => n_reset,
             result_div  => auto_result_div,
             result_idx  => auto_result_idx,
-            done        => auto_done
-                                                            
+            done        => auto_done                                               
         );
 
     --
-    -- Generate a ~350 hz output wave and see if
-    --  we can hear it on the headphones
-    doOutput: process(clk)
-    begin
-        if (rising_edge(clk)) then
-            output_sample <= std_logic_vector(unsigned(output_sample) + 1);
-        end if;
-    end process;
-
-    -- Play the looped back audio with switch 0
-    play_samples <= sw(0);
-    -- Choose the play output with switch 1
-    play_output <= sw(1);
+    -- The frequency conversion unit. Takes an index and
+    --  divider from the autocorrelation unit
+    --  and puts the decimal form on the display
+    --
+    frqconv : entity FREQ_CONVERT
+        port map(
+            clk             => clk
+            divider         => auto_result_div,
+            bin             => auto_result_idx,
+            sample_done     => sample_done_sig,
+            disp_wr_en      => freq_convert_wr_en,
+            disp_data       => freq_convert_data,
+            disp_fifo_full  => disp_fifo_full
+        );
 
     --
-    -- Now, light up some LEDs with some status info
+    -- The user interface unit
     --
-
-    -- Output the valid sample onto the bottom LED
-    -- led(0) <= sample_valid;
-    -- Output the sample itself onto the next 2 LEDs
-    -- led(2 downto 1) <= sample(1 downto 0);
+    uiunit : entity USER_INTERFACE
+        port map(
+            clk         => clk,
+            n_reset     => n_reset,
+            db_buttons  => db_buttons,
+            disp_wr_en  => ui_wr_en,
+            disp_data   => ui_data, 
+            fifo_full   => disp_fifo_full
+        );
 
     --
-    -- Make sure that the button debouncing is working
+    -- Need to set up a multiplexer for the FIFO data. Priority
+    --  is given to the frequency unit. This may cause us to
+    --  miss a button every now and then. But there are 
+    --  worse things in the world
     --
-    doButton : process(clk)
-    begin
+    disp_data   <=  freq_convert_data when (freq_convert_wr_en = '1') else
+                    ui_data;
 
-        if (rising_edge(clk)) then
+    disp_wr_en  <= (freq_convert_wr_en or ui_wr_en);
 
-            -- Latch the buttons to catch a rising edge
-            button_latch_1 <= db_buttons;
-            button_latch_2 <= button_latch_1;
+    --
+    -- Don't want to begin showing audio samples 
+    --  unti the switch for do_sample is high. 
+    --
+    sample_done_sig <= auto_done & do_sample;
 
-            -- If we got a rising edge on a new button
-            if ( not std_match(((button_latch_1 xor button_latch_2) and (button_latch_2)), "000000" ) ) then
-
-                if (std_match(curr_button, (button_latch_1 xor button_latch_2))) then
-
-                    button_count <= std_logic_vector(unsigned(button_count) + 1);
-                else
-                    curr_button <= button_latch_1 xor button_latch_2;
-                    button_count <= "00001";
-                end if;
-            end if;
-        end if;
-
-    end process;
-
-    -- Get the autocorrelation stage to synthesize.
-    led(7) <= auto_done;
-
-
+    --
+    -- Put interesting things on the LEDs
+    --
+    led(7) <= sample_valid;
+    led(6 downto 5) <= sample;
+    led(4 downto 0) <= (others => '0'); -- nothing else for now.
 
 
 end structural;
