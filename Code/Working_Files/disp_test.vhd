@@ -63,10 +63,6 @@ architecture structural of disp_test is
 
 begin
 
-	-- For now, turn the LEDs off;
-	led(5 downto 0) <= db_buttons(5 downto 0);
-	led(7 downto 6) <= (others => '0');
-
 	--
 	-- Display Unit
 	--
