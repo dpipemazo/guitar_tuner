@@ -201,6 +201,10 @@ begin
 
 	end process;
 
+	led(7) <= fifo_full;
+	led(6) <= fifo_wr_en;
+	led(5 downto 0) <= btn(5 downto 0);
+
 
 
 end architecture;
