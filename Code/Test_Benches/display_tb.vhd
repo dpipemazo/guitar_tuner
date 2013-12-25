@@ -96,15 +96,19 @@ begin
     testDisplay: process
     begin
     	test_reset <= '0';
+    	test_fifo_wr_en <= '0';
+    	test_fifo_wr_data <= (others => '0');
+
     	wait for 10 ns;
     	-- Reset the FIFO
     	test_reset <= '1';
     	wait for 10 ns;
     	test_reset <= '0';
+    	-- Need to give it some time to reset
+    	wait for 50 ns;
 
     	-- Fisrt put the Display reset on the line
     	test_fifo_wr_en 	<= '1';
-    	test_fifo_wr_data 	<= (others => '0');
     	wait for 10 ns;
 
     	-- Now, put the 80 characters into the fifo
