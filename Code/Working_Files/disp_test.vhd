@@ -234,7 +234,8 @@ begin
     -- 					"110" when std_match(curr_button, "100000") else
     -- 					"111";
     led(5 downto 0) <= btn;
-    led(7 downto 6) <= "00";
+    led(7) <= fifo_full;
+    led(6) <= fifo_wr_en;
 
 end architecture;
 
