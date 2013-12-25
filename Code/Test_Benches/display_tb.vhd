@@ -121,7 +121,7 @@ begin
 
     	end loop;
 
-    	wait for 1 ms;
+    	wait for 1000 ms;
 
     end process;
 
