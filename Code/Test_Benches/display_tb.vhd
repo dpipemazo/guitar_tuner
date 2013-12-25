@@ -6,6 +6,10 @@
 --	display by one character and one ASCII character each time. 
 --	Currently has manual verification that the signals are correct.
 --
+-- The entire test will take of 28.1ms of simulation. Verify
+--	that the display goes through the reset cycle, outputs all of the characters in the FIFO and
+--	then stays in idle.
+--
 
 library ieee;
 use ieee.std_logic_1164.all;
