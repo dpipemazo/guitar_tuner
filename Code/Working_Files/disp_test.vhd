@@ -60,6 +60,7 @@ architecture structural of disp_test is
 
 	signal done_burst 	: std_logic;
 	signal fifo_full	: std_logic;
+	signal disp_reset 	: std_logic;
 
 begin
 
@@ -77,8 +78,11 @@ begin
 			fifo_wr_en 		=> disp_wr_en,
 	        fifo_wr_data 	=> disp_data,
 	        fifo_full		=> fifo_full,
-			reset 			=> btn(0)
+			reset 			=> disp_reset
 		);
+
+	-- Display needs an active-high reset
+	disp_reset <= not btn(0);
 
 	--
 	-- Button Debouncer
@@ -235,7 +239,7 @@ begin
     -- 					"111";
     led(5 downto 0) <= btn;
     led(7) <= fifo_full;
-    led(6) <= done_burst;
+    led(6) <= disp_wr_en;
 
 end architecture;
 
