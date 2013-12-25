@@ -133,7 +133,7 @@ begin
 
 					if (unsigned(disp_counter) = 80) then
 						disp_counter <= (others => '0');
-						done_burst = '1';
+						done_burst <= '1';
 					else
 						disp_counter <= std_logic_vector(unsigned(disp_counter) + 1);
 					end if;
