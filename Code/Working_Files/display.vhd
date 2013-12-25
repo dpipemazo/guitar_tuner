@@ -253,7 +253,8 @@ begin
 				-- RS = 0, RW = 0, E = 1, data = Valid
 				when SEND_ADDR_SET_DATA =>
 					lcd_e <= '1';
-					lcd_data <= "1" & std_logic_vector(unsigned(lcd_line_start) + ("0" & unsigned(column)));
+					lcd_data(6 downto 0) <= std_logic_vector(unsigned(lcd_line_start) + ("0" & unsigned(column)));
+					lcd_data(7) <= '1';
 					curr_state <= SEND_ADDR_DROP_EN;
 
 				-- Drop the enable
