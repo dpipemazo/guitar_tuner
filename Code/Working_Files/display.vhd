@@ -88,7 +88,7 @@ architecture behavioral of DISPLAY is
 
 	-- Need a counter for the reset. Reset takes something
 	--	like 116 display clocks
-	signal reset_count : std_logic_vector(6 downto 0);
+	signal reset_count : std_logic_vector(7 downto 0);
 
 begin
 
@@ -225,7 +225,7 @@ begin
 					-- Need to send the fifo acknowledge high for 
 					--	one clock right before the end of the
 					--	cycle. Want the new data/empty available in IDLE
-					if (unsigned(reset_count) = 126) then
+					if (unsigned(reset_count) = 149) then
 						fifo_ack <= '1';
 					else
 						fifo_ack <= '0';
@@ -233,7 +233,7 @@ begin
 
 					-- Use the entire span of the reset counter to give the display
 					--	adequate time to clear. 
-					if (unsigned(reset_count) = 127) then
+					if (unsigned(reset_count) = 150) then
 						curr_state <= IDLE;
 						reset_count <= (others => '0');
 					else
