@@ -130,17 +130,16 @@ begin
 						disp_data <= (others => '0');
 					elsif (unsigned(disp_counter) <= 20) then
 						disp_data(15 downto 8) <= std_logic_vector(("0" & unsigned(disp_counter)) + to_unsigned(31, 8));
-						disp_data(7 downto 0) <= std_logic_vector(unsigned(disp_counter) + X"2F");
 					elsif (unsigned(disp_counter) <= 40) then
 						disp_data(15 downto 8) <= std_logic_vector(("0" & unsigned(disp_counter)) + to_unsigned(43, 8));
-						disp_data(7 downto 0) <= std_logic_vector(unsigned(disp_counter) + X"2F");
 					elsif (unsigned(disp_counter) <= 60) then
 						disp_data(15 downto 8) <= std_logic_vector(("0" & unsigned(disp_counter)) + to_unsigned(55, 8));
-						disp_data(7 downto 0) <= std_logic_vector(unsigned(disp_counter) + X"2F");
 					elsif (unsigned(disp_counter) <= 80) then
 						disp_data(15 downto 8) <= std_logic_vector(("0" & unsigned(disp_counter)) + to_unsigned(67, 8));
-						disp_data(7 downto 0) <= std_logic_vector(unsigned(disp_counter) + X"2F");
 					end if;
+
+					-- The display data is always the same
+					disp_data(7 downto 0) <= reset_string(to_integer(unsigned(disp_counter) - 1));
 
 					if (unsigned(disp_counter) = 80) then
 						disp_counter <= (others => '0');
