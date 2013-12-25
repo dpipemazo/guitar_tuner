@@ -6,6 +6,10 @@
 --	display by one character and one ASCII character each time. 
 --	Currently has manual verification that the signals are correct.
 --
+-- The entire test will take of 28.1ms of simulation. Verify
+--	that the display goes through the reset cycle, outputs all of the characters in the FIFO and
+--	then stays in idle.
+--
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -40,6 +44,7 @@ architecture behavioral of display_tb is
 	        -- FIFO input from freq_convert
 	        fifo_wr_en 		: in std_logic;
 	        fifo_wr_data 	: in std_logic_vector(15 downto 0);
+	        fifo_full		: out std_logic;
 
 	        -- Reset the system
 	        reset 			: in std_logic
@@ -57,6 +62,7 @@ architecture behavioral of display_tb is
 	signal test_fifo_wr_en 		: std_logic;
 	signal test_fifo_wr_data	: std_logic_vector(15 downto 0);
 	signal test_reset			: std_logic;
+	signal test_fifo_full		: std_logic;
 
 begin
 
@@ -70,6 +76,7 @@ begin
 			lcd_data     => test_lcd_data,   
 			fifo_wr_en 	 => test_fifo_wr_en, 
 			fifo_wr_data => test_fifo_wr_data,
+			fifo_full 	 => test_fifo_full
 			reset	 	 => test_reset
 		);
 
