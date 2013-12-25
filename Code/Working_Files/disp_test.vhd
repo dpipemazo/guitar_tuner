@@ -110,7 +110,7 @@ begin
             button_latch_2 <= button_latch_1;
 
 			-- We got a reset button
-			if (db_buttons(0) = '1') then
+			if (btn(0) = '0') then
 				disp_counter <= (others => '0');
 				disp_wr_en <= '0';
 				done_burst <= '0';
@@ -235,7 +235,7 @@ begin
     -- 					"111";
     led(5 downto 0) <= btn;
     led(7) <= fifo_full;
-    led(6) <= fifo_wr_en;
+    led(6) <= done_burst;
 
 end architecture;
 
