@@ -158,6 +158,9 @@ begin
 				--
 				when IDLE => 
 
+					-- Always send the read acknowledge low
+					fifo_ack <= '0';
+
 					-- If the fifo is non-empty and not reset, then
 					--	latch the data and send it out
 					if (fifo_empty = '0') then
@@ -171,7 +174,6 @@ begin
 					else
 						curr_state <= IDLE;
 						lcd_e 	<= '0';
-						fifo_ack <= '0';
 						reset_count <= (others => '0');
 					end if;
 
@@ -187,13 +189,17 @@ begin
 					-- 
 					-- Which data to put on the line
 					--
-					if( unsigned(reset_count) = 108 ) then
+					if( 	(unsigned(reset_count) = 108) or
+							(unsigned(reset_count) = 109) ) then
 						lcd_data <= reset_reg_function_set;
-					elsif( unsigned(reset_count) = 110 ) then
+					elsif( 	(unsigned(reset_count) = 110) or
+							(unsigned(reset_count) = 111) ) then
 						lcd_data <= reset_display_set;
-					elsif( unsigned(reset_count) = 112 ) then 
+					elsif( 	(unsigned(reset_count) = 112) or
+							(unsigned(reset_count) = 113) ) then 
 						lcd_data <= reset_display_clear;
-					elsif( unsigned(reset_count) = 114 ) then
+					elsif( 	(unsigned(reset_count) = 114) or
+							(unsigned(reset_count) = 115) ) then
 						lcd_data <= reset_entry_mode_set;
 					else
 						lcd_data <= reset_special_function_set;
@@ -215,11 +221,19 @@ begin
 						lcd_e <= '0';
 					end if;
 
+					-- Need to send the fifo acknowledge high for 
+					--	one clock right before the end of the
+					--	cycle. Want the new data/empty available in IDLE
+					if (unsigned(reset_count) = 114) then
+						fifo_ack <= '1';
+					else
+						fifo_ack <= '0';
+					end if;
+
 					-- Takes 116 clocks to do this reset. Increment the
 					--	reset counter until it's at 115, at which point
 					--	we are done with reset.
 					if (unsigned(reset_count) = 115) then
-						fifo_ack <= '1';
 						curr_state <= IDLE;
 						reset_count <= (others => '0');
 					else
@@ -256,16 +270,23 @@ begin
 
 				-- Send the display data
 				-- RS = 1, RW = 0, E = 1, data = Valid
+				--
+				-- Need the acknowledge to be high
+				--	for the clock before reset so
+				--	that we can have the right
+				--	data/empty value back in idle
 				when SEND_DATA_SET_DATA =>
 					lcd_e <= '1';
 					lcd_data <= data;
+					fifo_ack <= '1';
 					curr_state <= SEND_DATA_DROP_EN;
 
-				-- Drop the enable, send the fifo acknowledge and return to idle
+				-- Drop the enable, send the fifo acknowledge back down 
+				--	and return to idle
 				-- RS = 1, RW = 0, E = 0, data = Valid
 				when SEND_DATA_DROP_EN =>
 					lcd_e <= '0';
-					fifo_ack <= '1';
+					fifo_ack <= '0';
 					curr_state <= IDLE;
 
 				--
