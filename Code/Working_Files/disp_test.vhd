@@ -5,6 +5,7 @@
 
 library work;
 use work.display;
+use work.debounce;
 
 
 library ieee;
@@ -49,7 +50,8 @@ architecture structural of disp_test is
 	signal button_latch_1 : std_logic_vector(4 downto 0);
 	signal button_latch_2 : std_logic_vector(4 downto 0);
 
-	signal done_burst : std_logic;
+	signal done_burst 	: std_logic;
+	signal fifo_full	: std_logic;
 
 begin
 
@@ -69,6 +71,7 @@ begin
 	        lcd_data    	=> lcd_data,
 			fifo_wr_en 		=> disp_wr_en,
 	        fifo_wr_data 	=> disp_data,
+	        fifo_full		=> fifo_full,
 			reset 			=> db_buttons(0)
 		);
 
