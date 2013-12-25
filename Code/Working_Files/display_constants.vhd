@@ -24,7 +24,7 @@ package display_constants is
     constant reset_entry_mode_set       : std_logic_vector(7 downto 0) := "00000110";
 
     -- Reset String
-    type    reset_array is array(0 to 79) of std_logic_vector(8 downto 0);
+    type    reset_array is array(0 to 79) of std_logic_vector(7 downto 0);
     constant reset_string : reset_array :=
         -- Declare the reset string for now in constant form in four lines of 
         --  20 characters separated by underscores
