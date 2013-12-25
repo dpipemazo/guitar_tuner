@@ -41,6 +41,7 @@ entity DISPLAY is
         -- FIFO input from freq_convert
         fifo_wr_en 		: in std_logic;
         fifo_wr_data 	: in std_logic_vector(15 downto 0);
+        fifo_full		: out std_logic;
 
         reset 			: in std_logic
 
@@ -57,7 +58,6 @@ architecture behavioral of DISPLAY is
 	-- Signals to hook up the display FIFO
 	signal fifo_ack : std_logic;
 	signal fifo_dout : std_logic_vector(15 downto 0);
-	signal fifo_full : std_logic;
 	signal fifo_empty : std_logic;
 
 	signal row		: std_logic_vector(2 downto 0);
