@@ -129,8 +129,7 @@ begin
 					if (unsigned(disp_counter) = 0) then
 						disp_data <= (others => '0');
 					elsif (unsigned(disp_counter) <= 20) then
-						disp_data(15 downto 13) <= "001";
-						disp_data(12 downto 8) 	<= disp_counter(4 downto 0);
+						disp_data(15 downto 8) <= std_logic_vector(("0" & unsigned(disp_counter)) + to_unsigned(31, 8));
 						disp_data(7 downto 0) <= std_logic_vector(unsigned(disp_counter) + X"2F");
 					elsif (unsigned(disp_counter) <= 40) then
 						disp_data(15 downto 8) <= std_logic_vector(("0" & unsigned(disp_counter)) + to_unsigned(43, 8));
@@ -202,44 +201,7 @@ begin
 
 	end process;
 
-	--
-    -- Make sure that the button debouncing is working
-    --
-    doButton : process(clk)
-    begin
 
-        if (rising_edge(clk)) then
-
-            -- Latch the buttons to catch a rising edge
-            new_button_latch_1 <= db_buttons;
-            new_button_latch_2 <= new_button_latch_1;
-
-            -- If we got a rising edge on a new button
-            if ( not std_match(((new_button_latch_1 xor new_button_latch_2) and (new_button_latch_2)), "000000" ) ) then
-
-                if (std_match(curr_button, (new_button_latch_1 xor new_button_latch_2))) then
-
-                    button_count <= std_logic_vector(unsigned(button_count) + 1);
-                else
-                    curr_button <= new_button_latch_1 xor new_button_latch_2;
-                    button_count <= "00001";
-                end if;
-            end if;
-        end if;
-
-    end process;
-
-    -- led(4 downto 0) <= button_count;
-    -- led(7 downto 5) <= 	"001" when std_match(curr_button, "000001") else
-    -- 					"010" when std_match(curr_button, "000010") else
-    -- 					"011" when std_match(curr_button, "000100") else
-    -- 					"100" when std_match(curr_button, "001000") else
-    -- 					"101" when std_match(curr_button, "010000") else
-    -- 					"110" when std_match(curr_button, "100000") else
-    -- 					"111";
-    led(5 downto 0) <= btn;
-    led(7) <= fifo_full;
-    led(6) <= disp_wr_en;
 
 end architecture;
 
