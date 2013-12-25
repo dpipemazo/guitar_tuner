@@ -189,17 +189,17 @@ begin
 					-- 
 					-- Which data to put on the line
 					--
-					if( 	(unsigned(reset_count) = 108) or
-							(unsigned(reset_count) = 109) ) then
+					if( 	(unsigned(reset_count) = 112) or
+							(unsigned(reset_count) = 113) ) then
 						lcd_data <= reset_reg_function_set;
-					elsif( 	(unsigned(reset_count) = 110) or
-							(unsigned(reset_count) = 111) ) then
-						lcd_data <= reset_display_set;
-					elsif( 	(unsigned(reset_count) = 112) or
-							(unsigned(reset_count) = 113) ) then 
-						lcd_data <= reset_display_clear;
 					elsif( 	(unsigned(reset_count) = 114) or
 							(unsigned(reset_count) = 115) ) then
+						lcd_data <= reset_display_set;
+					elsif( 	(unsigned(reset_count) = 116) or
+							(unsigned(reset_count) = 117) ) then 
+						lcd_data <= reset_display_clear;
+					elsif( 	(unsigned(reset_count) = 118) or
+							(unsigned(reset_count) = 119) ) then
 						lcd_data <= reset_entry_mode_set;
 					else
 						lcd_data <= reset_special_function_set;
@@ -212,9 +212,10 @@ begin
 					if ((unsigned(reset_count) = 1) or	
 						(unsigned(reset_count) = 104) or	
 						(unsigned(reset_count) = 108) or	
-						(unsigned(reset_count) = 110) or	
-						(unsigned(reset_count) = 112) or
-						(unsigned(reset_count) = 114) ) then
+						(unsigned(reset_count) = 112) or	
+						(unsigned(reset_count) = 114) or
+						(unsigned(reset_count) = 116) or
+						(unsigned(reset_count) = 118) ) then
 
 						lcd_e <= '1';
 					else
@@ -224,7 +225,7 @@ begin
 					-- Need to send the fifo acknowledge high for 
 					--	one clock right before the end of the
 					--	cycle. Want the new data/empty available in IDLE
-					if (unsigned(reset_count) = 114) then
+					if (unsigned(reset_count) = 118) then
 						fifo_ack <= '1';
 					else
 						fifo_ack <= '0';
@@ -233,7 +234,7 @@ begin
 					-- Takes 116 clocks to do this reset. Increment the
 					--	reset counter until it's at 115, at which point
 					--	we are done with reset.
-					if (unsigned(reset_count) = 115) then
+					if (unsigned(reset_count) = 119) then
 						curr_state <= IDLE;
 						reset_count <= (others => '0');
 					else
