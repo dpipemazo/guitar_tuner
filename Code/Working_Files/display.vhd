@@ -197,10 +197,10 @@ begin
 						lcd_data <= reset_display_set;
 					elsif( 	(unsigned(reset_count) = 116) or
 							(unsigned(reset_count) = 117) ) then 
-						lcd_data <= reset_display_clear;
+						lcd_data <= reset_entry_mode_set;
 					elsif( 	(unsigned(reset_count) = 118) or
 							(unsigned(reset_count) = 119) ) then
-						lcd_data <= reset_entry_mode_set;
+						lcd_data <= reset_display_clear;
 					else
 						lcd_data <= reset_special_function_set;
 					end if;
@@ -225,16 +225,15 @@ begin
 					-- Need to send the fifo acknowledge high for 
 					--	one clock right before the end of the
 					--	cycle. Want the new data/empty available in IDLE
-					if (unsigned(reset_count) = 118) then
+					if (unsigned(reset_count) = 126) then
 						fifo_ack <= '1';
 					else
 						fifo_ack <= '0';
 					end if;
 
-					-- Takes 116 clocks to do this reset. Increment the
-					--	reset counter until it's at 115, at which point
-					--	we are done with reset.
-					if (unsigned(reset_count) = 119) then
+					-- Use the entire span of the reset counter to give the display
+					--	adequate time to clear. 
+					if (unsigned(reset_count) = 127) then
 						curr_state <= IDLE;
 						reset_count <= (others => '0');
 					else
