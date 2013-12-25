@@ -6,6 +6,7 @@
 library work;
 use work.display;
 use work.debounce;
+use work.display_constants.all;
 
 
 library ieee;
