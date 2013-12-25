@@ -50,6 +50,14 @@ architecture structural of disp_test is
 	signal button_latch_1 : std_logic_vector(4 downto 0);
 	signal button_latch_2 : std_logic_vector(4 downto 0);
 
+	--
+	-- For checking that debouncing is working
+	--
+	signal new_button_latch_1 : std_logic_vector(5 downto 0);
+	signal new_button_latch_2 : std_logic_vector(5 downto 0);
+	signal curr_button  : std_logic_vector(5 downto 0);
+	signal button_count	: std_logic_vector(4 downto 0);
+
 	signal done_burst 	: std_logic;
 	signal fifo_full	: std_logic;
 
@@ -193,6 +201,42 @@ begin
 	    end if;
 
 	end process;
+
+	--
+    -- Make sure that the button debouncing is working
+    --
+    doButton : process(clk)
+    begin
+
+        if (rising_edge(clk)) then
+
+            -- Latch the buttons to catch a rising edge
+            new_button_latch_1 <= db_buttons;
+            new_button_latch_2 <= new_button_latch_1;
+
+            -- If we got a rising edge on a new button
+            if ( not std_match(((new_button_latch_1 xor new_button_latch_2) and (new_button_latch_2)), "000000" ) ) then
+
+                if (std_match(curr_button, (new_button_latch_1 xor new_button_latch_2))) then
+
+                    button_count <= std_logic_vector(unsigned(button_count) + 1);
+                else
+                    curr_button <= new_button_latch_1 xor new_button_latch_2;
+                    button_count <= "00001";
+                end if;
+            end if;
+        end if;
+
+    end process;
+
+    led(4 downto 0) <= button_count;
+    led(7 downto 5) <= 	"001" when std_match(curr_button, "000001") else
+    					"010" when std_match(curr_button, "000010") else
+    					"011" when std_match(curr_button, "000100") else
+    					"100" when std_match(curr_button, "001000") else
+    					"101" when std_match(curr_button, "010000") else
+    					"110" when std_match(curr_button, "100000") else
+    					"111";
 
 end architecture;
 
