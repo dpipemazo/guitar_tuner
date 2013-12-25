@@ -125,6 +125,9 @@ begin
 
     	end loop;
 
+    	-- Stop enabling writes
+    	test_fifo_wr_en <= '0';
+
     	wait for 1000 ms;
 
     end process;
