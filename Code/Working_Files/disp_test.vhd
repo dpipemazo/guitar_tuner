@@ -121,13 +121,13 @@ begin
 						disp_data(12 downto 8) 	<= disp_counter(4 downto 0);
 						disp_data(7 downto 0) <= std_logic_vector(unsigned(disp_counter) + X"2F");
 					elsif (unsigned(disp_counter) <= 40) then
-						disp_data(15 downto 8) <= std_logic_vector(("0" & unsigned(disp_counter)) + to_unsigned(43, 8))
+						disp_data(15 downto 8) <= std_logic_vector(("0" & unsigned(disp_counter)) + to_unsigned(43, 8));
 						disp_data(7 downto 0) <= std_logic_vector(unsigned(disp_counter) + X"2F");
 					elsif (unsigned(disp_counter) <= 60) then
-						disp_data(15 downto 8) <= std_logic_vector(("0" & unsigned(disp_counter)) + to_unsigned(55, 8))
+						disp_data(15 downto 8) <= std_logic_vector(("0" & unsigned(disp_counter)) + to_unsigned(55, 8));
 						disp_data(7 downto 0) <= std_logic_vector(unsigned(disp_counter) + X"2F");
 					elsif (unsigned(disp_counter) <= 80) then
-						disp_data(15 downto 8) <= std_logic_vector(("0" & unsigned(disp_counter)) + to_unsigned(67, 8))
+						disp_data(15 downto 8) <= std_logic_vector(("0" & unsigned(disp_counter)) + to_unsigned(67, 8));
 						disp_data(7 downto 0) <= std_logic_vector(unsigned(disp_counter) + X"2F");
 					end if;
 
@@ -152,11 +152,11 @@ begin
 					if (unsigned(disp_counter) < 20) then
 						disp_data(15 downto 8) <= std_logic_vector(("0" & unsigned(disp_counter)) + to_unsigned(32, 8));
 					elsif (unsigned(disp_counter) < 40) then
-						disp_data(15 downto 8) <= std_logic_vector(("0" & unsigned(disp_counter)) + to_unsigned(44, 8))
+						disp_data(15 downto 8) <= std_logic_vector(("0" & unsigned(disp_counter)) + to_unsigned(44, 8));
 					elsif (unsigned(disp_counter) < 60) then
-						disp_data(15 downto 8) <= std_logic_vector(("0" & unsigned(disp_counter)) + to_unsigned(56, 8))
+						disp_data(15 downto 8) <= std_logic_vector(("0" & unsigned(disp_counter)) + to_unsigned(56, 8));
 					elsif (unsigned(disp_counter) < 80) then
-						disp_data(15 downto 8) <= std_logic_vector(("0" & unsigned(disp_counter)) + to_unsigned(68, 8))
+						disp_data(15 downto 8) <= std_logic_vector(("0" & unsigned(disp_counter)) + to_unsigned(68, 8));
 					end if;
 
 	            	-- Write the button's ASCII code (U, D, L, R, C) to the display
