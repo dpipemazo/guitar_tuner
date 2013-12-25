@@ -77,7 +77,7 @@ begin
 			fifo_wr_en 		=> disp_wr_en,
 	        fifo_wr_data 	=> disp_data,
 	        fifo_full		=> fifo_full,
-			reset 			=> db_buttons(0)
+			reset 			=> btn(0)
 		);
 
 	--
