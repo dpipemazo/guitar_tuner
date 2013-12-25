@@ -149,7 +149,7 @@ begin
 	doDisplay: process(disp_clk)
 	begin
 
-		if (rising_edge(clk)) then
+		if (rising_edge(disp_clk)) then
 			-- Break out the different display states
 			case curr_state is
 
