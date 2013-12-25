@@ -225,14 +225,16 @@ begin
 
     end process;
 
-    led(4 downto 0) <= button_count;
-    led(7 downto 5) <= 	"001" when std_match(curr_button, "000001") else
-    					"010" when std_match(curr_button, "000010") else
-    					"011" when std_match(curr_button, "000100") else
-    					"100" when std_match(curr_button, "001000") else
-    					"101" when std_match(curr_button, "010000") else
-    					"110" when std_match(curr_button, "100000") else
-    					"111";
+    -- led(4 downto 0) <= button_count;
+    -- led(7 downto 5) <= 	"001" when std_match(curr_button, "000001") else
+    -- 					"010" when std_match(curr_button, "000010") else
+    -- 					"011" when std_match(curr_button, "000100") else
+    -- 					"100" when std_match(curr_button, "001000") else
+    -- 					"101" when std_match(curr_button, "010000") else
+    -- 					"110" when std_match(curr_button, "100000") else
+    -- 					"111";
+    led(5 downto 0) <= btn;
+    led(7 downto 6) <= "00";
 
 end architecture;
 
