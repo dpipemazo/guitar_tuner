@@ -646,12 +646,13 @@ begin
 				max_detect_1 	<= (others => '0');
 				new_max 		<= '0';
 			end if;
+			-- Latch the maximum detection
 			max_detect_2 <= max_detect_1;
 
 			--
 			-- Need to do the operation
 			--
-			if (unsigned(sample_counter) >= 1087) then
+			if (unsigned(samp_counter) >= 1087) then
 				ops(0) <= '1';
 			else
 				ops(0) <= '0';
