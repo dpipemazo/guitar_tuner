@@ -634,7 +634,7 @@ begin
 				--	other two, and if the previous value was not zero, then
 				--	we have our maximum.
 				if (	(unsigned(max_detect_1) > unsigned(max_detect_2)) and 
-						(unsigned(max_detect_1) > unsigned(final_hamming)) and 
+						(unsigned(max_detect_1) >= unsigned(final_hamming)) and 
 						(not std_match(max_detect_2, "00000000000")) 			) then
 
 					-- If we found a peak which is bigger than the previous peaks by 
