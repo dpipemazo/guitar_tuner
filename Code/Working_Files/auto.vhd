@@ -651,7 +651,7 @@ begin
 			--
 			-- Need to do the operation
 			--
-			if (unsigned(sample_counter >= 1087)) then
+			if (unsigned(sample_counter) >= 1087) then
 				ops(0) <= '1';
 			else
 				ops(0) <= '0';
