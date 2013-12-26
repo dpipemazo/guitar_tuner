@@ -90,6 +90,8 @@ architecture behavioral of DISPLAY is
 	--	like 116 display clocks
 	signal reset_count : std_logic_vector(7 downto 0);
 
+	signal fifo_reset : std_logic;
+
 begin
 
 	--
@@ -98,10 +100,15 @@ begin
 	--
 	lcd_rw <= '0';
 
+	--
+	-- The FIFO needs an active high reset
+	-- 
+	fifo_reset <= not n_reset;
+
 	-- Declare the display FIFO
 	dispFIFO: entity DISPLAY_FIFO
 		port map(
-			rst  	=> reset,  
+			rst  	=> fifo_reset,  
 			wr_clk	=> clk,
 			rd_clk	=> disp_clk,
 			din  	=> fifo_wr_data,  
