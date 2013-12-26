@@ -211,7 +211,7 @@ begin
     led(3) <= disp_fifo_full;
     led(2) <= auto_done;
     led(1) <= '1' when (unsigned(auto_result_div) < 10) else '0';
-    led(0) <= 
+    led(0) <= '0';
 
     --
     -- Need to synchronize the reset button
