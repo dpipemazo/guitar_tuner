@@ -31,7 +31,7 @@ architecture TB_ARCHITECTURE of new_auto_tb is
 
         port (
             -- Inputs
-            clock       : in std_logic;                     -- the system clock, 100MHz. 
+            clk       : in std_logic;                     -- the system clock, 100MHz. 
 
             sample      : in std_logic_vector(1 downto 0);  -- sample input
 
@@ -81,7 +81,7 @@ begin
 	-- Declare the unit under test
 	UUT: AUTOCORRELATE
 		port map(
-			clock 		=> test_clock,
+			clk 		=> test_clock,
 			sample 	    => test_sample,
 			n_reset 	=> test_reset,
 			result_div 	=> test_result_div,
