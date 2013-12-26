@@ -42,6 +42,7 @@ entity DISPLAY is
         fifo_wr_en 		: in std_logic;
         fifo_wr_data 	: in std_logic_vector(15 downto 0);
         fifo_full		: out std_logic;
+        fifo_empty		: out std_logic;
 
         n_reset 		: in std_logic
 

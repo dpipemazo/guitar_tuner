@@ -106,6 +106,7 @@ begin
             fifo_wr_en      => disp_wr_en,
             fifo_wr_data    => disp_data,
             fifo_full       => disp_fifo_full,
+            fifo_empty      => disp_fifo_empty,
             n_reset         => n_reset
         );
 
@@ -163,8 +164,7 @@ begin
             bin             => auto_result_idx,
             sample_done     => sample_done_sig,
             disp_wr_en      => freq_convert_wr_en,
-            disp_data       => freq_convert_data,
-            disp_fifo_full  => disp_fifo_full
+            disp_data       => freq_convert_data
         );
 
     --
@@ -194,8 +194,11 @@ begin
     --
     -- Don't want to begin showing audio samples 
     --  unti the switch for do_sample is high. 
+    --  and also wait until the display fifo is empty
+    --  to make sure that we aren't spitting out
+    --  samples faster than it can handle
     --
-    sample_done_sig <= (auto_done and do_sample);
+    sample_done_sig <= (auto_done and do_sample and disp_fifo_empty);
 
     --
     -- Put interesting things on the LEDs
