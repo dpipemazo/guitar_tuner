@@ -256,7 +256,7 @@ begin
 			--	it's a rising edge, ensure that the new signal coming in
 			--	is a 1 in the bit which does not match by AND-ing the 
 			--	result with the new signal. 
-			db_buttons <= (debounce_latch xor debounced) and debounced;
+			db_buttons <= (debounced_latch xor debounced) and debounced;
 
 		end if;
 
