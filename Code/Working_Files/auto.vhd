@@ -341,7 +341,7 @@ architecture behavioral of AUTOCORRELATE is
 	signal max_detect_2		: std_logic_vector(10 downto 0);
 
 	signal peak_idx			: std_logic_vector(11 downto 0);
-	signal peak_val			: std_logic_vector(10 downto 0);
+	signal peak_val			: std_logic_vector(11 downto 0);
 
 	-- The SINGLE_AUTO component
 	component SINGLE_AUTO
@@ -637,11 +637,11 @@ begin
 						(unsigned(max_detect_1) > unsigned(final_hamming)) and 
 						(not std_match(max_detect_2, "00000000000")) 			) then
 
-					-- If the peak which we found is bigger than other peaks, then 
-					--	we want to keep it. 
-					if (max_detect_1 >= peak_val) then
-						peak_val <= max_detect_1;
-						peak_idx <= std_logic_vector(unsigned(samp_counter) - to_unsigned(1088, samp_counter'length));
+					-- If we found a peak which is bigger than the previous peaks by 
+					--	a significant margin, then we want to keep it. 
+					if (unsigned(max_detect_1) > (unsigned(peak_val) + to_unsigned(200, peak_val'length)) ) then
+						peak_val <= "0" & max_detect_1;
+						peak_idx <= std_logic_vector(unsigned(samp_counter) - to_unsigned(1089, samp_counter'length));
 					end if;
 
 				end if;
@@ -690,7 +690,13 @@ begin
 					-- Post the results!
 					result_idx		<= peak_idx(10 downto 0);
 					result_div 		<= clk_div;
-				-- If we are not done finding the pitch
+				-- If we are not done finding the pitch, 
+				--	but we found a harmonic or our divider got
+				--	messed up.
+				elsif(unsigned(new_clk_div) < 10) then
+					clk_div 		<= clk_div(11 downto 1) & "0";
+					done_sig 		<= '0';
+				-- Just need to continue on with the algorithm
 				else
 					clk_div 		<= new_clk_div;
 					done_sig 		<= '0';
