@@ -38,7 +38,7 @@ entity AUDIO is
 	port(
 
 		-- Inputs
-		clock			: in std_logic;	-- the 100MHz clock
+		clk				: in std_logic;	-- the 100MHz clock
 		n_reset			: in std_logic;	-- Active low reset
 
 		-- Outputs for autocorrelation

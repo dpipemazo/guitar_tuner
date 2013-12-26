@@ -106,7 +106,7 @@ entity SINGLE_AUTO is
 	
 	port(
 		-- Inputs
-		clock		: in std_logic;						-- sample clock
+		clk			: in std_logic;						-- sample clock
 		sample_in 	: in std_logic_vector(1 downto 0);	-- new sample data
 		op_in	 	: in std_logic;						-- If low, then 
 														--	put sample_in into
@@ -606,10 +606,10 @@ begin
 	--
 
 	-- Generate the sample clock and update the clock counter
-	MakeSampleClock : process(clock)
+	MakeSampleClock : process(clk)
 	begin
 
-		if (rising_edge(clock)) then
+		if (rising_edge(clk)) then
 
 			-- Latch the muxes
 			clk_counter 	<= clk_counter_mux;
