@@ -713,7 +713,7 @@ begin
     --	clk_div by max_idx_val and then shift the result right by 10.
     --	We will add 1 to the result if bit 9 of the multiply result was set
     --	in order to round it. 
-    clk_div_x_idx 	<= 	std_logic_vector(unsigned(clk_div) * unsigned(max_idx_val(10 downto 0)));
+    clk_div_x_idx 	<= 	std_logic_vector(unsigned(clk_div) * unsigned(peak_idx(10 downto 0)));
 
     -- Perform the divide by 1024 with rounding
     new_clk_div 	<= 	clk_div_x_idx(21 downto 10) when (clk_div_x_idx(9) = '0') else
