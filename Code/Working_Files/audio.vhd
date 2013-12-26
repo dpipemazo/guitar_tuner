@@ -80,7 +80,6 @@ architecture behavioral of AUDIO is
 	signal temp_min			: std_logic_vector(17 downto 0);
 	signal auto_sample_max		: std_logic_vector(17 downto 0);
 	signal auto_sample_min		: std_logic_vector(17 downto 0);
-	signal sample_avg		: std_logic_vector(17 downto 0);
 
 	-- Signals for finsing the threshold
 	signal sample_max_mult_result : std_logic_vector(20 downto 0);
@@ -193,7 +192,6 @@ begin
 					-- Clock the new max/min
 					auto_sample_max <= temp_max;
 					auto_sample_min <= temp_min;
-					sample_avg <= std_logic_vector(signed(temp_max) + signed(temp_min));
 
 					-- reset the temporary max/min
 					temp_max <= (others => '0');	-- Reset the max to 0
@@ -258,8 +256,7 @@ begin
 	--
 	auto_sample_mux <= 	"11" when (signed(ac97_sample_l_in) < signed(sample_low_threshold)) else 	-- Sample below min thresh
 						"01" when (signed(ac97_sample_l_in) > signed(sample_high_threshold)) else 	-- Sample above max thresh
-						"00" when (signed(ac97_sample_l_in) > signed(sample_avg)) else				-- Sample not either of the above but above average
-						"10";
+						"00";
 
 
 end architecture;
