@@ -340,6 +340,9 @@ architecture behavioral of AUTOCORRELATE is
 	signal max_detect_1		: std_logic_vector(10 downto 0);
 	signal max_detect_2		: std_logic_vector(10 downto 0);
 
+	signal peak_idx			: std_logic_vector(11 downto 0);
+	signal peak_val			: std_logic_vector(10 downto 0);
+
 	-- The SINGLE_AUTO component
 	component SINGLE_AUTO
 		port(
@@ -633,18 +636,19 @@ begin
 				if (	(unsigned(max_detect_1) > unsigned(max_detect_2)) and 
 						(unsigned(max_detect_1) > unsigned(final_hamming)) and 
 						(not std_match(max_detect_2, "00000000000")) 			) then
-					new_max <= '1';
-					-- The maximum index is the one which happened on the clock before this,
-					--	so subtract one from the max_idx_val. But since max_idx_val is now
-					--	zero-indexed, we should be okay.
-					max_idx_val <= std_logic_vector(unsigned(samp_counter) - to_unsigned(1088, samp_counter'length));
-				else
-					new_max <= '0';
+
+					-- If the peak which we found is bigger than other peaks, then 
+					--	we want to keep it. 
+					if (max_detect_1 > peak_val) then
+						peak_val <= max_detect_1;
+						peak_idx <= std_logic_vector(unsigned(samp_counter) - to_unsigned(1088, samp_counter'length));
+					end if;
+
 				end if;
 
 			else
+				peak_val		<= (others => '0');
 				max_detect_1 	<= (others => '0');
-				new_max 		<= '0';
 			end if;
 			-- Latch the maximum detection
 			max_detect_2 <= max_detect_1;
@@ -652,10 +656,8 @@ begin
 			--
 			-- Need to do the operation
 			--
-			if (unsigned(samp_counter) >= 1087) then
+			if ((unsigned(samp_counter) >= 1087) or (n_reset = '0')) then
 				ops(0) <= '1';
-			else
-				ops(0) <= '0';
 			end if;
 
 			--
@@ -663,31 +665,38 @@ begin
 			--	sample clock counter
 			--
 
-			-- If we get the reset signal, then reset the
-			--	sample counter
+			-- Got the reset signal
 			if (n_reset = '0') then
+
+				-- Reset everything
 				clk_div		 	<= (others => '1');
 				samp_counter 	<= (others => '0');
 				done_sig 	 	<= '0';
+
 			-- If we get a new max and the dividers are the same, then we are done
-			elsif ((new_max = '1') and std_match(clk_div, new_clk_div)) then
-				clk_div 		<= (others => '1');
-				samp_counter 	<= (others => '0');
-				done_sig		<= '1';
-			-- If we get a new max and the dividers aren't the same, then we 
-			--	need to keep going.
-			elsif (new_max = '1') then
-				clk_div 		<= new_clk_div;
-				samp_counter 	<= (others => '0');
-				done_sig 		<= '0';
-			-- If we reached the end of the cycle without a max, then
-			--	we detected an overtone, so multiply the divider by 2.
 			elsif (unsigned(samp_counter) = 2176) then
-				clk_div 		<= clk_div(10 downto 0) & '0';
+
+				-- We are done with the cycle so reset the sample counter
 				samp_counter 	<= (others => '0');
-				done_sig 		<= '0';
-			-- If none of these things are true, then we are not done and 
-			--	the clock divider should remain the same.
+				-- Need to reset the operation too
+				ops(0) <= '0';
+
+				-- If we are done finding the pitch
+				if (std_match(clk_div, new_clk_div)) then
+					clk_div 		<= (others => '1');
+					done_sig		<= '1';
+
+					-- Post the results!
+					result_idx		<= peak_idx(10 downto 0);
+					result_div 		<= clk_div;
+				-- If we are not done finding the pitch
+				else
+					clk_div 		<= new_clk_div;
+					done_sig 		<= '0';
+				end if;
+
+			-- If it's any other clock during the cycle, keep everything
+			-- 	as is and increment the sample counter
 			else
 				clk_div 		<= clk_div;
 				samp_counter 	<= std_logic_vector(unsigned(samp_counter) + 1);
@@ -709,14 +718,6 @@ begin
     new_clk_div 	<= 	clk_div_x_idx(21 downto 10) when (clk_div_x_idx(9) = '0') else
     					std_logic_vector(unsigned(clk_div_x_idx(21 downto 10)) + 1);
 
-	--
-	---
-	---- Results!
-	---
-	--
-
-	result_div <= clk_div;
-	result_idx <= max_idx_val(10 downto 0);
 
 end architecture;
 
