@@ -83,7 +83,7 @@ architecture behavioral of AUDIO is
 
 	-- Signals for finsing the threshold
 	signal sample_max_mult_result : std_logic_vector(19 downto 0);
-	signal sample_min_mult_result : std_logic_vector(29 downto 0);
+	signal sample_min_mult_result : std_logic_vector(19 downto 0);
 	signal sample_high_threshold  :	std_logic_vector(17 downto 0);
 	signal sample_low_threshold	  : std_logic_vector(17 downto 0);
 
