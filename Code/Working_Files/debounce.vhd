@@ -9,12 +9,11 @@
 -- The hardware description of the input buttons can be found 
 --	in the .ucf file, but can be found here as well
 --
---	Button 0: 	Reset	 	Active Low
---	Button 1: 	Up			Active High
---	Button 2: 	Left		Active High
---	Button 3: 	Down		Active High
---	Button 4: 	Right		Active High
---	Button 5: 	Center		Active High
+--	Button 0: 	Up			Active High
+--	Button 1: 	Left		Active High
+--	Button 2: 	Down		Active High
+--	Button 3: 	Right		Active High
+--	Button 4: 	Center		Active High
 --
 --	Each button will have its own debounce logic. It will be 
 --	considered debounced after being down for somewhere around 10ms. The keys will then
@@ -161,15 +160,10 @@ entity DEBOUNCE is
 	port(
 		-- Inputs
 		clock		: in std_logic;						-- system clock, 100MHz
-		buttons		: in std_logic_vector(5 downto 0);	-- Raw button lines
+		buttons		: in std_logic_vector(4 downto 0);	-- Raw button lines
 
 		-- Outputs
-		button_0	: out std_logic; -- Active High. RESET
-		button_1	: out std_logic; -- Active High. UP
-		button_2	: out std_logic; -- Active High. LEFT
-		button_3	: out std_logic; -- Active High. DOWN
-		button_4	: out std_logic; -- Active High. RIGHT
-		button_5	: out std_logic  -- Active High. CENTER
+		db_buttons	: out std_logic_vector(4 downto 0)
 	);
 
 end DEBOUNCE;
@@ -178,7 +172,7 @@ end DEBOUNCE;
 -- We will use as many of the SINGLE_DEBOUNCE units as we desire
 --	to perform our debouncing. These units will take a number of
 --	debounce clocks and auto-repeat clocks and will generate
---	an active-high signal for one debounce clock if the key has been debounced
+--	an active-high signal for one SYSTEM clock if the key has been debounced
 --	
 -- We also need to generate a debounce clock. This clock should be
 --	on the order of 1KHz. Since we are assuming that our input clock is 
@@ -193,10 +187,6 @@ end DEBOUNCE;
 --	output
 --
 architecture behavioral of DEBOUNCE is 
-	
-	-- Need signals for I/O of single debounce units
-	signal db_ins 	: std_logic_vector(5 downto 0);
-	signal db_outs	: std_logic_vector(5 downto 0);
 
 	-- Need a counter for the debounce clock
 	signal db_clock_counter : std_logic_vector(15 downto 0);
@@ -224,32 +214,26 @@ architecture behavioral of DEBOUNCE is
 
 	end component;
 
+	-- The signals coming out of the debouncer units are 
+	--	high for a single DEBOUNCE clock. We want them to 
+	--	be high for a single system clock
+	signal debounced 		: std_logic_vector(4 downto 0);
+	signal debounced_latch 	: std_logic_vector(4 downto 0);	
+
 begin
 
 	-- Generate each of the single debounce units
-	genDBs: for i in 0 to 5 generate
+	genDBs: for i in 0 to 4 generate
 	begin
 
 		DBx: SINGLE_DEBOUNCE
 			port map(
 				debounce_clock 	=> db_clock,
-				button_in 		=> db_ins(i),
-				debounced_out 	=> db_outs(i)
+				button_in 		=> buttons(i),
+				debounced_out 	=> debounced(i)
 			);
 
 	end generate genDBs;
-
-	-- Now, need to map the inputs for the debounce units
-	db_ins(5 downto 1) 	<= buttons(5 downto 1); -- Map all of the active high buttons
-	db_ins(0) 			<= not buttons(0);		-- Map the active low reset
-
-	-- And map the outputs
-	button_0  <= db_outs(0);
-	button_1  <= db_outs(1);
-	button_2  <= db_outs(2);
-	button_3  <= db_outs(3);
-	button_4  <= db_outs(4);
-	button_5  <= db_outs(5);
 
 	-- Need to increment the debounce clock counter every clock
 	doDFF: process(clock)
@@ -262,6 +246,17 @@ begin
 
 			-- Assign the debounce clock to the high bit of the debounce clock counter
 			db_clock <= db_clock_counter(15);
+
+			--
+			-- Need to perform rising-edge detection on the debounced signals
+			--
+			debounced_latch <= debounced;
+			-- Do the rising-edge detection. XOR the two records together
+			--	and if they do not match then we have an edge. To ensure that
+			--	it's a rising edge, ensure that the new signal coming in
+			--	is a 1 in the bit which does not match by AND-ing the 
+			--	result with the new signal. 
+			db_buttons <= (debounce_latch xor debounced) and debounced;
 
 		end if;
 

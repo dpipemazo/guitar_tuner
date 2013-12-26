@@ -65,8 +65,11 @@ entity FREQ_CONVERT is
 		sample_done : in std_logic;
 
 		-- Output to the display FIFO
-		disp_wr_en	: out std_logic;					-- active high
-		disp_data	: out std_logic_vector(15 downto 0) -- data to be written to FIFO
+		disp_wr_en	: out std_logic;					 -- active high
+		disp_data	: out std_logic_vector(15 downto 0); -- data to be written to FIFO
+
+		-- Input from the display FIFO
+		disp_fifo_full	: in std_logic
 
 	);
 
@@ -108,7 +111,7 @@ architecture behavioral of FREQ_CONVERT is
 	-- Display row and column start constants
 	--
 	constant start_row : std_logic_vector(2 downto 0) := "100"; -- Row 4
-	constant start_col : std_logic_vector(4 downto 0) := "00000"; -- begin at 0 for now
+	constant start_col : std_logic_vector(4 downto 0) := "01100"; -- begin at character 12
 	signal char : std_logic_vector(4 downto 0);
 
 
@@ -194,26 +197,33 @@ begin
 			--	Last 3 clocks: Multiply fractional by 10 and take high 4 bits.
 			elsif ( (do_convert = '1') and (unsigned(convert_count) >= 14) ) then
 
-				-- Set the write enable on the display FIFO
-				disp_wr_en <= '1';
+				-- If the FIFO is not full or resetting, then write to 
+				--	it, else hold tight. If fifo_full is 1, then we will get right 
+				--	back here on the next clock cycle until we can write to
+				--	the FIFO. 
+				if (disp_fifo_full = '0') then
+					-- Set the write enable on the display FIFO
+					disp_wr_en <= '1';
 
-				-- Send out the BCD quotient
-				if (unsigned(convert_count) < 18) then 
-					-- Output the current convert value and shift the convert value
-					disp_data <= start_row & char & X"3" & convert_val(15 downto 12);
-					convert_val  <= convert_val(11 downto 0) & "0000";
-				-- Send out the decimal place
-				elsif (unsigned(convert_count) = 18) then
-					-- Output a decimal point and do not shift the convert val
-					disp_data <= start_row & char & X"2E";
-				-- Send out the decimal
-				else
-					disp_data <= start_row & char & X"3" & frac_mul_10(13 downto 10);
-					latched_fractional <= frac_mul_10(9 downto 0);
+					-- Send out the BCD quotient
+					if (unsigned(convert_count) < 18) then 
+						-- Output the current convert value and shift the convert value
+						disp_data <= start_row & char & X"3" & convert_val(15 downto 12);
+						convert_val  <= convert_val(11 downto 0) & "0000";
+					-- Send out the decimal place
+					elsif (unsigned(convert_count) = 18) then
+						-- Output a decimal point and do not shift the convert val
+						disp_data <= start_row & char & X"2E";
+					-- Send out the decimal
+					else
+						disp_data <= start_row & char & X"3" & frac_mul_10(13 downto 10);
+						latched_fractional <= frac_mul_10(9 downto 0);
+					end if;
+
+					-- Always increment the character
+					char <= std_logic_vector(unsigned(char) + 1);
 				end if;
 
-				-- Always increment the character
-				char <= std_logic_vector(unsigned(char) + 1);
 
 			-- And if something is totally wrong just reset everything
 			else
@@ -230,7 +240,10 @@ begin
 					convert_count <= (others => '0');
 					do_convert <= '0';
 				else
-					convert_count <= std_logic_vector(unsigned(convert_count) + 1);
+					-- Don't increment the convert count if the fifo is full
+					if (disp_fifo_full = '0') then
+						convert_count <= std_logic_vector(unsigned(convert_count) + 1);
+					end if;
 				end if;
 			end if;
 

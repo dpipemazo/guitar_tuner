@@ -205,11 +205,7 @@ entity AUTOCORRELATE is
 
 		sample  	: in std_logic_vector(1 downto 0);	-- sample input
 
-		reset   	: in std_logic;						-- active high. Just needs 
-														--	to be high for one 
-														--	system (100 MHZ) clock
-														--	and it will begin a sampling
-														--	process
+		n_reset   	: in std_logic;						-- active low reset
 
 		-- Outputs
 		result_div  : out std_logic_vector(11 downto 0);-- Divider used which gets
@@ -392,7 +388,7 @@ begin
     -- Need to error-check. If we picked up an overtone, then our maximum value 
     --	will be 1. In this instance, since we think we picked up an overtone, 
     --	multiply the divider by 2. 
-    clk_div_mux 	<= 	(others => '1') 				when (reset = '1') or (done_sig = '1') else
+    clk_div_mux 	<= 	(others => '1') 				when (n_reset = '0') or (done_sig = '1') else
     					new_clk_div						when ( (cycle_done = '1') and (max_idx_one = '0') ) else
     					(clk_div(10 downto 0) & "0")	when ( (cycle_done = '1') and (max_idx_one = '1') ) else
     					clk_div;
@@ -409,7 +405,7 @@ begin
 	--	will reset to 0 after reset is asserted and will stick at the 
 	--	maximum value until reset is asserted, else, increment. 
 	--
-	samp_counter_mux <= (others => '0') when ((cycle_done = '1') or (reset = '1')) else
+	samp_counter_mux <= (others => '0') when ((cycle_done = '1') or (n_reset = '0')) else
 						std_logic_vector(unsigned(samp_counter) + 1);
 
 	-- We are done with a cycle when the cycle counter has reached its maximum
@@ -447,7 +443,7 @@ begin
 	clk_counter_mux <= 	clk_counter_inc when (unsigned(clk_counter_inc) <  unsigned(clk_div)) else
 						(others => '0');
 	-- Sample clock is high when count is greater than divisor/2, else low
-	sample_clock_mux <= '1' when ((unsigned(clk_counter) < ("0" & unsigned(clk_div(11 downto 1)))) or (reset = '1')) else
+	sample_clock_mux <= '1' when ((unsigned(clk_counter) < ("0" & unsigned(clk_div(11 downto 1)))) or (n_reset = '0')) else
 						'0';
 
 	--
