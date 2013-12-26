@@ -336,7 +336,6 @@ architecture behavioral of AUTOCORRELATE is
 	signal done_sig_latch	: std_logic;
 	signal had_max			: std_logic;
 	signal cycle_done_mux 	: std_logic;
-	signal max_idx_one		: std_logic;
 
 	signal max_detect_1		: std_logic_vector(10 downto 0);
 	signal max_detect_2		: std_logic_vector(10 downto 0);
@@ -377,15 +376,6 @@ begin
     --	1024th bin. We also need to round this result in order for the 
     --	algorithm to work. 
     --
-    -- In order to perform this calculation, we are going to multiply
-    --	clk_div by max_idx_val and then shift the result right by 10.
-    --	We will add 1 to the result if bit 9 of the multiply result was set
-    --	in order to round it. 
-    clk_div_x_idx 	<= 	std_logic_vector(unsigned(clk_div) * unsigned(max_idx_val));
-
-    -- Perform the divide by 1024 with rounding
-    new_clk_div 	<= 	clk_div_x_idx(21 downto 10) when (clk_div_x_idx(9) = '0') else
-    					std_logic_vector(unsigned(clk_div_x_idx(21 downto 10)) + 1);
 
     -- Do the multiplexing for the clock divider. When reset is high, set the divider 
     --	to the maximum. If reset is not high and we are sampling, keep the divider, 
@@ -393,32 +383,25 @@ begin
     -- Need to error-check. If we picked up an overtone, then our maximum value 
     --	will be 1. In this instance, since we think we picked up an overtone, 
     --	multiply the divider by 2. 
-    clk_div_mux 	<= 	(others => '1') 				when (n_reset = '0') or (done_sig = '1') else
-    					new_clk_div						when ( (cycle_done = '1') and (max_idx_one = '0') ) else
-    					(clk_div(10 downto 0) & "0")	when ( (cycle_done = '1') and (max_idx_one = '1') ) else
-    					clk_div;
-
-    --
-    -- Signal saying that the max index is not one, we need this for 
-    --	error-checking
-    --
-    max_idx_one <=  '1' when std_match(max_idx_val, std_logic_vector(to_unsigned(1, max_idx_val'length))) else
-    				'0'; 
+    -- clk_div_mux 	<= 	(others => '1') 				when (n_reset = '0') or (done_sig = '1') else
+    -- 					new_clk_div						when ( (cycle_done = '1') and (had_max = '1') ) else
+    -- 					(clk_div(10 downto 0) & "0")	when ( (cycle_done = '1') and (had_max = '0') ) else
+    -- 					clk_div;
 
 	--
 	-- Logic for which sample we are currently taking. The sample counter
 	--	will reset to 0 after reset is asserted and will stick at the 
 	--	maximum value until reset is asserted, else, increment. 
 	--
-	samp_counter_mux <= (others => '0') when ((cycle_done = '1') or (n_reset = '0')) else
-						std_logic_vector(unsigned(samp_counter) + 1);
+	-- samp_counter_mux <= (others => '0') when ((cycle_done = '1') or (n_reset = '0')) else
+	-- 					std_logic_vector(unsigned(samp_counter) + 1);
 
 	-- We are done with a cycle when the cycle counter has reached its maximum
 	--	or once we find a maximum autocorrelation value which is not the 
 	--	first index. 
-	cycle_done_mux 	<= '1' when ( (samp_counter(11) = '1') and (samp_counter(7) = '1') and (cycle_done = '0') ) or
-						   ( (new_max = '0') and (had_max = '1') and (max_idx_one = '0') ) else
-					   '0';
+	-- cycle_done_mux 	<= '1' when ( (samp_counter(11) = '1') and (samp_counter(7) = '1') and (cycle_done = '0') ) or
+	-- 					   ( (new_max = '0') and (had_max = '1') ) else
+	-- 				   '0';
 
 	-- We are completely done when the old divider is equal to the new divider or
 	--	the index found is >= 1024 at the end of any given cycle. The second
@@ -428,10 +411,10 @@ begin
 	--	is higher accuracy in indieces in the array past 1024, so that's
 	--	all we really care about. This won't work if the current strategy
 	--	of cycling up from the lowest frequency is abandoned. 
-	done_sig 		<= 	'1' when ( (std_match(new_clk_div, clk_div) or 
-								   (std_match(max_idx_val, std_logic_vector(to_unsigned(1025, max_idx_val'length))))
-								   ) and (cycle_done = '1') ) else
-						'0';
+	-- done_sig 		<= 	'1' when ( (std_match(new_clk_div, clk_div) or 
+	-- 							   (std_match(max_idx_val, std_logic_vector(to_unsigned(1025, max_idx_val'length))))
+	-- 							   ) and (cycle_done = '1') ) else
+	-- 					'0';
 
 
 	--
@@ -440,14 +423,6 @@ begin
 	--	50% duty cycle clock.
 	--
 
-	-- Incrementor
-	clk_counter_inc <= std_logic_vector(unsigned(clk_counter) + 1);
-	-- Need to wrap the sample clock 
-	clk_counter_mux <= 	clk_counter_inc when (unsigned(clk_counter_inc) <  unsigned(clk_div)) else
-						(others => '0');
-	-- Sample clock is high when count is greater than divisor/2, else low
-	sample_clock_mux <= '1' when ((unsigned(clk_counter) < ("0" & unsigned(clk_div(11 downto 1)))) or (n_reset = '0')) else
-						'0';
 
 	--
 	---
@@ -461,14 +436,14 @@ begin
 	samples(0) 	<= sample;
 
 	-- We are in the second half of the autocorrelation when we are between 1088 and 2176
-	second_half <= 	'1' when (	((samp_counter(10) and (samp_counter(9) or samp_counter(8) or samp_counter(7) or samp_counter(6))) = '1') 	or
-				  				((samp_counter(11) and (not samp_counter(7))) = '1') 														or
-				  				std_match(samp_counter, std_logic_vector(to_unsigned(2176, samp_counter'length))) ) 						else
-					'0';
+	-- second_half <= 	'1' when (	((samp_counter(10) and (samp_counter(9) or samp_counter(8) or samp_counter(7) or samp_counter(6))) = '1') 	or
+	-- 			  				((samp_counter(11) and (not samp_counter(7))) = '1') 														or
+	-- 			  				std_match(samp_counter, std_logic_vector(to_unsigned(2176, samp_counter'length))) ) 						else
+	-- 				'0';
 
 	-- The operation can be the same as the valid_auto bit, since we want to do the second
 	--	type of operation for the second half of the sampling
-	ops(0) 		<= second_half;
+	-- ops(0) 		<= second_half;
 
 	-- First, string together autocorrelation units
 	genautos: for i in 0 to 1087 generate 
@@ -580,8 +555,8 @@ begin
 	--
 
 	-- We have valid autocorrelate values from 1089 to 2176. 
-	valid_auto <= 	'1' when (second_half = '1') and not std_match(samp_counter, std_logic_vector(to_unsigned(1088, samp_counter'length))) else
-					'0';	  
+	-- valid_auto <= 	'1' when (second_half = '1') and not std_match(samp_counter, std_logic_vector(to_unsigned(1088, samp_counter'length))) else
+	-- 				'0';	  
 
 
 	-- We have had a valid new maximum autocorrelation value
@@ -604,9 +579,20 @@ begin
 
 	--
 	---
-	---- DFFs
+	---- Clock-Based logic
 	---
 	--
+
+	-- Incrementor
+	clk_counter_inc <= std_logic_vector(unsigned(clk_counter) + 1);
+
+	-- Need to wrap the sample clock 
+	clk_counter_mux <= 	clk_counter_inc when (unsigned(clk_counter_inc) <  unsigned(clk_div)) else
+						(others => '0');
+
+	-- Sample clock is high when count is greater than divisor/2, else low
+	sample_clock_mux <= '1' when ((unsigned(clk_counter) < ("0" & unsigned(clk_div(11 downto 1)))) or (n_reset = '0')) else
+						'0';
 
 	-- Generate the sample clock and update the clock counter
 	MakeSampleClock : process(clk)
@@ -643,7 +629,8 @@ begin
 			--
 			-- Do the maximum detection
 			--
-			if (valid_auto = '1') then
+			if (unsigned(samp_counter) >= 1087) then
+				ops(0) <= '1';
 				max_detect_1 <= final_hamming;
 
 				-- If the middle of our three values is greater than both of the
@@ -662,15 +649,62 @@ begin
 
 			else
 				max_detect_1 	<= (others => '0');
-				max_idx_val 	<= (others => '0');
 				new_max 		<= '0';
+				ops(0)			<= '0';
 			end if;
 			max_detect_2 <= max_detect_1;
+
+
+			--
+			-- Deal with the sample clock divider and the 
+			--	sample clock counter
+			--
+
+			-- If we get the reset signal, then reset the
+			--	sample counter
+			if (n_reset = '0') then
+				clk_div		 	<= (others => '1');
+				samp_counter 	<= (others => '0');
+				done_sig 	 	<= '0'
+			-- If we get a new max and the dividers are the same, then we are done
+			elsif ((new_max = '1') and std_match(clk_div, new_clk_div)) then
+				clk_div 		<= (others => '1');
+				samp_counter 	<= (others => '0');
+				done_sig		<= '1';
+			-- If we get a new max and the dividers aren't the same, then we 
+			--	need to keep going.
+			elsif (new_max = '1') then
+				clk_div 		<= new_clk_div;
+				samp_couner 	<= (others => '0');
+				done_sig 		<= '0';
+			-- If we reached the end of the cycle without a max, then
+			--	we detected an overtone, so multiply the divider by 2.
+			elsif (unsigned(samp_counter) = 2176) then
+				clk_div 		<= clk_div(10 downto 0) & '0';
+				samp_counter 	<= (others => '0');
+				done_sig 		<= '0';
+			-- If none of these things are true, then we are not done and 
+			--	the clock divider should remain the same.
+			else
+				clk_div 		<= clk_div;
+				samp_counter 	<= std_logic_vector(unsigned(samp_counter) + 1);
+				done_sig		<= '0';
+			end if;
 
 
 		end if;
 
 	end process UpdateSampleCounter;
+
+	-- In order to perform this calculation, we are going to multiply
+    --	clk_div by max_idx_val and then shift the result right by 10.
+    --	We will add 1 to the result if bit 9 of the multiply result was set
+    --	in order to round it. 
+    clk_div_x_idx 	<= 	std_logic_vector(unsigned(clk_div) * unsigned(max_idx_val(10 downto 0)));
+
+    -- Perform the divide by 1024 with rounding
+    new_clk_div 	<= 	clk_div_x_idx(21 downto 10) when (clk_div_x_idx(9) = '0') else
+    					std_logic_vector(unsigned(clk_div_x_idx(21 downto 10)) + 1);
 
 	--
 	---
