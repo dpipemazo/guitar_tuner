@@ -217,7 +217,8 @@ entity AUTOCORRELATE is
 														-- be close to 1024.
 
 		done		: out std_logic						-- Sampling is complete and the 
-														--	frequency has been found
+														--	frequency has been found.
+														--	high for one system clock
 	);
 
 end AUTOCORRELATE;
@@ -332,6 +333,7 @@ architecture behavioral of AUTOCORRELATE is
 	signal valid_auto		: std_logic;
 	signal second_half		: std_logic;
 	signal done_sig			: std_logic;
+	signal done_sig_latch	: std_logic;
 	signal had_max			: std_logic;
 	signal cycle_done_mux 	: std_logic;
 	signal max_idx_one		: std_logic;
@@ -427,8 +429,6 @@ begin
 								   (std_match(max_idx_val, std_logic_vector(to_unsigned(1025, max_idx_val'length))))
 								   ) and (cycle_done = '1') ) else
 						'0';
-	-- Put the done signal on the line a clock after. 
-	done 			<= done_sig;
 
 
 	--
@@ -614,6 +614,10 @@ begin
 			-- Latch the muxes
 			clk_counter 	<= clk_counter_mux;
 			sample_clock 	<= sample_clock_mux;
+
+			-- Need to do rising edge detection on done_sig for done
+			done_sig_latch 	<= done_sig;
+			done 			<= done_sig and not done_sig_latch;
 
 		end if;
 
