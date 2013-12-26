@@ -35,7 +35,7 @@ architecture TB_ARCHITECTURE of new_auto_tb is
 
             sample      : in std_logic_vector(1 downto 0);  -- sample input
 
-            reset   : in std_logic;                     -- active high. Just needs 
+            n_reset     : in std_logic;                     -- active high. Just needs 
                                                             --  to be high for one 
                                                             --  system (100 MHZ) clock
                                                             --  and it will begin a sampling
@@ -159,9 +159,9 @@ begin
         --  and the output can be latched into a FIFO.
         --  using the done signal
         --
-        test_reset <= '1';
-        wait for 20 ps;
         test_reset <= '0';
+        wait for 20 ps;
+        test_reset <= '1';
 
         while (END_SIM = FALSE) loop
 
