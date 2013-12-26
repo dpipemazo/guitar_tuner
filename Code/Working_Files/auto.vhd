@@ -323,7 +323,7 @@ architecture behavioral of AUTOCORRELATE is
 
 	-- Index at which maximum occurred. Needs to be same bitwidth as max_idx
 	signal max_idx_mux 		: std_logic_vector(10 downto 0);
-	signal max_idx_val		: std_logic_vector(10 downto 0);
+	signal max_idx_val		: std_logic_vector(11 downto 0);
 	signal max_idx_result 	: std_logic_vector(11 downto 0);
 	-- Maximum autocorrelation value. Needs to be same bitwidth as final_hamming
 	signal max_auto_mux		: std_logic_vector(10 downto 0);
@@ -679,7 +679,7 @@ begin
 	--
 
 	result_div <= clk_div;
-	result_idx <= max_idx_val;
+	result_idx <= max_idx_val(10 downto 0);
 
 end architecture;
 
