@@ -80,7 +80,7 @@ architecture structural of system is
     --  the display
     signal freq_convert_data    : std_logic_vector(15 downto 0);
     signal freq_convert_wr_en   : std_logic;
-    signal sample_done_dig      : std_logic;
+    signal sample_done_sig      : std_logic;
 
     -- Signals for the user interface unit to talk to the display
     signal ui_wr_en         : std_logic;
@@ -110,7 +110,7 @@ begin
     --
     dbounce: entity DEBOUNCE
         port map(
-            clock       => clk,
+            clk         => clk,
             buttons     => btn,
             db_buttons  => db_buttons
         );
@@ -168,12 +168,12 @@ begin
     --
     uiunit : entity USER_INTERFACE
         port map(
-            clk         => clk,
-            n_reset     => n_reset,
-            db_buttons  => db_buttons,
-            disp_wr_en  => ui_wr_en,
-            disp_data   => ui_data, 
-            fifo_full   => disp_fifo_full
+            clk                 => clk,
+            n_reset             => n_reset,
+            db_buttons          => db_buttons,
+            disp_wr_en          => ui_wr_en,
+            disp_data           => ui_data, 
+            disp_fifo_full      => disp_fifo_full
         );
 
     --
