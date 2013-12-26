@@ -621,11 +621,6 @@ begin
 			samp_counter 	<= samp_counter_mux;
 			clk_div 		<= clk_div_mux;
 
-			-- Latch whether or not we just had a maximum
-			had_max 		<= new_max;
-			-- Latch if we are done with the current cycle
-			cycle_done		<= cycle_done_mux;
-
 			--
 			-- Do the maximum detection
 			--
