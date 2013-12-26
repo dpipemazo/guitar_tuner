@@ -59,7 +59,6 @@ architecture behavioral of DISPLAY is
 	-- Signals to hook up the display FIFO
 	signal fifo_ack : std_logic;
 	signal fifo_dout : std_logic_vector(15 downto 0);
-	signal fifo_empty : std_logic;
 
 	signal row		: std_logic_vector(2 downto 0);
 	signal column 	: std_logic_vector(4 downto 0);
