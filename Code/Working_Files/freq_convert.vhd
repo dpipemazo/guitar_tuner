@@ -151,7 +151,7 @@ begin
 		if (rising_edge(clk)) then
 			-- Indicate that we just got a "sample done" and
 			--	are waiting for the divider to go.
-			if (sample_done = '1') 
+			if (sample_done = '1') then
 				do_divide <= '1';
 			end if;
 			-- Latch the output of the divider and get ready to begin the
