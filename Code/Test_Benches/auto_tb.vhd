@@ -83,7 +83,7 @@ begin
 		port map(
 			clock 		=> test_clock,
 			sample 	    => test_sample,
-			reset 	    => test_reset,
+			n_reset 	=> test_reset,
 			result_div 	=> test_result_div,
 			result_idx 	=> test_result_idx,
 			done 		=> test_done
