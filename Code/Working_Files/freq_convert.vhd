@@ -111,6 +111,8 @@ architecture behavioral of FREQ_CONVERT is
 	constant start_col : std_logic_vector(4 downto 0) := "01100"; -- begin at character 12
 	signal char : std_logic_vector(4 downto 0);
 
+	signal do_divide : std_logic;
+
 
 begin
 
@@ -144,18 +146,24 @@ begin
 
 	-- Do the conversion from binary to BCD
 	latchDivide: process(clk)
-		variable temp_multiply : std_logic_vector(13 downto 0);
+
 	begin
 		if (rising_edge(clk)) then
+			-- Indicate that we just got a "sample done" and
+			--	are waiting for the divider to go.
+			if (sample_done = '1') 
+				do_divide <= '1';
+			end if;
 			-- Latch the output of the divider and get ready to begin the
 			--	binary-to-bcd conversion
-			if ( divide_rdy = '1' ) then 
+			if ( (divide_rdy = '1') and (do_divide = '1') ) then 
 				latched_quotient 	<= freq_quotient(13 downto 0);
 				latched_fractional 	<= freq_fractional;
 				convert_val <= (others => '0');
 				disp_wr_en  <= '0';
 				char 		<= start_col;
 				do_convert 	<= '1';
+				do_divide   <= '0';
 
 			-- Need 16 clocks to do the conversion of the quotient from binary 
 			--	to BCD
@@ -223,6 +231,7 @@ begin
 				latched_quotient <= (others => '0');
 				latched_fractional <= (others => '0');
 				disp_wr_en <= '0';
+				do_divide <= '0';
 			end if;
 
 			-- Need to increment the convert clock until we're done
