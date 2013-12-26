@@ -665,7 +665,7 @@ begin
 			if (n_reset = '0') then
 				clk_div		 	<= (others => '1');
 				samp_counter 	<= (others => '0');
-				done_sig 	 	<= '0'
+				done_sig 	 	<= '0';
 			-- If we get a new max and the dividers are the same, then we are done
 			elsif ((new_max = '1') and std_match(clk_div, new_clk_div)) then
 				clk_div 		<= (others => '1');
