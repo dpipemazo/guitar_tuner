@@ -45,7 +45,7 @@ entity system is
         AUDSDO          : out std_logic;
         AUDSYNC         : out std_logic;
         AUDRST          : out std_logic;
-        BITCLK          : in std_logic
+        BITCLK          : in std_logic;
 
         -- Need Display I/O as well
         lcd_rs      : out std_logic;
@@ -154,7 +154,7 @@ begin
     --
     frqconv : entity FREQ_CONVERT
         port map(
-            clk             => clk
+            clk             => clk,
             divider         => auto_result_div,
             bin             => auto_result_idx,
             sample_done     => sample_done_sig,
