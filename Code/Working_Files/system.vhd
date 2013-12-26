@@ -205,14 +205,13 @@ begin
     -- Put interesting things on the LEDs
     --
     led(7) <= sample_valid;
-    led(6) <=   '1' when std_match(sample, "11") else
-                '0';
-    led(5) <=   '1' when std_match(sample, "01") else
-                '0';
-    led(4) <=   '1' when std_match(sample, "00") else
-                '0';
+    led(6) <=   '1' when std_match(sample, "11") else '0';
+    led(5) <=   '1' when std_match(sample, "01") else '0';
+    led(4) <=   '1' when std_match(sample, "00") else '0';
     led(3) <= disp_fifo_full;
-    led(2 downto 0) <= (others => '0'); -- nothing else for now.
+    led(2) <= auto_done;
+    led(1) <= '1' when (unsigned(auto_result_div) < 10) else '0';
+    led(0) <= 
 
     --
     -- Need to synchronize the reset button
