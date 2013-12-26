@@ -624,8 +624,7 @@ begin
 			--
 			-- Do the maximum detection
 			--
-			if (unsigned(samp_counter) >= 1087) then
-				ops(0) <= '1';
+			if (unsigned(samp_counter) >= 1088) then
 				max_detect_1 <= final_hamming;
 
 				-- If the middle of our three values is greater than both of the
@@ -636,8 +635,9 @@ begin
 						(not std_match(max_detect_2, "00000000000")) 			) then
 					new_max <= '1';
 					-- The maximum index is the one which happened on the clock before this,
-					--	so subtract one from the max_idx_val.
-					max_idx_val <= std_logic_vector(unsigned(samp_counter) - to_unsigned(1089, samp_counter'length));
+					--	so subtract one from the max_idx_val. But since max_idx_val is now
+					--	zero-indexed, we should be okay.
+					max_idx_val <= std_logic_vector(unsigned(samp_counter) - to_unsigned(1088, samp_counter'length));
 				else
 					new_max <= '0';
 				end if;
@@ -645,10 +645,17 @@ begin
 			else
 				max_detect_1 	<= (others => '0');
 				new_max 		<= '0';
-				ops(0)			<= '0';
 			end if;
 			max_detect_2 <= max_detect_1;
 
+			--
+			-- Need to do the operation
+			--
+			if (unsigned(sample_counter >= 1087)) then
+				ops(0) <= '1';
+			else
+				ops(0) <= '0';
+			end if;
 
 			--
 			-- Deal with the sample clock divider and the 
