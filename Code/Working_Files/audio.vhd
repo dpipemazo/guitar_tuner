@@ -140,7 +140,7 @@ begin
 	ac97_state: entity work.dc97cmd
 		port map(
 	      clk      => clk,
-	      ready    => ac97_ready,
+	      ready    => ac97_rdy,
 	      cmd_addr => ac97_cmd_addr,
 	      cmd_data => ac97_cmd_data,
 	      volume   => volume,
@@ -204,12 +204,12 @@ begin
 
 					-- If we got a new max
 					if (signed(ac97_sample_l_in) > signed(temp_max)) then
-						temp_max <= codec_sample_l_in;
+						temp_max <= ac97_sample_l_in;
 					end if;
 
 					-- If we got a new min
 					if (signed(ac97_sample_l_in) < signed(temp_min)) then
-						temp_min <= codec_sample_l_in;
+						temp_min <= ac97_sample_l_in;
 					end if;
 
 				end if;
@@ -256,9 +256,9 @@ begin
 	--
 	-- And finally we can do our sample thresholding
 	--
-	auto_sample_mux <= 	"11" when (signed(codec_sample_l_in) < signed(sample_low_threshold)) else 	-- Sample below min thresh
-						"01" when (signed(codec_sample_l_in) > signed(sample_high_threshold)) else 	-- Sample above max thresh
-						"00" when (signed(codec_sample_l_in) > signed(sample_avg)) else				-- Sample not either of the above but above average
+	auto_sample_mux <= 	"11" when (signed(ac97_sample_l_in) < signed(sample_low_threshold)) else 	-- Sample below min thresh
+						"01" when (signed(ac97_sample_l_in) > signed(sample_high_threshold)) else 	-- Sample above max thresh
+						"00" when (signed(ac97_sample_l_in) > signed(sample_avg)) else				-- Sample not either of the above but above average
 						"10";
 
 
