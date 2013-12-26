@@ -161,11 +161,11 @@ begin
 	sample_out <= register_2;
 
 	-- Finally, DFF the registers on the rising edge of the clock
-	doDFF	: process(clock)
+	doDFF	: process(clk)
 	begin
 
 		-- DFF all of the registers based on the clock. 
-		if (rising_edge(clock)) then
+		if (rising_edge(clk)) then
 			-- Put the appropriate value in register 1 based on the mux
 			register_1 <= reg_1_mux;
 			-- Always put the input sample in register 2
@@ -201,7 +201,7 @@ entity AUTOCORRELATE is
 	
 	port (
 		-- Inputs
-		clock 		: in std_logic;						-- the system clock, 100MHz. 
+		clk 		: in std_logic;						-- the system clock, 100MHz. 
 
 		sample  	: in std_logic_vector(1 downto 0);	-- sample input
 
@@ -340,7 +340,7 @@ architecture behavioral of AUTOCORRELATE is
 	component SINGLE_AUTO
 		port(
 			-- Inputs
-			clock		: in std_logic;						-- sample clock
+			clk			: in std_logic;						-- sample clock
 			sample_in 	: in std_logic_vector(1 downto 0);	-- new sample data
 			op_in	 	: in std_logic;						-- If low, then 
 															--	put sample_in into
@@ -475,7 +475,7 @@ begin
 			port map(
 
 				-- Input
-				clock 		=> sample_clock,
+				clk	 		=> sample_clock,
 				sample_in 	=> samples(i),
 				op_in 		=> ops(i),
 
