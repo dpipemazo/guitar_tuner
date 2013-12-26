@@ -226,11 +226,6 @@ begin
 	--	thresholds for the samples. 
 	--
 
-	-- The streams of samples will be valid if we see audio that is 1/4th of the maximum value
-	sample_valid <= '1' when (unsigned(auto_sample_max) > to_unsigned(2**17 + 2**15, auto_sample_max'length)) else
-					'0';
-
-
 	--
 	-- Compute the amplitude of the sample stream by doing the 
 	--	max minus the min
@@ -242,8 +237,13 @@ begin
 	--
 
 	-- Now divide by 4 to get the threshold
-	sample_high_threshold 	<= std_logic_vector(unsigned(auto_sample_max) - unsigned("00" & sample_amplitude(17 downto 2));
-	sample_low_threshold 	<= std_logic_vector(unsigned(auto_sample_min) + unsigned("00" & sample_amplitude(17 downto 2));
+	sample_high_threshold 	<= std_logic_vector(unsigned(auto_sample_max) - unsigned("00" & sample_amplitude(17 downto 2)));
+	sample_low_threshold 	<= std_logic_vector(unsigned(auto_sample_min) + unsigned("00" & sample_amplitude(17 downto 2)));
+
+	-- Our sample is valid when the amplitude is greater than 2^15
+		-- The streams of samples will be valid if we see audio that is 1/4th of the maximum value
+	sample_valid <= '1' when (unsigned(sample_amplitude) > 2**15) else
+					'0';
 
 	--
 	-- And finally we can do our sample thresholding
