@@ -338,6 +338,9 @@ architecture behavioral of AUTOCORRELATE is
 	signal cycle_done_mux 	: std_logic;
 	signal max_idx_one		: std_logic;
 
+	signal max_detect_1		: std_logic_vector(10 downto 0);
+	signal max_detect_2		: std_logic_vector(10 downto 0);
+
 	-- The SINGLE_AUTO component
 	component SINGLE_AUTO
 		port(
@@ -582,22 +585,22 @@ begin
 
 
 	-- We have had a valid new maximum autocorrelation value
-	new_max <= 	'1' when ((unsigned(final_hamming) > unsigned(max_auto_val)) and (valid_auto = '1') and (cycle_done = '0')) else
-				'0';
+	-- new_max <= 	'1' when ((unsigned(final_hamming) > unsigned(max_auto_val)) and (valid_auto = '1') and (cycle_done = '0')) else
+	-- 			'0';
 
 	-- Want max_auto to be 0 when not in the final 256 clocks, 
-	max_auto_mux <= final_hamming 	when (new_max = '1') else
-					max_auto_val	when ((valid_auto = '1') or (cycle_done = '1')) else
-					(others => '0');
+	-- max_auto_mux <= final_hamming 	when (new_max = '1') else
+	-- 				max_auto_val	when ((valid_auto = '1') or (cycle_done = '1')) else
+	-- 				(others => '0');
 
 	-- Need to subtract 1088 from the sample counter to get the current sample's index.
-	max_idx_result <= std_logic_vector(unsigned(samp_counter) - to_unsigned(1088, samp_counter'length));
+	-- max_idx_result <= std_logic_vector(unsigned(samp_counter) - to_unsigned(1088, samp_counter'length));
 
 	-- Want to use the new index if we have a new max, keep the value if we don't have a new max, 
 	--	and reset it else
-	max_idx_mux <= 	max_idx_result(10 downto 0)	when (new_max = '1') else
-					max_idx_val 	when ((valid_auto = '1') or (cycle_done = '1')) else
-					(others => '0');
+	-- max_idx_mux <= 	max_idx_result(10 downto 0)	when (new_max = '1') else
+	-- 				max_idx_val 	when ((valid_auto = '1') or (cycle_done = '1')) else
+	-- 				(others => '0');
 
 	--
 	---
@@ -630,15 +633,40 @@ begin
 		if (rising_edge(sample_clock)) then
 			-- Latch the muxes
 			samp_counter 	<= samp_counter_mux;
-			max_idx_val 	<= max_idx_mux;
-			max_auto_val 	<= max_auto_mux;
 			clk_div 		<= clk_div_mux;
 
 			-- Latch whether or not we just had a maximum
 			had_max 		<= new_max;
-
 			-- Latch if we are done with the current cycle
 			cycle_done		<= cycle_done_mux;
+
+			--
+			-- Do the maximum detection
+			--
+			if (valid_auto = '1') then
+				max_detect_1 <= final_hamming;
+
+				-- If the middle of our three values is greater than both of the
+				--	other two, and if the previous value was not zero, then
+				--	we have our maximum.
+				if (	(unsigned(max_detect_1) > unsigned(max_detect_2)) and 
+						(unsigned(max_detect_1) > unsigned(final_hamming)) and 
+						(not std_match(max_detect_2, "00000000000")) 			) then
+					new_max <= '1';
+					-- The maximum index is the one which happened on the clock before this,
+					--	so subtract one from the max_idx_val.
+					max_idx_val <= std_logic_vector(unsigned(samp_counter) - to_unsigned(1089, samp_counter'length));
+				else
+					new_max <= '0';
+				end if;
+
+			else
+				max_detect_1 	<= (others => '0');
+				max_idx_val 	<= (others => '0');
+				new_max 		<= '0';
+			end if;
+			max_detect_2 <= max_detect_1;
+
 
 		end if;
 
