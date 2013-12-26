@@ -82,10 +82,9 @@ architecture behavioral of AUDIO is
 	signal auto_sample_min		: std_logic_vector(17 downto 0);
 
 	-- Signals for finsing the threshold
-	signal sample_max_mult_result : std_logic_vector(19 downto 0);
-	signal sample_min_mult_result : std_logic_vector(19 downto 0);
-	signal sample_high_threshold  :	std_logic_vector(17 downto 0);
-	signal sample_low_threshold	  : std_logic_vector(17 downto 0);
+	signal sample_high_threshold  	: std_logic_vector(17 downto 0);
+	signal sample_low_threshold	  	: std_logic_vector(17 downto 0);
+	signal sample_amplitude			: std_logic_vector(17 downto 0);
 
 	-- Sync signal. Will be acting like a clock so let's buffer it
 	signal sync_clk	: std_logic;
@@ -227,25 +226,24 @@ begin
 	--	thresholds for the samples. 
 	--
 
-	-- The streams of samples will be valid if the max is at least 20% of the maximum
-	--	value for now. This may change. an 18-bit unsigned sample has a maximum
-	-- 	of (2^17 - 1) = 131071, of which 20% is roughly 26,000. 16K is good enough, 
-	--	since that is 14 bits, and random noise shouldn't be able to get above 
-	--	the 13th bit (hopefully).
-	sample_valid <= '1' when (unsigned(auto_sample_max) > to_unsigned(16384, auto_sample_max'length)) else
+	-- The streams of samples will be valid if we see audio that is 1/4th of the maximum value
+	sample_valid <= '1' when (unsigned(auto_sample_max) > to_unsigned(2**17 + 2**15, auto_sample_max'length)) else
 					'0';
 
+
 	--
-	-- Now compute the thresholds as 75% of the min and max, respectively. We will
-	--	multiply by 3 and then divide by 2
+	-- Compute the amplitude of the sample stream by doing the 
+	--	max minus the min
+	--
+	sample_amplitude <= std_logic_vector(unsigned(auto_sample_max) - unsigned(auto_sample_min));
+	--
+	-- Now compute the thresholds by subtracting amplitude/4 from the max and adding
+	--	amplitude/4 to the min
 	--
 
-	-- Result will be 18 bits + 3 bits = 20 bits. 
-	sample_max_mult_result <= std_logic_vector(unsigned(auto_sample_max) * to_unsigned(3, 2));
-	sample_min_mult_result <= std_logic_vector(unsigned(auto_sample_min) * to_unsigned(3, 2));
 	-- Now divide by 4 to get the threshold
-	sample_high_threshold 	<= sample_max_mult_result(19 downto 2);
-	sample_low_threshold 	<= sample_min_mult_result(19 downto 2);
+	sample_high_threshold 	<= std_logic_vector(unsigned(auto_sample_max) - unsigned("00" & sample_amplitude(17 downto 2));
+	sample_low_threshold 	<= std_logic_vector(unsigned(auto_sample_min) + unsigned("00" & sample_amplitude(17 downto 2));
 
 	--
 	-- And finally we can do our sample thresholding
