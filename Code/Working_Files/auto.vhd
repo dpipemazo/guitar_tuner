@@ -654,10 +654,13 @@ begin
 			max_detect_2 <= max_detect_1;
 
 			--
-			-- Need to do the operation
+			-- Need to send the operation flag high one clock before we start
+			--	performing valid autocorrelation samples
 			--
-			if ((unsigned(samp_counter) >= 1087) or (n_reset = '0')) then
+			if (unsigned(samp_counter) >= 1087 and (not (unsigned(samp_counter) = 2176))) then
 				ops(0) <= '1';
+			else
+				ops(0) <= '0';
 			end if;
 
 			--
@@ -678,8 +681,6 @@ begin
 
 				-- We are done with the cycle so reset the sample counter
 				samp_counter 	<= (others => '0');
-				-- Need to reset the operation too
-				ops(0) <= '0';
 
 				-- If we are done finding the pitch
 				if (std_match(clk_div, new_clk_div)) then
