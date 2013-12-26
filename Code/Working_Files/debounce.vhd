@@ -159,7 +159,7 @@ entity DEBOUNCE is
 	
 	port(
 		-- Inputs
-		clock		: in std_logic;						-- system clock, 100MHz
+		clk			: in std_logic;						-- system clock, 100MHz
 		buttons		: in std_logic_vector(4 downto 0);	-- Raw button lines
 
 		-- Outputs
@@ -236,10 +236,10 @@ begin
 	end generate genDBs;
 
 	-- Need to increment the debounce clock counter every clock
-	doDFF: process(clock)
+	doDFF: process(clk)
 	begin
 
-		if (rising_edge(clock)) then
+		if (rising_edge(clk)) then
 
 			-- Every clock, increment the debounce clock counter 
 			db_clock_counter <= std_logic_vector(unsigned(db_clock_counter) + 1);

@@ -120,7 +120,7 @@ begin
     --
     audo: entity AUDIO
         port map(
-            clock           => clk,
+            clk             => clk,
             n_reset         => n_reset,
             auto_sample     => sample,
             sample_valid    => sample_valid,
@@ -139,7 +139,7 @@ begin
 
     corr: entity AUTOCORRELATE
         port map(
-            clock       => clk,
+            clk         => clk,
             sample      => sample,
             n_reset     => n_reset,
             result_div  => auto_result_div,
