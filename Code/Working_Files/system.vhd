@@ -31,7 +31,7 @@ entity system is
         clk         : in  std_logic;
 
         -- pushbuttons
-        n_reset     : in  std_logic;
+        reset_unsync: in  std_logic;
         btn         : in  std_logic_vector(4 downto 0);
         -- leds
         led         : out std_logic_vector(7 downto 0);
@@ -85,6 +85,10 @@ architecture structural of system is
     -- Signals for the user interface unit to talk to the display
     signal ui_wr_en         : std_logic;
     signal ui_data          : std_logic_vector(15 downto 0);
+
+    -- Need to syhcnronize the reset button into our circuit
+    signal reset_sync       : std_logic;
+    signal n_reset          : std_logic;
 
 begin
 
@@ -198,7 +202,19 @@ begin
     --
     led(7) <= sample_valid;
     led(6 downto 5) <= sample;
-    led(4 downto 0) <= (others => '0'); -- nothing else for now.
+    led(4) <= disp_fifo_full;
+    led(3 downto 0) <= (others => '0'); -- nothing else for now.
+
+    --
+    -- Need to synchronize the reset button
+    --
+    doReset : process(clk)
+    begin
+        if (rising_edge(clk)) then
+            reset_sync  <= reset_unsync;
+            n_reset     <= reset_sync;
+        end if;
+    end process;
 
 
 end structural;
