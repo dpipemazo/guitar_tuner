@@ -191,7 +191,7 @@ begin
     -- Don't want to begin showing audio samples 
     --  unti the switch for do_sample is high. 
     --
-    sample_done_sig <= auto_done & do_sample;
+    sample_done_sig <= (auto_done and do_sample);
 
     --
     -- Put interesting things on the LEDs
