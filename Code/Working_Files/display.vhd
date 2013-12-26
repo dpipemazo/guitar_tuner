@@ -59,6 +59,7 @@ architecture behavioral of DISPLAY is
 	-- Signals to hook up the display FIFO
 	signal fifo_ack : std_logic;
 	signal fifo_dout : std_logic_vector(15 downto 0);
+	signal is_fifo_empty : std_logic;
 
 	signal row		: std_logic_vector(2 downto 0);
 	signal column 	: std_logic_vector(4 downto 0);
@@ -104,6 +105,7 @@ begin
 	-- The FIFO needs an active high reset
 	-- 
 	fifo_reset <= not n_reset;
+	fifo_empty <= is_fifo_empty;
 
 	-- Declare the display FIFO
 	dispFIFO: entity DISPLAY_FIFO
@@ -116,7 +118,7 @@ begin
 			rd_en 	=> fifo_ack, 
 			dout 	=> fifo_dout, 
 			full 	=> fifo_full, 
-			empty 	=> fifo_empty 
+			empty 	=> is_fifo_empty 
 		);
 
 	--
@@ -170,7 +172,7 @@ begin
 
 					-- If the fifo is non-empty and not reset, then
 					--	latch the data and send it out
-					if (fifo_empty = '0') then
+					if (is_fifo_empty = '0') then
 						if (disp_reset = '1') then
 							curr_state <= DO_RESET;
 						else
