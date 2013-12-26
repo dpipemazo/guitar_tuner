@@ -244,8 +244,8 @@ begin
 	sample_max_mult_result <= std_logic_vector(unsigned(auto_sample_max) * to_unsigned(3, 2));
 	sample_min_mult_result <= std_logic_vector(unsigned(auto_sample_min) * to_unsigned(3, 2));
 	-- Now divide by 4 to get the threshold
-	sample_high_threshold 	<= "0" & sample_max_mult_result(19 downto 2);
-	sample_low_threshold 	<= "0" & sample_min_mult_result(19 downto 2);
+	sample_high_threshold 	<= sample_max_mult_result(19 downto 2);
+	sample_low_threshold 	<= sample_min_mult_result(19 downto 2);
 
 	--
 	-- And finally we can do our sample thresholding
