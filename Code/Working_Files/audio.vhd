@@ -83,7 +83,7 @@ architecture behavioral of AUDIO is
 
 	-- Signals for finsing the threshold
 	signal sample_max_mult_result : std_logic_vector(19 downto 0);
-	signal sample_min_mult_result : std_logic_vector(20 downto 0);
+	signal sample_min_mult_result : std_logic_vector(29 downto 0);
 	signal sample_high_threshold  :	std_logic_vector(17 downto 0);
 	signal sample_low_threshold	  : std_logic_vector(17 downto 0);
 
@@ -160,9 +160,6 @@ begin
 	--	So we can expect to see a maximum every 50ish Hz. So, use a 1024 sample counter, 
 	--	and record the maximum and the minimum. 
 	--
-	-- The maximum and minimum should be signed complements of each other. If they are not, 
-	--	then calculate the difference and use it as a noise cancellation level. 
-	--
 	-- If the maximum is above the threshold for valid maximums, then
 	--
 	-- NOTE: we are only looking at the left input sample right now. If we 
@@ -195,18 +192,18 @@ begin
 
 					-- reset the temporary max/min
 					temp_max <= (others => '0');	-- Reset the max to 0
-					temp_min <= (others => '1');	-- Reset the min to -1
+					temp_min <= (others => '1');	-- Reset the min to the maximum
 
 				-- Oterwise we just want to check for a new max/min
 				else
 
 					-- If we got a new max
-					if (signed(ac97_sample_l_in) > signed(temp_max)) then
+					if (unsigned(ac97_sample_l_in) > unsigned(temp_max)) then
 						temp_max <= ac97_sample_l_in;
 					end if;
 
 					-- If we got a new min
-					if (signed(ac97_sample_l_in) < signed(temp_min)) then
+					if (unsigned(ac97_sample_l_in) < unsigned(temp_min)) then
 						temp_min <= ac97_sample_l_in;
 					end if;
 
@@ -231,7 +228,7 @@ begin
 	--
 
 	-- The streams of samples will be valid if the max is at least 20% of the maximum
-	--	value for now. This may change. an 18-bit signed sample has a maximum
+	--	value for now. This may change. an 18-bit unsigned sample has a maximum
 	-- 	of (2^17 - 1) = 131071, of which 20% is roughly 26,000. 16K is good enough, 
 	--	since that is 14 bits, and random noise shouldn't be able to get above 
 	--	the 13th bit (hopefully).
@@ -239,22 +236,22 @@ begin
 					'0';
 
 	--
-	-- Now compute the thresholds as 50% of the min and max, respectively. We will
-	--	just divide by 2
+	-- Now compute the thresholds as 75% of the min and max, respectively. We will
+	--	multiply by 3 and then divide by 2
 	--
 
 	-- Result will be 18 bits + 3 bits = 20 bits. 
-	-- sample_max_mult_result <= std_logic_vector(unsigned(auto_sample_max) * to_unsigned(3, 2));
-	-- sample_min_mult_result <= std_logic_vector(signed(auto_sample_min) * to_signed(3, 3));
+	sample_max_mult_result <= std_logic_vector(unsigned(auto_sample_max) * to_unsigned(3, 2));
+	sample_min_mult_result <= std_logic_vector(unsigned(auto_sample_min) * to_unsigned(3, 2));
 	-- Now divide by 4 to get the threshold
-	sample_high_threshold 	<= "0" & auto_sample_max(17 downto 1);
-	sample_low_threshold 	<= "1" & auto_sample_min(17 downto 1);
+	sample_high_threshold 	<= "0" & sample_max_mult_result(19 downto 2);
+	sample_low_threshold 	<= "0" & sample_min_mult_result(19 downto 2);
 
 	--
 	-- And finally we can do our sample thresholding
 	--
-	auto_sample_mux <= 	"11" when (signed(ac97_sample_l_in) < signed(sample_low_threshold)) else 	-- Sample below min thresh
-						"01" when (signed(ac97_sample_l_in) > signed(sample_high_threshold)) else 	-- Sample above max thresh
+	auto_sample_mux <= 	"11" when (unsigned(ac97_sample_l_in) < unsigned(sample_low_threshold)) else 	-- Sample below min thresh
+						"01" when (unsigned(ac97_sample_l_in) > unsigned(sample_high_threshold)) else 	-- Sample above max thresh
 						"00";
 
 
