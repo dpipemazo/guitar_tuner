@@ -639,7 +639,7 @@ begin
 
 					-- If the peak which we found is bigger than other peaks, then 
 					--	we want to keep it. 
-					if (max_detect_1 > peak_val) then
+					if (max_detect_1 >= peak_val) then
 						peak_val <= max_detect_1;
 						peak_idx <= std_logic_vector(unsigned(samp_counter) - to_unsigned(1088, samp_counter'length));
 					end if;
