@@ -232,17 +232,16 @@ begin
 	--
 	sample_amplitude <= std_logic_vector(unsigned(auto_sample_max) - unsigned(auto_sample_min));
 	--
-	-- Now compute the thresholds by subtracting amplitude/4 from the max and adding
-	--	amplitude/4 to the min
+	-- Now compute the thresholds by subtracting amplitude/8 from the max and adding
+	--	amplitude/8 to the min
 	--
 
 	-- Now divide by 4 to get the threshold
-	sample_high_threshold 	<= std_logic_vector(unsigned(auto_sample_max) - unsigned("00" & sample_amplitude(17 downto 2)));
-	sample_low_threshold 	<= std_logic_vector(unsigned(auto_sample_min) + unsigned("00" & sample_amplitude(17 downto 2)));
+	sample_high_threshold 	<= std_logic_vector(unsigned(auto_sample_max) - unsigned("000" & sample_amplitude(17 downto 3)));
+	sample_low_threshold 	<= std_logic_vector(unsigned(auto_sample_min) + unsigned("000" & sample_amplitude(17 downto 3)));
 
-	-- Make the sample valid as long as there's no clipping
-	sample_valid <= '1' when (unsigned(auto_sample_max) < (2**18 - 512)) else
-					'0';
+	-- Make the sample valid always for now.
+	sample_valid <= '1';
 	--
 	-- And finally we can do our sample thresholding
 	--
