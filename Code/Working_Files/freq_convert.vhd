@@ -231,7 +231,6 @@ begin
 				latched_quotient <= (others => '0');
 				latched_fractional <= (others => '0');
 				disp_wr_en <= '0';
-				do_divide <= '0';
 			end if;
 
 			-- Need to increment the convert clock until we're done
