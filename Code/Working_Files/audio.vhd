@@ -28,7 +28,7 @@ use IEEE.STD_LOGIC_1164.all;
 use IEEE.numeric_std.all;
 
 library work;
-use work.dc97.all;
+use work.pkg_dc97.all;
 
 --
 -- Declare the IO
