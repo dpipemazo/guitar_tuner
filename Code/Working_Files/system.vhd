@@ -65,7 +65,8 @@ architecture structural of system is
     signal disp_wr_en        : std_logic;
     signal disp_data         : std_logic_vector(15 downto 0);
     signal disp_fifo_full    : std_logic;
-
+    signal disp_fifo_empty   : std_logic;
+    
     -- Signals to hook up the audio unit to the autocorrelation unit
     signal sample           : std_logic_vector(1 downto 0);
     signal sample_valid     : std_logic;
