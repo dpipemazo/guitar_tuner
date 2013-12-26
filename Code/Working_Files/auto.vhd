@@ -675,7 +675,7 @@ begin
 			--	need to keep going.
 			elsif (new_max = '1') then
 				clk_div 		<= new_clk_div;
-				samp_couner 	<= (others => '0');
+				samp_counter 	<= (others => '0');
 				done_sig 		<= '0';
 			-- If we reached the end of the cycle without a max, then
 			--	we detected an overtone, so multiply the divider by 2.
