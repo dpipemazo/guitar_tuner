@@ -82,7 +82,7 @@ architecture behavioral of AUDIO is
 	signal auto_sample_min		: std_logic_vector(17 downto 0);
 
 	-- Signals for finsing the threshold
-	signal sample_max_mult_result : std_logic_vector(20 downto 0);
+	signal sample_max_mult_result : std_logic_vector(19 downto 0);
 	signal sample_min_mult_result : std_logic_vector(20 downto 0);
 	signal sample_high_threshold  :	std_logic_vector(17 downto 0);
 	signal sample_low_threshold	  : std_logic_vector(17 downto 0);
@@ -235,21 +235,20 @@ begin
 	-- 	of (2^17 - 1) = 131071, of which 20% is roughly 26,000. 16K is good enough, 
 	--	since that is 14 bits, and random noise shouldn't be able to get above 
 	--	the 13th bit (hopefully).
-	sample_valid <= '1' when (signed(auto_sample_max) > to_signed(16384, auto_sample_max'length)) else
+	sample_valid <= '1' when (unsigned(auto_sample_max) > to_unsigned(16384, auto_sample_max'length)) else
 					'0';
 
 	--
-	-- Now compute the thresholds as 75% of the min and max, respectively. We will
-	--	do a multiply by 3 and then a divide by 4. We don't really care about 
-	--	rounding
+	-- Now compute the thresholds as 50% of the min and max, respectively. We will
+	--	just divide by 2
 	--
 
 	-- Result will be 18 bits + 3 bits = 20 bits. 
-	sample_max_mult_result <= std_logic_vector(signed(auto_sample_max) * to_signed(3, 3));
-	sample_min_mult_result <= std_logic_vector(signed(auto_sample_min) * to_signed(3, 3));
+	-- sample_max_mult_result <= std_logic_vector(unsigned(auto_sample_max) * to_unsigned(3, 2));
+	-- sample_min_mult_result <= std_logic_vector(signed(auto_sample_min) * to_signed(3, 3));
 	-- Now divide by 4 to get the threshold
-	sample_high_threshold <= sample_max_mult_result(19 downto 2);
-	sample_low_threshold <= sample_min_mult_result(19 downto 2);
+	sample_high_threshold 	<= "0" & auto_sample_max(17 downto 1);
+	sample_low_threshold 	<= "1" & auto_sample_min(17 downto 1);
 
 	--
 	-- And finally we can do our sample thresholding
