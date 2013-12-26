@@ -66,7 +66,7 @@ architecture structural of system is
     signal disp_data         : std_logic_vector(15 downto 0);
     signal disp_fifo_full    : std_logic;
     signal disp_fifo_empty   : std_logic;
-    
+
     -- Signals to hook up the audio unit to the autocorrelation unit
     signal sample           : std_logic_vector(1 downto 0);
     signal sample_valid     : std_logic;
@@ -205,9 +205,14 @@ begin
     -- Put interesting things on the LEDs
     --
     led(7) <= sample_valid;
-    led(6 downto 5) <= sample;
-    led(4) <= disp_fifo_full;
-    led(3 downto 0) <= (others => '0'); -- nothing else for now.
+    led(6) <=   '1' when std_match(sample, "11") else
+                '0';
+    led(5) <=   '1' when std_match(sample, "01") else
+                '0';
+    led(4) <=   '1' when std_match(sample, "00") else
+                '0';
+    led(3) <= disp_fifo_full;
+    led(2 downto 0) <= (others => '0'); -- nothing else for now.
 
     --
     -- Need to synchronize the reset button
