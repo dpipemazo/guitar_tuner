@@ -694,7 +694,7 @@ begin
 				--	but we found a harmonic or our divider got
 				--	messed up.
 				elsif(unsigned(new_clk_div) < 10) then
-					clk_div 		<= clk_div(11 downto 1) & "0";
+					clk_div 		<= clk_div(10 downto 0) & "0";
 					done_sig 		<= '0';
 				-- Just need to continue on with the algorithm
 				else
