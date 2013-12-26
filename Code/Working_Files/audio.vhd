@@ -240,11 +240,9 @@ begin
 	sample_high_threshold 	<= std_logic_vector(unsigned(auto_sample_max) - unsigned("00" & sample_amplitude(17 downto 2)));
 	sample_low_threshold 	<= std_logic_vector(unsigned(auto_sample_min) + unsigned("00" & sample_amplitude(17 downto 2)));
 
-	-- Our sample is valid when the amplitude is greater than 2^15
-		-- The streams of samples will be valid if we see audio that is 1/4th of the maximum value
-	sample_valid <= '1' when (unsigned(sample_amplitude) > 2**15) else
+	-- Make the sample valid as long as there's no clipping
+	sample_valid <= '1' when (unsigned(auto_sample_max) < (2**18 - 512)) else
 					'0';
-
 	--
 	-- And finally we can do our sample thresholding
 	--
