@@ -70,7 +70,7 @@ package display_constants is
     constant b3_freq : string_freq := (X"30", X"32", X"34", X"36", X"2E", X"39", X"34", X"32"); -- 246.942
     constant e4_freq : string_freq := (X"30", X"33", X"32", X"39", X"2E", X"36", X"32", X"38"); -- 329.628
 
-    type string_freqs is array(0 to 5) of (string_freq);
+    type string_freqs is array(0 to 5) of string_freq;
     constant freqs : string_freqs := (e2_freq, a2_freq, d3_freq, g3_freq, b3_freq, e4_freq);
 
 end package;
