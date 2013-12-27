@@ -65,7 +65,7 @@ architecture behavioral of USER_INTERFACE is
     -- If it is time to do a redraw
     signal redraw       : std_logic;
     signal redraw_row   : std_logic_vector(1 downto 0);
-    signal redraw_col   : std_logic_vector(4 downto 0);
+    signal redraw_col   : integer range 0 to 19;
 
     -- Need signals fo rthe current string and auto tune
     signal auto_tune    : std_logic;
@@ -119,7 +119,7 @@ begin
                 disp_wr_en <= '1';
 
                 -- Set up the row/column on the display lines
-                disp_data(15 downto 13) <= std_logic_vector(unsigned("0" & redraw_row) + 1);
+                disp_data(15 downto 13) <= std_logic_vector(("0" & unsigned(redraw_row)) + 1);
                 disp_data(12 downto 8)  <= redraw_col;
 
                 --
@@ -131,18 +131,18 @@ begin
                     when 0 =>
                         -- Free tune
                         if (unsigned(curr_string) = 0) then
-                            disp_data(7 downto 0) <= free_tune_line(unsigned(redraw_col));
+                            disp_data(7 downto 0) <= free_tune_line(redraw_col);
                         -- Guitar tuning, need ot check for auto tuning or not
                         else
                             -- Need to output the correct string name in the correct place
                             if ((unsigned(redraw_col) = 10) or (unsigned(redraw_col) = 11)) then
-                                disp_data(7 downto 0) <= strings(unsigned(curr_string) - 1)(unsigned(redraw_col) - 10);
+                                disp_data(7 downto 0) <= strings(to_integer(unsigned(curr_string) - 1))(redraw_col - 10);
                             -- Otherwise, redo the filler for the string
                             else 
                                 if (auto_tune = '0') then
-                                    disp_data(7 downto 0) <= reg_tune_line(unsigned(redraw_col));
+                                    disp_data(7 downto 0) <= reg_tune_line(redraw_col);
                                 else
-                                    disp_data(7 downto 0) <= auto_tune_line(unsigned(redraw_col));
+                                    disp_data(7 downto 0) <= auto_tune_line(redraw_col);
                                 end if;
                             end if;
                         end if;
@@ -154,24 +154,24 @@ begin
                         else
                             -- Need to output the correct string frequency in the correct place
                             if (unsigned(redraw_col) >= 12) then 
-                                disp_data(7 downto 0) <= freqs(unsigned(curr_string))(unsigned(redraw_col) - 12);
+                                disp_data(7 downto 0) <= freqs(to_integer(unsigned(curr_string)))(redraw_col - 12);
                             -- Output the template string
                             else 
-                                disp_data(7 downto 0) <= target_freq_line(unsigned(redraw_col));
+                                disp_data(7 downto 0) <= target_freq_line(redraw_col);
                             end if;
                         end if;
 
                     -- Row 3: The input frequency
                     when 2 =>
-                        disp_data(7 downto 0) <= input_freq_line(unsigned(redraw_col));
+                        disp_data(7 downto 0) <= input_freq_line(redraw_col);
 
                     -- Row 4: Used if in auto-tune mode. 
                     when 3 =>
                         if (auto_tune = '1') then
                             if (run_auto_tune_sig = '0') then
-                                disp_data(7 downto 0) <= auto_tune_stopped(unsigned(redraw_col));
+                                disp_data(7 downto 0) <= auto_tune_stopped(redraw_col);
                             else
-                                disp_data(7 downto 0) <= auto_tune_running(unsigned(redraw_col));
+                                disp_data(7 downto 0) <= auto_tune_running(redraw_col);
                             end if;
                         else
                             disp_data(7 downto 0) <= X"20";
@@ -181,7 +181,7 @@ begin
                 --
                 -- Increment the column and row counters
                 --
-                if(unsigned(redraw_col) = 19) then
+                if(redraw_col = 19) then
                     if (unsigned(redraw_row) = 3) then
                         redraw <= '0';
                         redraw_row <= (others => '0');
@@ -189,9 +189,9 @@ begin
                         redraw_row <= std_logic_vector(unsigned(redraw_row) + 1);
                     end if;
 
-                    redraw_col <= (others => '0');
+                    redraw_col <= 0;
                 else
-                    redraw_col <= std_logic_vector(unsigned(redraw_col) + 1);
+                    redraw_col <= redraw_col + 1;
                 end if;
 
             else
