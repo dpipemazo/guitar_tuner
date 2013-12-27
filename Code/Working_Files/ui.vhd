@@ -38,6 +38,11 @@ entity USER_INTERFACE is
 		-- Display input
 		disp_fifo_full	: in std_logic
 
+        -- String output
+        current_string      : out std_logic_vector(2 downto 0);
+        run_auto_tune       : out std_logic;
+        auto_tune_thresh    : out std_logic_vector(2 downto 0)
+
 	); 
 
 end USER_INTERFACE;
@@ -53,7 +58,32 @@ architecture behavioral of USER_INTERFACE is
 	--	and the cycling through buttons
 	signal disp_counter : std_logic_vector(6 downto 0);
 
+    -- The current state of the user interface
+    signal curr_string  : std_logic_vector(2 downto 0);
+    signal auto_tune    : std_logic;
+
+    -- If it is time to do a redraw
+    signal redraw       : std_logic;
+    signal redraw_row   : std_logic_vector(1 downto 0);
+    signal redraw_col   : std_logic_vector(4 downto 0);
+
+    -- Need signals fo rthe current string and auto tune
+    signal auto_tune    : std_logic;
+    signal curr_string  : std_logic_vector(2 downto 0);
+
+    -- Need a signal for toggling the auto tune
+    signal run_auto_tune_sig : std_logic;
+
+    -- Need a signal for the auto tune threshold
+    signal auto_tune_thresh_sig : std_logic_vector(2 downto 0);
+
 begin
+
+    -- Put the outputs out
+    current_string      <= curr_string;
+    run_auto_tune       <= run_auto_tune_sig;
+    auto_tune_thresh    <= auto_tune_thresh_sig;
+
 
 	--
     -- Logic for the UI. First, send a display reset. Then
@@ -69,86 +99,149 @@ begin
 
         if (rising_edge(clk)) then
 
-            -- We got a reset 
+            -- We got a reset, so reset all of our
+            --  variables and signals 
             if (n_reset = '0') then
-                disp_counter <= (others => '0');
-                disp_wr_en <= '0';
-                done_reset <= '0';
-            else
-                -- For the first 81 clocks, send the reset and 
-                -- fill the display
-                if ((disp_fifo_full = '0') and (done_reset = '0')) then
+                disp_counter        <= (others => '0');
+                disp_wr_en          <= '0';
+                done_reset          <= '0';
+                curr_string         <= (others => '0');
+                auto_tune           <= '0';
+                redraw_row          <= (others => '0');
+                redraw_col          <= (others => '0');
+                redraw              <= '1';
+                run_auto_tune       <= '0';
+                auto_tune_thresh    <= (others => '0');
 
-                    disp_wr_en <= '1';
+            elsif ((redraw = '1') and (disp_fifo_full = '0')) then
 
-                    -- On the fist clock, want to send the reset
-                    if (unsigned(disp_counter) = 0) then
-                        disp_data <= (others => '0');
-                    elsif (unsigned(disp_counter) <= 20) then
-                        disp_data(15 downto 8) <= std_logic_vector(("0" & unsigned(disp_counter)) + to_unsigned(31, 8));
-                    elsif (unsigned(disp_counter) <= 40) then
-                        disp_data(15 downto 8) <= std_logic_vector(("0" & unsigned(disp_counter)) + to_unsigned(43, 8));
-                    elsif (unsigned(disp_counter) <= 60) then
-                        disp_data(15 downto 8) <= std_logic_vector(("0" & unsigned(disp_counter)) + to_unsigned(55, 8));
-                    elsif (unsigned(disp_counter) <= 80) then
-                        disp_data(15 downto 8) <= std_logic_vector(("0" & unsigned(disp_counter)) + to_unsigned(67, 8));
-                    end if;
+                -- Turn on the display write enable
+                disp_wr_en <= '1';
 
-                    -- The display data is always the same
-                    disp_data(7 downto 0) <= reset_string(to_integer(unsigned(disp_counter) - 1));
-
-                    if (unsigned(disp_counter) = 80) then
-                        disp_counter <= (others => '0');
-                        done_reset <= '1';
-                    else
-                        disp_counter <= std_logic_vector(unsigned(disp_counter) + 1);
-                    end if;
+                -- Set up the row/column on the display lines
+                disp_data(15 downto 13) <= std_logic_vector(unsigned("0" & redraw_row) + 1);
+                disp_data(12 downto 8)  <= redraw_col;
 
                 --
-                -- Now that we have enqueued the full array of characters, we want to enqueue
-                --  a character for each button pressed
+                -- Put the data out based on the row
                 --
+                case unsigned(redraw_row) is 
 
-                -- If we got a rising edge on a new button
-                elsif ( (not std_match(db_buttons, "00000")) and (disp_fifo_full = '0') ) then
+                    -- Row 1: Which type of tuning mode we are in
+                    when 0 =>
+                        -- Free tune
+                        if (unsigned(curr_string) = 0) then
+                            disp_data(7 downto 0) <= free_tune_line(unsigned(redraw_col));
+                        -- Guitar tuning, need ot check for auto tuning or not
+                        else
+                            -- Need to output the correct string name in the correct place
+                            if ((unsigned(redraw_col) = 10) or (unsigned(redraw_col) = 11)) then
+                                disp_data(7 downto 0) <= strings(unsigned(curr_string) - 1)(unsigned(redraw_col) - 10);
+                            -- Otherwise, redo the filler for the string
+                            else 
+                                if (auto_tune = '0') then
+                                    disp_data(7 downto 0) <= reg_tune_line(unsigned(redraw_col));
+                                else
+                                    disp_data(7 downto 0) <= auto_tune_line(unsigned(redraw_col));
+                                end if;
+                            end if;
+                        end if;
 
-                    -- Enable writing to the display
-                    disp_wr_en <= '1';
+                    -- Row 2: The reference frequency for our note
+                    when 1 =>
+                        if (unsigned(curr_string = 0)) then
+                            disp_data(7 downto 0) <= X"20";
+                        else
+                            -- Need to output the correct string frequency in the correct place
+                            if (unsigned(redraw_col) >= 12) then 
+                                disp_data(7 downto 0) <= freqs(unsigned(curr_string))(unsigned(redraw_col) - 12);
+                            -- Output the template string
+                            else 
+                                disp_data(7 downto 0) <= target_freq_line(unsigned(redraw_col));
+                            end if;
+                        end if;
 
-                    if (unsigned(disp_counter) < 20) then
-                        disp_data(15 downto 8) <= std_logic_vector(("0" & unsigned(disp_counter)) + to_unsigned(32, 8));
-                    elsif (unsigned(disp_counter) < 40) then
-                        disp_data(15 downto 8) <= std_logic_vector(("0" & unsigned(disp_counter)) + to_unsigned(44, 8));
-                    elsif (unsigned(disp_counter) < 60) then
-                        disp_data(15 downto 8) <= std_logic_vector(("0" & unsigned(disp_counter)) + to_unsigned(56, 8));
-                    elsif (unsigned(disp_counter) < 80) then
-                        disp_data(15 downto 8) <= std_logic_vector(("0" & unsigned(disp_counter)) + to_unsigned(68, 8));
-                    end if;
+                    -- Row 3: The input frequency
+                    when 2 =>
+                        disp_data(7 downto 0) <= input_freq_line(unsigned(redraw_col));
 
-                    -- Write the button's ASCII code (U, D, L, R, C) to the display
-                    if (db_buttons(0) = '1') then
-                        disp_data(7 downto 0) <= X"55";
-                    elsif(db_buttons(1) = '1') then
-                        disp_data(7 downto 0) <= X"4C";
-                    elsif(db_buttons(2) = '1') then
-                        disp_data(7 downto 0) <= X"44";
-                    elsif(db_buttons(3) = '1') then
-                        disp_data(7 downto 0) <= X"52";
+                    -- Row 4: Used if in auto-tune mode. 
+                    when 3 =>
+                        if (auto_tune = '1') then
+                            if (run_auto_tune_sig = '0') then
+                                disp_data(7 downto 0) <= auto_tune_stopped(unsigned(redraw_col));
+                            else
+                                disp_data(7 downto 0) <= auto_tune_running(unsigned(redraw_col));
+                            end if;
+                        else
+                            disp_data(7 downto 0) <= X"20";
+                        end if;
+                end case;
+
+                --
+                -- Increment the column and row counters
+                --
+                if(unsigned(redraw_col) = 19) then
+                    if (unsigned(redraw_row) = 3) then
+                        redraw <= '0';
+                        redraw_row <= (others => '0');
                     else
-                        disp_data(7 downto 0) <= X"43";
+                        redraw_row <= std_logic_vector(unsigned(redraw_row) + 1);
                     end if;
 
-                    if (unsigned(disp_counter) = 79) then
-                        disp_counter <= (others => '0');
-                    else
-                        disp_counter <= std_logic_vector(unsigned(disp_counter) + 1);
-                    end if;
-
+                    redraw_col <= (others => '0');
                 else
-                    
-                    disp_wr_en <= '0';
-
+                    redraw_col <= std_logic_vector(unsigned(redraw_col) + 1);
                 end if;
+
+            else
+                -- turn off the write enable, that's all.
+                disp_wr_en <= '0';
+            end if;
+
+            --
+            -- Deal with button presses. 
+            --
+
+            if ( not std_match(db_buttons, "00000") ) then
+
+                -- Run the auto tune or turn it off. 
+                --  This signal will be an enable for
+                --  the motors
+                -- Up button
+                if (db_buttons(0) = '1') then
+                    run_auto_tune_sig <= not run_auto_tune_sig;
+                end if;
+
+                -- Left button. Decrement the string
+                if(db_buttons(1) = '1') then
+                    if (unsigned(curr_string) = 0) then
+                        curr_string <= std_logic_vector(to_unsigned(6, curr_string'length));
+                    else
+                        curr_string <= std_logic_vector(unsigned(curr_string) - 1);
+                    end if;
+                -- Right button. Increment the string
+                elsif(db_buttons(3) = '1') then
+                    if (unsigned(curr_string) = 6) then
+                        curr_string <= (others => '0')
+                    else
+                        curr_string <= std_logic_vector(unsigned(curr_string) + 1);
+                    end if;
+                end if;
+
+                -- Center button. Toggle auto-tune
+                if(db_buttons(4) = '1') then
+                    auto_tune <= not auto_tune;
+                end if;
+
+                -- Down button. Increments the auto-tune threshold until
+                --  it wraps around
+                if(db_buttons(2) = '1') then
+                    auto_tune_thresh_sig <= std_logic_vector(unsigned(auto_tune_thresh_sig) + 1);
+                end if;
+
+                -- Every time we get a button, redraw the display.
+                redraw <= '1';
 
             end if;
 
