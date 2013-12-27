@@ -27,8 +27,9 @@ use work.freq_constants.all;
 entity TUNER is
 
 	port(
-		-- System clock
+		-- System clock and reset
 		clk				: in std_logic; -- system clock
+		n_reset			: in std_logic;
 
 		-- Signals from the UI unit
 		run_motor		: in std_logic;	-- whether we should
@@ -40,10 +41,12 @@ entity TUNER is
 		-- the frequency result
 		div_quotient	: in std_logic_vector(13 downto 0);
 		div_fractional	: in std_logic_vector(9 downto 0);
+		new_freq		: in std_logic;
 
 		-- Stepper motor commands
 		step			: out std_logic;
 		dir				: out std_logic;
+		micro			: out std_logic_vector(1 downto 0);
 
 		-- Whether or not the frequency is in tune
 		tuned			: out std_logic
@@ -71,6 +74,17 @@ architecture behavioral of TUNER is
 	-- Put the input frequency together
 	signal input_freq		: std_logic_vector(23 downto 0);
 
+	-- Need to create a ~400KHz clock for the stepper motor.
+	--	We can send steps at a maximum of 250KHz, so 
+	--	we can use this clock to bit-bang the step
+	--	output up and down
+	signal step_clk_counter : std_logic_vector(7 downto 0);
+	signal step_clk			: std_logic;
+
+	--
+	-- The number of steps for the stepper motor to take
+	--	
+
 begin
 
 	--
@@ -92,6 +106,51 @@ begin
 	--	in Q14.10 form
 	--
 	input_freq		<= div_quotient & div_fractional;
+
+	--
+	-- Make the stepper clock
+	--
+	step_clk <= step_clk_counter(7);
+
+	stepClk : process(clk)
+	begin
+
+		if (rising_edge(clk)) then
+
+			-- Make the stepper clock
+			if (n_reset = '0') then
+				step_clk_counter <= (others => '0');
+			else
+				step_clk_counter <= std_logic_vector(unsigned(step_clk_counter) + 1);
+			end if;
+
+			-- If we got a new frequency
+			if (new_freq <= '1') then
+				-- Check to see if we are tuned!
+				if ((unsigned(input_freq) < unsigned(high_threshold)) and (unsigned(input_freq) > unsigned(low_threshold))) then
+					tuned <= '1';
+				-- If we are not tuned, calculate how off we are and give a number of steps to the stepper
+				--	motor accordingly
+				else
+					
+					tuned <= '0';
+				end if;
+
+
+		end if;
+
+	end process;
+
+	--
+	-- Now act on the stepper
+	--
+	doStep : process(step_clk)
+	begin
+
+		if (rising_edge(step_clk)) then
+
+
+
 
 
 
