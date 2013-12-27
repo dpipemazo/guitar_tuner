@@ -59,7 +59,7 @@
  
 # onBoard SWITCHES
  NET "do_sample" LOC = "A10"	| IOSTANDARD = "LVCMOS33"; # Bank = 0, Pin name = IO_L37N_GCLK12,      	Sch name = SW0
- #NET "debug_sw" LOC = "D14"		| IOSTANDARD = "LVCMOS33"; # Bank = 0, Pin name = IO_L65P_SCP3,      	Sch name = SW1
+ NET "debug_sw" LOC = "D14"	    | IOSTANDARD = "LVCMOS33"; # Bank = 0, Pin name = IO_L65P_SCP3,      	Sch name = SW1
  NET "SOURCE" LOC = "C14"		| IOSTANDARD = "LVCMOS33"; # Bank = 0, Pin name = IO_L65N_SCP2,      	Sch name = SW2
  NET "VOLUME<0>" LOC = "P15"	| IOSTANDARD = "LVCMOS33"; # Bank = 1, Pin name = IO_L74P_AWAKE_1,       Sch name = SW3
  NET "VOLUME<1>" LOC = "P12"	| IOSTANDARD = "LVCMOS33"; # Bank = 2, Pin name = IO_L13N_D10,      		Sch name = SW4
