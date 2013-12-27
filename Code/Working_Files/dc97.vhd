@@ -84,7 +84,7 @@ architecture dc97_arch of dc97 is
   signal ed1_q        : std_logic;
   signal ed2_q        : std_logic;
   signal bit_count    : natural range 0 to 0255;
-  signal ctrwait      : natural range 0 to 1023;
+  signal ctrwait      : natural range 0 to 2047;
   signal dc97_ready   : std_logic;
   signal l_cmd_addr   : std_logic_vector(19 downto 00);
   signal l_cmd_data   : std_logic_vector(19 downto 00);
@@ -113,7 +113,7 @@ begin
   		if n_reset = '0' then
   			ctrwait <= 0;
   			ac97_reset <= '0';
-  		elsif ctrwait = 1023 then
+  		elsif ctrwait = 2047 then
   			ac97_reset <= '1';
   		else
   			ctrwait <= ctrwait + 1;
