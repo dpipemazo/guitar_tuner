@@ -65,11 +65,8 @@ architecture behavioral of USER_INTERFACE is
     -- If it is time to do a redraw
     signal redraw       : std_logic;
     signal redraw_row   : std_logic_vector(1 downto 0);
-    signal redraw_col   : integer range 0 to 19;
+    signal redraw_col   : natural range 0 to 19;
 
-    -- Need signals fo rthe current string and auto tune
-    signal auto_tune    : std_logic;
-    signal curr_string  : std_logic_vector(2 downto 0);
 
     -- Need a signal for toggling the auto tune
     signal run_auto_tune_sig : std_logic;
@@ -108,7 +105,7 @@ begin
                 curr_string         <= (others => '0');
                 auto_tune           <= '0';
                 redraw_row          <= (others => '0');
-                redraw_col          <= (others => '0');
+                redraw_col          <= 0;
                 redraw              <= '1';
                 run_auto_tune       <= '0';
                 auto_tune_thresh    <= (others => '0');
@@ -120,7 +117,7 @@ begin
 
                 -- Set up the row/column on the display lines
                 disp_data(15 downto 13) <= std_logic_vector(("0" & unsigned(redraw_row)) + 1);
-                disp_data(12 downto 8)  <= redraw_col;
+                disp_data(12 downto 8)  <= std_logic_vector(to_unsigned(redraw_col, 5));
 
                 --
                 -- Put the data out based on the row
@@ -135,7 +132,7 @@ begin
                         -- Guitar tuning, need ot check for auto tuning or not
                         else
                             -- Need to output the correct string name in the correct place
-                            if ((unsigned(redraw_col) = 10) or (unsigned(redraw_col) = 11)) then
+                            if (redraw_col = 10) or (redraw_col = 11)) then
                                 disp_data(7 downto 0) <= strings(to_integer(unsigned(curr_string) - 1))(redraw_col - 10);
                             -- Otherwise, redo the filler for the string
                             else 
@@ -153,7 +150,7 @@ begin
                             disp_data(7 downto 0) <= X"20";
                         else
                             -- Need to output the correct string frequency in the correct place
-                            if (unsigned(redraw_col) >= 12) then 
+                            if (redraw_col >= 12) then 
                                 disp_data(7 downto 0) <= freqs(to_integer(unsigned(curr_string)))(redraw_col - 12);
                             -- Output the template string
                             else 
