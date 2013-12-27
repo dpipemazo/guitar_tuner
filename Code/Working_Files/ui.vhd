@@ -36,7 +36,7 @@ entity USER_INTERFACE is
 		disp_data	: out std_logic_vector(15 downto 0);
 
 		-- Display input
-		disp_fifo_full	: in std_logic
+		disp_fifo_full	: in std_logic;
 
         -- String output
         current_string      : out std_logic_vector(2 downto 0);
@@ -223,7 +223,7 @@ begin
                 -- Right button. Increment the string
                 elsif(db_buttons(3) = '1') then
                     if (unsigned(curr_string) = 6) then
-                        curr_string <= (others => '0')
+                        curr_string <= (others => '0');
                     else
                         curr_string <= std_logic_vector(unsigned(curr_string) + 1);
                     end if;
