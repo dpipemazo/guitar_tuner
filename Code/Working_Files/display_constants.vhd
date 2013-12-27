@@ -37,7 +37,7 @@ package display_constants is
         (X"20",X"20",X"20",X"20",X"20",X"54",X"75",X"6E",X"65",X"20",X"58",X"58",X"20",X"53",X"20",X"20",X"20",X"20",X"20",X"20");
     constant target_freq_line : disp_line :=
         -- T    a     r     g     e     t    ' '    F     r     e     q    ' '    X     X     X     X     .     X     X     X
-        (X"54",X"61",X"72",X"67",X"65",X"74",X"20",X"46",X"72",X"65",X"71",X"20",X"58",X"58",X"58",X"58",X"2E",X"58",X"58",X"58"),
+        (X"54",X"61",X"72",X"67",X"65",X"74",X"20",X"46",X"72",X"65",X"71",X"20",X"58",X"58",X"58",X"58",X"2E",X"58",X"58",X"58");
     constant input_freq_line : disp_line :=
         --I     n     p     u     t    ' '   ' '    F     r     e     q    ' '    X     X     X     X     .     X     X     X
         (X"49",X"6E",X"70",X"75",X"74",X"20",X"20",X"46",X"72",X"65",X"71",X"20",X"58",X"58",X"58",X"58",X"2E",X"58",X"58",X"58");

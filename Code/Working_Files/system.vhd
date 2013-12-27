@@ -184,8 +184,7 @@ begin
             db_buttons          => db_buttons,
             disp_wr_en          => ui_wr_en,
             disp_data           => ui_data, 
-            disp_fifo_full      => disp_fifo_full
-
+            disp_fifo_full      => disp_fifo_full,
             current_string      => curr_string,
             run_auto_tune       => run_motors,
             auto_tune_thresh    => motors_thresh
