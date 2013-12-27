@@ -54,10 +54,6 @@ architecture behavioral of USER_INTERFACE is
 	--	after reset
 	signal done_reset : std_logic;
 
-	-- Need a display counter to help with the reset cycle
-	--	and the cycling through buttons
-	signal disp_counter : std_logic_vector(6 downto 0);
-
     -- The current state of the user interface
     signal curr_string  : std_logic_vector(2 downto 0);
     signal auto_tune    : std_logic;
@@ -99,16 +95,15 @@ begin
             -- We got a reset, so reset all of our
             --  variables and signals 
             if (n_reset = '0') then
-                disp_counter        <= (others => '0');
-                disp_wr_en          <= '0';
-                done_reset          <= '0';
-                curr_string         <= (others => '0');
-                auto_tune           <= '0';
-                redraw_row          <= 0;
-                redraw_col          <= 0;
-                redraw              <= '1';
-                run_auto_tune       <= '0';
-                auto_tune_thresh    <= (others => '0');
+                disp_wr_en              <= '0';
+                done_reset              <= '0';
+                curr_string             <= (others => '0');
+                auto_tune               <= '0';
+                redraw_row              <= 0;
+                redraw_col              <= 0;
+                redraw                  <= '1';
+                run_auto_tune_sig       <= '0';
+                auto_tune_thresh_sig    <= (others => '0');
 
             elsif ((redraw = '1') and (disp_fifo_full = '0')) then
 
