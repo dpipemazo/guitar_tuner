@@ -66,7 +66,11 @@ entity FREQ_CONVERT is
 
 		-- Output to the display FIFO
 		disp_wr_en	: out std_logic;					 -- active high
-		disp_data	: out std_logic_vector(15 downto 0)  -- data to be written to FIFO
+		disp_data	: out std_logic_vector(15 downto 0); -- data to be written to FIFO
+
+		-- Output frequency to the motors unit
+		quot_out	: out std_logic_vector(13 downto 0);
+		frac_out	: out std_logic_vector(9 downto 0)
 
 	);
 
@@ -146,7 +150,6 @@ begin
 
 	-- Do the conversion from binary to BCD
 	latchDivide: process(clk)
-
 	begin
 		if (rising_edge(clk)) then
 			-- Indicate that we just got a "sample done" and
@@ -164,6 +167,10 @@ begin
 				char 		<= start_col;
 				do_convert 	<= '1';
 				do_divide   <= '0';
+
+				-- Latch the signals for the motors unit as well
+				quot_out 	<= freq_quotient(13 downto 0);
+				frac_out	<= freq_fractional;
 
 			-- Need 16 clocks to do the conversion of the quotient from binary 
 			--	to BCD

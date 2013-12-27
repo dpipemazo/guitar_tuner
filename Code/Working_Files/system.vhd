@@ -83,6 +83,8 @@ architecture structural of system is
     signal freq_convert_data    : std_logic_vector(15 downto 0);
     signal freq_convert_wr_en   : std_logic;
     signal sample_done_sig      : std_logic;
+    signal freq_quot            : std_logic_vector(13 downto 0);
+    signal freq_frac            : std_logic_vector(9 downto 0);
 
     -- Signals for the user interface unit to talk to the display
     signal ui_wr_en         : std_logic;
@@ -171,7 +173,10 @@ begin
             bin             => auto_result_idx,
             sample_done     => sample_done_sig,
             disp_wr_en      => freq_convert_wr_en,
-            disp_data       => freq_convert_data
+            disp_data       => freq_convert_data,
+            quot_out        => freq_quot,
+            frac_out        => freq_frac
+
         );
 
     --
