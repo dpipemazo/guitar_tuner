@@ -49,10 +49,6 @@ end USER_INTERFACE;
 
 
 architecture behavioral of USER_INTERFACE is
-	
-	-- Need a signal to see if we output the reset string
-	--	after reset
-	signal done_reset : std_logic;
 
     -- The current state of the user interface
     signal curr_string  : std_logic_vector(2 downto 0);
@@ -69,6 +65,8 @@ architecture behavioral of USER_INTERFACE is
 
     -- Need a signal for the auto tune threshold
     signal auto_tune_thresh_sig : std_logic_vector(2 downto 0);
+
+    signal do_reset   : std_logic;
 
 begin
 
@@ -92,18 +90,27 @@ begin
 
         if (rising_edge(clk)) then
 
+            reset_sync <= n_reset;
+
             -- We got a reset, so reset all of our
             --  variables and signals 
             if (n_reset = '0') then
                 disp_wr_en              <= '0';
-                done_reset              <= '0';
                 curr_string             <= (others => '0');
                 auto_tune               <= '0';
                 redraw_row              <= 0;
                 redraw_col              <= 0;
-                redraw                  <= '1';
+                redraw                  <= '0';
+                do_reset                <= '1';
                 run_auto_tune_sig       <= '0';
                 auto_tune_thresh_sig    <= (others => '0');
+
+            -- Send the reset command to the display unit and then
+            --  trigger a normal redraw
+            elsif (do_reset = '1') then
+                disp_wr_en  <= '1';
+                redraw      <= '1';
+                disp_data   <= (others => '0');
 
             elsif ((redraw = '1') and (disp_fifo_full = '0')) then
 
