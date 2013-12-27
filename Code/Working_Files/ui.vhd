@@ -90,8 +90,6 @@ begin
 
         if (rising_edge(clk)) then
 
-            reset_sync <= n_reset;
-
             -- We got a reset, so reset all of our
             --  variables and signals 
             if (n_reset = '0') then
