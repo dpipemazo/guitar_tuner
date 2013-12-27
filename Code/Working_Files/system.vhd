@@ -39,6 +39,7 @@ entity system is
         source      : in  std_logic;
         do_sample   : in  std_logic;
         volume      : in  std_logic_vector(4 downto 0);
+        debug_sw    : in  std_logic;
 
         -- Need to declare I/O for audio here
         AUDSDI          : in std_logic;
@@ -90,6 +91,11 @@ architecture structural of system is
     -- Need to syhcnronize the reset button into our circuit
     signal reset_sync       : std_logic;
     signal n_reset          : std_logic;
+
+    -- Signals for the controls coming from the user interface unit
+    signal run_motors           : std_logic;
+    signal curr_string          : std_logic_vector(2 downto 0);
+    signal motors_thresh        : std_logic_vector(2 downto 0);
 
 begin
 
@@ -179,6 +185,10 @@ begin
             disp_wr_en          => ui_wr_en,
             disp_data           => ui_data, 
             disp_fifo_full      => disp_fifo_full
+
+            current_string      => curr_string,
+            run_auto_tune       => run_motors,
+            auto_tune_thresh    => motors_thresh
         );
 
     --
@@ -204,14 +214,13 @@ begin
     --
     -- Put interesting things on the LEDs
     --
-    led(7) <= sample_valid;
-    led(6) <=   '1' when std_match(sample, "11") else '0';
-    led(5) <=   '1' when std_match(sample, "01") else '0';
-    led(4) <=   '1' when std_match(sample, "00") else '0';
-    led(3) <= disp_fifo_full;
-    led(2) <= auto_done;
-    led(1) <= '1' when (unsigned(auto_result_div) < 10) else '0';
-    led(0) <= '0';
+    led(7)          <= sample_valid;
+    led(6)          <=   '1' when std_match(sample, "11") else '0';
+    led(5)          <=   '1' when std_match(sample, "01") else '0';
+    led(4)          <=   '1' when std_match(sample, "00") else '0';
+    led(3)          <=  run_motors;
+    led(2 downto 0) <=  curr_string when (debug_sw = '1') else
+                        motors_thresh;
 
     --
     -- Need to synchronize the reset button
