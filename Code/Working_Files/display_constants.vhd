@@ -34,7 +34,7 @@ package display_constants is
         (X"20",X"20",X"20",X"20",X"20",X"54",X"75",X"6E",X"65",X"20",X"58",X"58",X"20",X"53",X"74",X"72",X"69",X"6E",X"67",X"20");
     constant free_tune_line : disp_line := 
         --' '   ' '   ' '   ' '   ' '    F     r     e     e    ' '    T     u     n     e    ' '   ' '   ' '   ' '   ' '   ' '
-        (X"20",X"20",X"20",X"20",X"20",X"54",X"75",X"6E",X"65",X"20",X"58",X"58",X"20",X"53",X"20",X"20",X"20",X"20",X"20",X"20");
+        (X"20",X"20",X"20",X"20",X"20",X"46",X"72",X"65",X"65",X"20",X"54",X"75",X"6E",X"65",X"20",X"20",X"20",X"20",X"20",X"20");
     constant target_freq_line : disp_line :=
         -- T    a     r     g     e     t    ' '    F     r     e     q    ' '    X     X     X     X     .     X     X     X
         (X"54",X"61",X"72",X"67",X"65",X"74",X"20",X"46",X"72",X"65",X"71",X"20",X"58",X"58",X"58",X"58",X"2E",X"58",X"58",X"58");
@@ -43,13 +43,13 @@ package display_constants is
         (X"49",X"6E",X"70",X"75",X"74",X"20",X"20",X"46",X"72",X"65",X"71",X"20",X"58",X"58",X"58",X"58",X"2E",X"58",X"58",X"58");
     constant note_line       : disp_line := 
         --  =     =     =    =     =     =     =     T     u     n    e     d     !      =     =     =     =     =     =     =  
-        (X"49",X"6E",X"70",X"75",X"74",X"20",X"20",X"46",X"72",X"65",X"71",X"20",X"58",X"58",X"58",X"58",X"2E",X"58",X"58",X"58");
+        (X"FE",X"FE",X"FE",X"FE",X"FE",X"FE",X"FE",X"54",X"75",X"6E",X"65",X"64",X"21",X"FE",X"FE",X"FE",X"FE",X"FE",X"FE",X"FE");
     constant auto_tune_running       : disp_line := 
         -- ' '   A     u     t     o    ' '     T     u     n     e    ' '    R    u     n     n     i     n     g    ' '   ' '
-        (X"41",X"75",X"74",X"6F",X"20",X"54",X"75",X"6E",X"65",X"20",X"58",X"58",X"20",X"53",X"74",X"72",X"69",X"6E",X"67",X"20");
+        (X"20",X"41",X"75",X"74",X"6F",X"20",X"54",X"75",X"6E",X"65",X"20",X"52",X"75",X"6E",X"6E",X"69",X"6E",X"67",X"20",X"20");
     constant auto_tune_stopped       : disp_line := 
         -- ' '   A     u     t     o    ' '     T     u     n     e    ' '   S     t     o     p     p     e     d    ' '   ' '
-        (X"41",X"75",X"74",X"6F",X"20",X"54",X"75",X"6E",X"65",X"20",X"58",X"58",X"20",X"53",X"74",X"72",X"69",X"6E",X"67",X"20");
+        (X"20",X"41",X"75",X"74",X"6F",X"20",X"54",X"75",X"6E",X"65",X"20",X"53",X"74",X"6F",X"70",X"70",X"65",X"64",X"20",X"20");
 
     type string_name is array(0 to 1) of std_logic_vector(7 downto 0);
     constant e2_string : string_name := (X"45", X"32");

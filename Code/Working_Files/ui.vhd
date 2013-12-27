@@ -152,7 +152,7 @@ begin
                         else
                             -- Need to output the correct string frequency in the correct place
                             if (redraw_col >= 12) then 
-                                disp_data(7 downto 0) <= freqs(to_integer(unsigned(curr_string)))(redraw_col - 12);
+                                disp_data(7 downto 0) <= freqs(to_integer(unsigned(curr_string) - 1))(redraw_col - 12);
                             -- Output the template string
                             else 
                                 disp_data(7 downto 0) <= target_freq_line(redraw_col);
