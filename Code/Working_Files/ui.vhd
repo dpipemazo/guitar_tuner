@@ -106,6 +106,7 @@ begin
             -- Send the reset command to the display unit and then
             --  trigger a normal redraw
             elsif (do_reset = '1') then
+                do_reset    <= '0';
                 disp_wr_en  <= '1';
                 redraw      <= '1';
                 disp_data   <= (others => '0');
