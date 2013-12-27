@@ -208,7 +208,9 @@ begin
                 --  the motors
                 -- Up button
                 if (db_buttons(0) = '1') then
-                    run_auto_tune_sig <= not run_auto_tune_sig;
+                    if (auto_tune = '1') then
+                        run_auto_tune_sig <= not run_auto_tune_sig;
+                    end if;
                 end if;
 
                 -- Left button. Decrement the string
@@ -229,6 +231,9 @@ begin
 
                 -- Center button. Toggle auto-tune
                 if(db_buttons(4) = '1') then
+                    -- Always turn off the motors when entering/exiting
+                    --  auto_tune.
+                    run_auto_tune_sig <= '0';
                     auto_tune <= not auto_tune;
                 end if;
 
