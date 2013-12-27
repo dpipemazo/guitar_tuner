@@ -64,7 +64,7 @@ architecture behavioral of USER_INTERFACE is
 
     -- If it is time to do a redraw
     signal redraw       : std_logic;
-    signal redraw_row   : std_logic_vector(1 downto 0);
+    signal redraw_row   : natural range 0 to 3;
     signal redraw_col   : natural range 0 to 19;
 
 
@@ -104,7 +104,7 @@ begin
                 done_reset          <= '0';
                 curr_string         <= (others => '0');
                 auto_tune           <= '0';
-                redraw_row          <= (others => '0');
+                redraw_row          <= 0;
                 redraw_col          <= 0;
                 redraw              <= '1';
                 run_auto_tune       <= '0';
@@ -116,13 +116,13 @@ begin
                 disp_wr_en <= '1';
 
                 -- Set up the row/column on the display lines
-                disp_data(15 downto 13) <= std_logic_vector(("0" & unsigned(redraw_row)) + 1);
+                disp_data(15 downto 13) <= std_logic_vector(to_unsigned(redraw_row + 1, 3));
                 disp_data(12 downto 8)  <= std_logic_vector(to_unsigned(redraw_col, 5));
 
                 --
                 -- Put the data out based on the row
                 --
-                case unsigned(redraw_row) is 
+                case redraw_row is 
 
                     -- Row 1: Which type of tuning mode we are in
                     when 0 =>
@@ -132,7 +132,7 @@ begin
                         -- Guitar tuning, need ot check for auto tuning or not
                         else
                             -- Need to output the correct string name in the correct place
-                            if (redraw_col = 10) or (redraw_col = 11)) then
+                            if ((redraw_col = 10) or (redraw_col = 11)) then
                                 disp_data(7 downto 0) <= strings(to_integer(unsigned(curr_string) - 1))(redraw_col - 10);
                             -- Otherwise, redo the filler for the string
                             else 
@@ -146,7 +146,7 @@ begin
 
                     -- Row 2: The reference frequency for our note
                     when 1 =>
-                        if (unsigned(curr_string = 0)) then
+                        if (unsigned(curr_string) = 0) then
                             disp_data(7 downto 0) <= X"20";
                         else
                             -- Need to output the correct string frequency in the correct place
@@ -179,11 +179,11 @@ begin
                 -- Increment the column and row counters
                 --
                 if(redraw_col = 19) then
-                    if (unsigned(redraw_row) = 3) then
+                    if (redraw_row = 3) then
                         redraw <= '0';
-                        redraw_row <= (others => '0');
+                        redraw_row <= 0;
                     else
-                        redraw_row <= std_logic_vector(unsigned(redraw_row) + 1);
+                        redraw_row <= redraw_row + 1;
                     end if;
 
                     redraw_col <= 0;
