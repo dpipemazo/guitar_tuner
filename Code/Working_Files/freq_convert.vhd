@@ -107,7 +107,7 @@ architecture behavioral of FREQ_CONVERT is
 	--
 	-- Display row and column start constants
 	--
-	constant start_row : std_logic_vector(2 downto 0) := "100"; -- Row 4
+	constant start_row : std_logic_vector(2 downto 0) := "011"; -- Row 4
 	constant start_col : std_logic_vector(4 downto 0) := "01100"; -- begin at character 12
 	signal char : std_logic_vector(4 downto 0);
 
