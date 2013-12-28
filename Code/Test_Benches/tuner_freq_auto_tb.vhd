@@ -144,6 +144,33 @@ begin
 			n_stepping		=> test_n_stepping
 		);
 
+	testAuto : AUTOCORRELATE
+		port map(
+			clk 			=> test_clk,
+			sample 	    	=> test_sample,
+			n_reset 		=> auto_n_reset,
+			result_div 		=> test_result_div,
+			result_idx 		=> test_result_idx,
+			done 			=> test_sample_done
+		);
+
+	testFrqConv : FREQ_CONVERT
+		port map(
+			clk 		 	=> test_clk, 		
+			divider		 	=> test_result_div,		
+			bin			 	=> test_result_idx,			
+			sample_done  	=> test_sample_done,
+			disp_wr_en	 	=> test_disp_wr_en,
+			disp_data	 	=> test_disp_data,	
+			quot_out	 	=> test_div_quotient,	
+			frac_out	 	=> test_div_fractional,	
+			new_freq	 	=> test_new_data	
+		);
+
+	-- Wire up the autocorrelation reset. Reset when the stepper motor is stepping
+	auto_n_reset <= test_n_reset or test_n_stepping;
+
+
 	-- Make the system clock
 	make_clock: process
 
@@ -258,16 +285,42 @@ begin
 			--
 			while (test_tuned /= '1') loop
 
-				-- Put the frequency data out for the tuner unit
-				test_div_quotient <= std_logic_vector(unsigned(integer(trunc(string_freq)), test_div_quotient'length));
-				test_div_fractional <= std_logic_vector(unsigned(integer(trunc((string_freq - trunc(string_freq))*1024.0)), test_div_fractional'length));
-				
-				-- Let the data be valid and then tell the tuning unit 
-				--	that the data is valid
-				wait for 10 ps;
-				test_new_data <= '1';
-				wait for 10 ps;
-				test_new_data <= '0';
+				-- Wait for the autocorrelation unit to finish. When it does finish,
+				--	make sure that it detects the frequency correctly.
+				while(test_sample_done /= '1') loop
+					wait for 10 ps;
+				end loop;
+
+				-- Calculate the reported frequency by dividing the input clock (100MHz) by the result divider and index
+	            reported_freq  := 100000000.0/(real(to_integer(unsigned(test_result_div)))*real(to_integer(unsigned(test_result_idx))));
+
+	            -- See if we (1) got it right to 1 cent or (2) got a harmonic or (3) failed miserably
+	            if ( abs(1.0 - (string_freq/reported_freq)) < 0.001156 ) then
+	                assert false report "SUCCESS: Autocorrelation correctly detected to within 2 cents";
+	            elsif ( (abs(round(string_freq/reported_freq) - (string_freq/reported_freq)) < 0.01) and (round(string_freq/reported_freq) > 1.5) ) then
+	                assert false report "ERROR: Autocorrelation reported harmonic, not actual frequency";
+	            else
+	                assert false report "ERROR: Autocorrelation incorrectly detected frequency";
+	                END_SIM := TRUE;
+	            end if;
+
+	            --
+	            -- Now, wait for the freq_convert unit to finish
+	            --
+	            while(test_new_data /= '1') loop
+	            	wait for 10 ps;
+	            end loop;
+
+	           	-- Calculate the reported frequency by dividing the quotient and fractional by 1024
+	            reported_freq  := real(to_integer(unsigned(test_div_quotient & test_div_fractional)))/1024.0;
+
+	            -- Make sure that the repoerted frequency is right
+	            if ( abs(1.0 - (string_freq/reported_freq)) < 0.001156 ) then
+	                assert false report "SUCCESS: Frequency conversion correctly outputted frequency";
+	            else
+	                assert false report "ERROR: Frequency conversion incorrectly reported frequency";
+	                END_SIM := TRUE;
+	            end if;
 
 	            --
 	            -- Now, wait for the stepping to begin
