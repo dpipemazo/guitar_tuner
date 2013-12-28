@@ -248,7 +248,7 @@ begin
 
 
 	-- Do the clock itself
-	step_clk <= step_clk_counter(7);
+	step_clk <= not step_clk_counter(7);
 
 	stepClk : process(clk)
 	begin

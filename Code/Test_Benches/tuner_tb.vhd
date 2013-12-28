@@ -146,7 +146,7 @@ begin
 		test_n_reset <= '1';
 		wait for 10 ps;
 		test_n_reset <= '0';
-		wait for 10 ps;
+		wait for 10 ps;	-- Need the step clock to go high
 		test_n_reset <= '1';
 
 		-- Now loop, testing each of the strings
