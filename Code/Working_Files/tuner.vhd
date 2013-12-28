@@ -366,7 +366,7 @@ begin
 
 						-- Move onto sending the new steps
 						do_steps <= '1';
-						curr_state <= SEND_STEPS;
+						curr_state <= SEND_STEPS_PREP;
 
 					--
 					-- Need to get ready to send the steps
@@ -434,6 +434,8 @@ begin
 							if (unsigned(num_steps) = 1) then
 								-- Remember the direction we stepped in
 								old_dir 	<= step_dir;
+								-- Reset the first_run signal
+								first_run 	<= '0';
 								-- And go back to idle
 								curr_state 	<= IDLE;
 
