@@ -97,18 +97,18 @@ begin
         variable END_SIM : boolean := FALSE;
 
 	begin
-        -- this process generates a 10 ps period, 50% duty cycle clock, 
+        -- this process generates a 10 ns period, 50% duty cycle clock, 
         -- which is equivalent to the clock which we will have in our system. 
         if END_SIM = FALSE then
             test_clk <= '1';
-            wait for 5 ps;
+            wait for 5 ns;
         else
             wait;
         end if;
 
         if END_SIM = FALSE then
             test_clk <= '0';
-            wait for 5 ps;
+            wait for 5 ns;
         else
             wait;
         end if;
@@ -144,9 +144,9 @@ begin
 
 		-- Send the system reset after a clock
 		test_n_reset <= '1';
-		wait for 10 ps;
+		wait for 10 ns;
 		test_n_reset <= '0';
-		wait for 10 ps;	-- Need the step clock to go high
+		wait for 10 ns;	-- Need the step clock to go high
 		test_n_reset <= '1';
 
 		-- Now loop, testing each of the strings
@@ -177,16 +177,16 @@ begin
 				
 				-- Let the data be valid and then tell the tuning unit 
 				--	that the data is valid
-				wait for 10 ps;
+				wait for 10 ns;
 				test_new_data <= '1';
-				wait for 10 ps;
+				wait for 10 ns;
 				test_new_data <= '0';
 
 	            --
 	            -- Now, wait for the stepping to begin
 	            --
 	   			while(test_n_stepping /= '0') loop
-	   				wait for 10 ps;
+	   				wait for 10 ns;
 	   			end loop;
 
 	   			-- Once the stepping has begun, adjust the sample frequency 
@@ -200,10 +200,10 @@ begin
 	   					end if;
 
 	   					while(test_step = '1') loop
-	   						wait for 10 ps;
+	   						wait for 10 ns;
 	   					end loop;
 	   				else
-	   					wait for 10 ps;
+	   					wait for 10 ns;
 	   				end if;
 	   			end loop;
 
@@ -219,7 +219,7 @@ begin
             end if;
 
             -- Wait for the tuned signal to drop
-            wait for 10 ps;
+            wait for 10 ns;
 
         end loop;
 
