@@ -48,7 +48,8 @@ entity TUNER is
 		step			: out std_logic;
 		dir				: out std_logic;
 
-		-- Whether or not the frequency is in tune
+		-- Whether or not the frequency is in tune. Will pulse high for 
+		--	one system clock
 		tuned			: out std_logic;
 		-- Whether or not the unit is in the process of sending steps
 		--	active low when in the process of stepping. 
@@ -131,9 +132,10 @@ architecture behavioral of TUNER is
 	constant freq_reset_val 	: std_logic_vector(23 downto 0) := "000000000000000000000000";
 
 	-- Signal telling that it's the first run of the algorithm
-	signal first_run 	: std_logic;
+	signal first_run 			: std_logic;
 
 	-- Latch for the old current string to see if we got a nw current string
+	signal curr_string_latch : std_logic_vector(2 downto 0);
 
 	--
 	-- States for the tuning state machine
@@ -289,6 +291,11 @@ begin
 					--
 					when IDLE =>
 
+						--
+						-- Always send tuned back low in idle
+						--
+						tuned <= '0';
+
 						-- If we get a new reading, then move on to
 						--	check the thresholds.
 						if (new_data = '1') then
@@ -296,7 +303,6 @@ begin
 							new_freq 	<= div_quotient & div_fractional;
 							old_freq	<= new_freq;
 							curr_state 	<= CHECK_TUNED;
-							tuned		<= '0';
 						else
 							curr_state <= IDLE;
 						end if;
@@ -396,6 +402,8 @@ begin
 	--
 	-- Now act on the stepper
 	--
+	n_stepping <= done_steps;
+
 	doStep : process(step_clk)
 	begin
 
