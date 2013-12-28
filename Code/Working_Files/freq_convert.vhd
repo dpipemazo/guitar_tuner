@@ -66,7 +66,12 @@ entity FREQ_CONVERT is
 
 		-- Output to the display FIFO
 		disp_wr_en	: out std_logic;					 -- active high
-		disp_data	: out std_logic_vector(15 downto 0)  -- data to be written to FIFO
+		disp_data	: out std_logic_vector(15 downto 0); -- data to be written to FIFO
+
+		-- Output frequency to the motors unit
+		quot_out	: out std_logic_vector(13 downto 0);
+		frac_out	: out std_logic_vector(9 downto 0);
+		new_freq	: out std_logic
 
 	);
 
@@ -113,6 +118,10 @@ architecture behavioral of FREQ_CONVERT is
 
 	signal do_divide : std_logic;
 
+	signal new_freq_latch : std_logic;
+
+
+
 
 begin
 
@@ -146,7 +155,6 @@ begin
 
 	-- Do the conversion from binary to BCD
 	latchDivide: process(clk)
-
 	begin
 		if (rising_edge(clk)) then
 			-- Indicate that we just got a "sample done" and
@@ -164,6 +172,10 @@ begin
 				char 		<= start_col;
 				do_convert 	<= '1';
 				do_divide   <= '0';
+
+				-- Latch the signals for the motors unit as well
+				quot_out 	<= freq_quotient(13 downto 0);
+				frac_out	<= freq_fractional;
 
 			-- Need 16 clocks to do the conversion of the quotient from binary 
 			--	to BCD
@@ -242,6 +254,12 @@ begin
 					convert_count <= std_logic_vector(unsigned(convert_count) + 1);
 				end if;
 			end if;
+
+			-- Need a single-clock, active high signal
+			--	indicating to the tuning unit that a new
+			--	frequency is available. Do that here
+			new_freq_latch 	<= do_convert;
+			new_freq 		<= do_convert and not new_freq_latch;
 
 		end if;
 
