@@ -333,7 +333,7 @@ begin
 						--	then we need to latch the data because it is 
 						--	only valid for one cycle.
 
-						if (divide_rdy <= '1') then
+						if (divide_rdy = '1') then
 							step_multiplier <= step_multiplier_mux;
 							curr_state 		<= GET_NEW_STEPS;
 						else
