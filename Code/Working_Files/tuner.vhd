@@ -87,7 +87,7 @@ architecture behavioral of TUNER is
 	signal step_clk			: std_logic;
 
 	-- The number of steps to take, multiplied by 1024
-	signal num_steps_x_1024 	: std_logic_vector(22 downto 0);
+	signal new_steps_x_1024 	: std_logic_vector(22 downto 0);
 	signal step_multiplier		: std_logic_vector(12 downto 0);
 	signal step_multiplier_mux 	: std_logic_vector(12 downto 0);
 	signal new_steps_mux		: std_logic_vector(9 downto 0);
@@ -148,7 +148,7 @@ architecture behavioral of TUNER is
 		SEND_STEPS			
 	);
 
-
+	signal curr_state : tune_states;
 
 begin
 
