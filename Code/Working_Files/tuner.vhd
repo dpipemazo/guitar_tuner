@@ -329,7 +329,6 @@ begin
 						-- Wait for the divide data to be ready. If it is,
 						--	then we need to latch the data because it is 
 						--	only valid for one cycle.
-
 						divide_nd <= '0';
 
 						if (divide_rdy = '1') then
