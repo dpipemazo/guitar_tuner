@@ -120,7 +120,7 @@ architecture TB_ARCHITECTURE of tuner_tb is
 	constant strings : string_freqs := (82.407, 110.000, 146.832, 195.998, 246.942, 329.628);
 
 	-- Variable for the random frequency
-	variable string_freq : real;
+	shared variable string_freq : real;
 
 	signal auto_n_reset : std_logic;
 
