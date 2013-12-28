@@ -108,6 +108,7 @@ architecture behavioral of TUNER is
 	signal divide_rdy		: std_logic;
 	signal divide_rfd 		: std_logic;
 	signal divide_nd		: std_logic;
+	signal divide_nd_sig 	: std_logic;
 
 	--
 	-- Latch the quotient and fractional after divide
@@ -168,12 +169,12 @@ begin
 	---
 	--
 
-
+	divide_nd_sig <= divide_nd and n_reset;
 	stepHzDiv: entity STEPS_HZ_DIVIDER
 		port map(
 			rfd 		=> divide_rfd,
 			rdy 		=> divide_rdy,
-			nd 			=> divide_nd, 
+			nd 			=> divide_nd_sig, 
 			clk 		=> clk,
 			dividend 	=> dividend,
 			quotient 	=> quotient,
