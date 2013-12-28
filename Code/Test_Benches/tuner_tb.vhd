@@ -257,8 +257,8 @@ begin
 			while (test_tuned /= '1') loop
 
 				-- Put the frequency data out for the tuner unit
-				test_div_quotient <= std_logic_vector(unsigned(integer(trunc(string_freq)), test_div_quotient'length));
-				test_div_fractional <= std_logic_vector(unsigned(integer(trunc((string_freq - trunc(string_freq))*1024.0)), test_div_fractional'length));
+				test_div_quotient <= std_logic_vector(to_unsigned(integer(trunc(string_freq)), test_div_quotient'length));
+				test_div_fractional <= std_logic_vector(to_unsigned(integer(trunc((string_freq - trunc(string_freq))*1024.0)), test_div_fractional'length));
 				
 				-- Let the data be valid and then tell the tuning unit 
 				--	that the data is valid
