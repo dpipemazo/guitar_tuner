@@ -189,12 +189,12 @@ begin
 	-- The inputs to the divider are freq_to_go and freq_moved. We cap these
 	--	values at +/- 127 in Q7.10 form, so need to add that logic in. 
 	--
-	dividend 	<= "011111110000000000" when (signed(freq_to_go(23 downto 10)) >= 128) else
-				   "100000010000000000" when (signed(freq_to_go(23 downto 10)) <= -127) else
+	dividend 	<= "011111110000000000" when (signed(freq_to_go(24 downto 10)) >= 128) else
+				   "100000010000000000" when (signed(freq_to_go(24 downto 10)) <= -127) else
 				   freq_to_go(17 downto 0);
 
-	divisor 	<= "011111110000000000" when (signed(freq_moved(23 downto 10)) >= 128) else
-				   "100000010000000000" when (signed(freq_moved(23 downto 10)) <= -127) else
+	divisor 	<= "011111110000000000" when (signed(freq_moved(24 downto 10)) >= 128) else
+				   "100000010000000000" when (signed(freq_moved(24 downto 10)) <= -127) else
 				   freq_moved(17 downto 0);
 	--
 	-- The quotient will be limited to +/- 2 plus fractional. When the algorithm starts, 
@@ -216,8 +216,8 @@ begin
 	-- We are multiplying the old steps value by 2, so we need
 	--	to threshold it at the max and min of +/- 511
 	--
-	new_steps_mux 		<=  "1000000001" when ( signed(new_steps_x_1024) <= -512 ) else
-							"0111111111" when ( signed(new_steps_x_1024) >= 512 ) else
+	new_steps_mux 		<=  "1000000001" when ( signed(new_steps_x_1024(22 downto 10)) <= -512 ) else
+							"0111111111" when ( signed(new_steps_x_1024(22 downto 10)) >= 512 ) else
 							new_steps_x_1024(19 downto 10);
 
 	--
