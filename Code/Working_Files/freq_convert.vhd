@@ -128,7 +128,7 @@ begin
 	--
 	-- Wire up the divider
 	--
-	div: entity FREQ_DIVIDER(STRUCTURE)
+	div: entity FREQ_DIVIDER
 		port map(
 		    rfd 		=> divide_rfd,
 		    rdy 		=> divide_rdy,
