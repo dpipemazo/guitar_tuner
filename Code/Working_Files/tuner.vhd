@@ -296,6 +296,7 @@ begin
 						-- Always send tuned back low in idle
 						--
 						tuned <= '0';
+						divide_nd <= '0';
 
 						-- If we get a new reading, then move on to
 						--	check the thresholds.
