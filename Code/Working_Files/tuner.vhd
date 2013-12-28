@@ -79,10 +79,9 @@ architecture behavioral of TUNER is
 	signal new_freq		: std_logic_vector(23 downto 0);
 	signal old_freq		: std_logic_vector(23 downto 0);
 
-	-- Need to create a ~400KHz clock for the stepper motor.
-	--	We can send steps at a maximum of 250KHz, so 
-	--	we can use this clock to bit-bang the step
-	--	output up and down
+	-- Range 0-255. Used as a wait counter in the state machine in order
+	--	to dilute the system clock down to a level that
+	--	is acceptable for the stpper chip.
 	signal step_wait_counter : std_logic_vector(6 downto 0);
 
 	-- The number of steps to take, multiplied by 1024
@@ -95,8 +94,7 @@ architecture behavioral of TUNER is
 	signal abs_steps			: std_logic_vector(9 downto 0);
 
 	signal old_dir				: std_logic;
-	signal step_dir				: std_logic;
-	signal step_sig				: std_logic;
+	signal new_dir				: std_logic;
 
 	--
 	-- Signals for the differences
@@ -117,12 +115,7 @@ architecture behavioral of TUNER is
 
 	-- Signals for the stepper controller to know
 	--	to send steps
-	signal do_steps			: std_logic;
-	signal step_count		: std_logic_vector(8 downto 0);
 	signal num_steps		: std_logic_vector(8 downto 0);
-	signal done_steps_latch : std_logic; -- main clock domain
-	signal done_steps		: std_logic; -- stepper clock domain
-	signal steps_done		: std_logic; -- main clock domain
 
 	--
 	-- Reset values for old_steps and old_freq
@@ -249,8 +242,7 @@ begin
 	--
 	-- Needed a signal for the direction so that we could read from it
 	--
-	dir			<= step_dir;
-
+	dir			<= new_dir;
 
 	stepClk : process(clk)
 	begin
@@ -376,12 +368,12 @@ begin
 						-- Need tof igure out which direction
 						--	to run the stepper motor
 						if (first_run = '1') then
-							step_dir <= '1';
+							new_dir <= '1';
 						else
 							if (new_steps(9) = '1') then
-								step_dir <= not old_dir;
+								new_dir <= not old_dir;
 							else
-								step_dir <= old_dir;
+								new_dir <= old_dir;
 							end if; 
 						end if;
 
@@ -433,7 +425,7 @@ begin
 							-- If we just sent the last step
 							if (unsigned(num_steps) = 1) then
 								-- Remember the direction we stepped in
-								old_dir 	<= step_dir;
+								old_dir 	<= new_dir;
 								-- Reset the first_run signal
 								first_run 	<= '0';
 								-- And go back to idle
