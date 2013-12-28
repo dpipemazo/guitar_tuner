@@ -329,9 +329,9 @@ begin
 						-- Wait for the divide data to be ready. If it is,
 						--	then we need to latch the data because it is 
 						--	only valid for one cycle.
-						divide_nd <= '0';
 
 						if (divide_rdy = '1') then
+							divide_nd <= '0';
 							step_multiplier <= step_multiplier_mux;
 							curr_state 		<= GET_NEW_STEPS;
 						else
