@@ -406,6 +406,7 @@ begin
 	--
 	n_stepping <= done_steps;
 	step 		<= step_sig;
+	dir			<= step_dir;
 
 	doStep : process(step_clk)
 	begin
