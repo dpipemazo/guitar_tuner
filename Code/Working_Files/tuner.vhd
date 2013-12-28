@@ -291,6 +291,10 @@ begin
 							new_freq 	<= div_quotient & div_fractional;
 							old_freq	<= new_freq;
 							curr_state 	<= CHECK_TUNED;
+
+							-- Send the divider new data line high here so that the 
+							--	ready flag is cleared by the time that we get to checking it
+							divide_nd 	<= '1';
 						else
 							curr_state <= IDLE;
 						end if;
@@ -300,6 +304,9 @@ begin
 					--	within the thresholds
 					--
 					when CHECK_TUNED =>
+						-- Need to send the divide new data signal low
+						divide_nd <= '0';
+
 						-- See if the difference between the input frequency and expected is between the thresholds
 						if ((signed(freq_to_go) < signed(high_threshold)) and (signed(freq_to_go) > signed(low_threshold))) then
 							tuned 		<= '1';
@@ -311,10 +318,11 @@ begin
 							if (first_run = '1') then
 								curr_state <= GET_NEW_STEPS;
 							else
-								divide_nd 	<= '1';
 								curr_state 	<= DO_DIVIDE;
 							end if;
 						end if;
+
+
 
 					--
 					-- We are not tuned, so calculate the ratio of the 
@@ -324,9 +332,6 @@ begin
 						-- Wait for the divide data to be ready. If it is,
 						--	then we need to latch the data because it is 
 						--	only valid for one cycle.
-
-						-- Need to send the new data signal on the divider low
-						divide_nd <= '0';
 
 						if (divide_rdy <= '1') then
 							step_multiplier <= step_multiplier_mux;
