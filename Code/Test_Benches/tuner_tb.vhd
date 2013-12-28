@@ -336,7 +336,7 @@ begin
 	   					if (test_dir = '1') then
 	   						string_freq := string_freq + (1.0/rand_step_hz);
 	   					else
-	   						string_freq := string_freq - (1.0/rand_steps_hz);
+	   						string_freq := string_freq - (1.0/rand_step_hz);
 	   					end if;
 
 	   					while(test_step = '1') loop
