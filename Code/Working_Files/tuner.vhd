@@ -22,8 +22,8 @@ use ieee.std_logic_misc.all;
 use ieee.numeric_std.all;
 
 library work;
-use work.freq_constants.all;
 use work.steps_hz_divider;
+use work.freq_constants.all;
 
 entity TUNER is
 
