@@ -291,10 +291,6 @@ begin
 							new_freq 	<= div_quotient & div_fractional;
 							old_freq	<= new_freq;
 							curr_state 	<= CHECK_TUNED;
-
-							-- Send the divider new data line high here so that the 
-							--	ready flag is cleared by the time that we get to checking it
-							divide_nd 	<= '1';
 						else
 							curr_state <= IDLE;
 						end if;
@@ -318,6 +314,7 @@ begin
 							if (first_run = '1') then
 								curr_state <= GET_NEW_STEPS;
 							else
+								divide_nd 	<= '1';
 								curr_state 	<= DO_DIVIDE;
 							end if;
 						end if;
