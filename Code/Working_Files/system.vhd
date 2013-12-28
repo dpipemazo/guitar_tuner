@@ -173,7 +173,8 @@ begin
 
     -- Want to reset the autocorrelation unit if we either
     --  get the reset signal or we are currently stepping
-    auto_reset <= n_reset and n_stepping;
+    --  or if the sample is not valid
+    auto_reset <= n_reset and n_stepping and sample_valid;
 
     --
     -- The frequency conversion unit. Takes an index and
