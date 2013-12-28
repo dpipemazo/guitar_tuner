@@ -83,8 +83,7 @@ architecture behavioral of TUNER is
 	--	We can send steps at a maximum of 250KHz, so 
 	--	we can use this clock to bit-bang the step
 	--	output up and down
-	signal step_clk_counter : std_logic_vector(7 downto 0);
-	signal step_clk			: std_logic;
+	signal step_wait_counter : std_logic_vector(6 downto 0);
 
 	-- The number of steps to take, multiplied by 1024
 	signal new_steps_x_1024 	: std_logic_vector(22 downto 0);
@@ -145,7 +144,9 @@ architecture behavioral of TUNER is
 		CHECK_TUNED, 
 		DO_DIVIDE, 
 		GET_NEW_STEPS, 
-		SEND_STEPS			
+		SEND_STEPS_PREP,
+		SEND_STEPS_HIGH,
+		SEND_STEPS_LOW			
 	);
 
 	signal curr_state : tune_states;
@@ -245,21 +246,16 @@ begin
 	high_threshold 	<= std_logic_vector("0000000000" & unsigned(expected_freq(23 downto 9)));
 	low_threshold 	<= std_logic_vector(unsigned(not high_threshold) + 1);
 
+	--
+	-- Needed a signal for the direction so that we could read from it
+	--
+	dir			<= step_dir;
 
-	-- Do the clock itself
-	step_clk <= step_clk_counter(7);
 
 	stepClk : process(clk)
 	begin
 
 		if (rising_edge(clk)) then
-
-			--
-			-- Need to perform rising edge detection on the
-			--	done_steps signal from the stepper motor unit
-			--
-			done_steps_latch <= done_steps;
-			steps_done 		 <= done_steps and not done_steps_latch;
 
 			--
 			-- Need to monitor if we are changing strings. If so, 
@@ -272,14 +268,14 @@ begin
 			--	be running the stepper motor
 			--
 			if ( (n_reset = '0') or (not std_match(curr_string, curr_string_latch)) or (run_motor = '0') ) then
-				step_clk_counter 	<= (others => '0');
+				step_wait_counter 	<= (others => '0');
 				curr_state 			<= IDLE;
 				first_run			<= '1';
 				do_steps 			<= '0';
 				tuned				<= '0';
+				step_sig			<= '0';
+				n_stepping 			<= '1';
 			else
-				-- Increment the step clock counter
-				step_clk_counter <= std_logic_vector(unsigned(step_clk_counter) + 1);
 
 				--
 				-- Run the state machine which controls the tuning
@@ -296,6 +292,7 @@ begin
 						--
 						tuned <= '0';
 						divide_nd <= '0';
+						n_stepping <= '1';
 
 						-- If we get a new reading, then move on to
 						--	check the thresholds.
@@ -372,19 +369,83 @@ begin
 						curr_state <= SEND_STEPS;
 
 					--
-					-- Need to send out the steps
+					-- Need to get ready to send the steps
 					--
-					when SEND_STEPS =>
+					when SEND_STEPS_PREP =>
 
-						-- Stay here until the stepper unit 
-						--	says that it is done sending the steps
-						if (steps_done = '1') then
-							curr_state <= IDLE;
-							-- reset first run if it is set.
-							first_run <= '0';
-							do_steps  <= '0';
+						-- Need tof igure out which direction
+						--	to run the stepper motor
+						if (first_run = '1') then
+							step_dir <= '1';
 						else
-							curr_state <= SEND_STEPS;
+							if (new_steps(9) = '1') then
+								step_dir <= not old_dir;
+							else
+								step_dir <= old_dir;
+							end if; 
+						end if;
+
+						-- Latch the number of steps which need
+						--	to be taken.
+						num_steps <= abs_steps(8 downto 0);
+
+						-- Need to initialize the step wait counter to 0
+						step_wait_counter <= (others => '0');
+
+						-- Indicate that we are stepping
+						n_stepping <= '0';
+
+						curr_state <= SEND_STEPS_HIGH;
+
+					--
+					-- Send the first half of the step
+					--
+					when SEND_STEPS_HIGH =>
+
+						-- Send the step
+						step <= '1';
+
+						-- Increment the counter
+						step_wait_counter <= std_logic_vector(unsigned(step_wait_counter) + 1);
+
+						-- If the counter is at a max, then move onto the low portion of the step
+						if (unsigned(step_wait_counter) = 255) then
+							curr_state <= SEND_STEPS_LOW;
+						else
+							curr_state <= SEND_STEPS_HIGH;
+						end if;
+
+					--
+					-- Send the second half of the step
+					--
+					when SEND_STEPS_LOW =>
+
+						-- Send step back low
+						step <= '0';
+
+						-- Increment the counter
+						step_wait_counter <= std_logic_vector(unsigned(step_wait_counter) + 1);
+
+						-- If the counter is at a max, move onto the high portion of the
+						--	step unless we are done.
+						if (unsigned(step_wait_counter) = 255) then
+
+							-- If we just sent the last step
+							if (unsigned(num_steps) = 1) then
+								-- Remember the direction we stepped in
+								old_dir 	<= step_dir;
+								-- And go back to idle
+								curr_state 	<= IDLE;
+
+							-- Otherwise decrement the number of steps to go and 
+							--	go back to the high part
+							else
+								curr_state 	<= SEND_STEPS_HIGH;
+								num_steps 	<= std_logic_vector(unsigned(num_steps) - 1);
+							end if;
+
+						else
+							curr_state <= SEND_STEPS_LOW;
 						end if;
 
 					--
@@ -400,75 +461,6 @@ begin
 		end if;
 
 	end process;
-
-	--
-	-- Now act on the stepper
-	--
-	n_stepping <= done_steps;
-	step 		<= step_sig;
-	dir			<= step_dir;
-
-	doStep : process(step_clk)
-	begin
-
-		if (rising_edge(step_clk)) then
-
-			-- If we got a rising edge on the signal to do steps
-			--	then reset the step count and latch 
-			--	the number of steps to do.
-			if (do_steps = '1') then
-
-				-- Reinitialize the step count
-				step_count <= (others => '0');
-
-				-- Latch the number of steps which need to be taken
-				num_steps  <= abs_steps(8 downto 0);
-
-				-- If the new number of steps is negative, then
-				--	we need to reset the direction
-
-				-- If this is the first run, then we do not have an old_dir,
-				--	so arbitrarily initialize the step direction.
-				if (first_run = '1') then
-					step_dir <= '1';
-				else
-					if (new_steps(9) = '1') then
-						step_dir <= not old_dir;
-					else
-						step_dir <= old_dir;
-					end if;
-				end if;
-
-				-- Reset the step signal
-				step_sig 	   <= '0';
-			end if;
-
-			-- If our step count is less that the latched number of steps, 
-			--	take a step and increment the step count
-			if ((unsigned(step_count) < unsigned(num_steps)) and (step_sig = '0') and (do_steps = '1')) then
-				step_sig <= '1';
-				step_count <= std_logic_vector(unsigned(step_count) + 1);
-			else
-				step_sig <= '0';
-			end if;
-
-			--
-			-- If our step count is equal to the number of steps, then we are done
-			--	and should tell the control loop so
-			--
-			if (unsigned(step_count) = unsigned(num_steps))then
-				done_steps 	<= '1';
-				step_sig 	<= '0';
-				old_dir 	<= step_dir;
-			else
-				done_steps <= '0';
-			end if;
-
-		end if;
-
-	end process;
-
-end architecture;
 
 
 
