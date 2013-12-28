@@ -87,14 +87,10 @@ architecture behavioral of TUNER is
 	-- The number of steps to take, multiplied by 1024
 	signal new_steps_x_1024 	: std_logic_vector(22 downto 0);
 	signal step_multiplier		: std_logic_vector(12 downto 0);
-	signal step_multiplier_mux 	: std_logic_vector(12 downto 0);
 	signal new_steps_mux		: std_logic_vector(9 downto 0);
 	signal new_steps			: std_logic_vector(9 downto 0);
 	signal old_steps			: std_logic_vector(9 downto 0);
 	signal abs_steps			: std_logic_vector(9 downto 0);
-
-	signal old_dir				: std_logic;
-	signal new_dir				: std_logic;
 
 	--
 	-- Signals for the differences
@@ -112,6 +108,12 @@ architecture behavioral of TUNER is
 	signal divide_rdy		: std_logic;
 	signal divide_rfd 		: std_logic;
 	signal divide_nd		: std_logic;
+
+	--
+	-- Latch the quotient and fractional after divide
+	--
+	signal latched_quotient			: std_logic_vector(17 downto 0);
+	signal latched_fractional 		: std_logic_vector(9 downto 0);
 
 	-- Signals for the stepper controller to know
 	--	to send steps
@@ -200,9 +202,9 @@ begin
 	--	go to +/- 2. As the algorithm runs, though, the number of steps will
 	--	converge to the correct value without overshooting.
 	--
-	step_multiplier_mux <= 	"0100000000000" when (signed(quotient) >= 2) else
-							"1100000000000" when (signed(quotient) <= -2) else
-							quotient(2 downto 0) & fractional;
+	step_multiplier	 	<= 	"0100000000000" when (signed(latched_quotient) >= 2) else
+							"1100000000000" when (signed(latched_quotient) <= -2) else
+							latched_quotient(2 downto 0) & latched_fractional;
 
 	--
 	-- Now calculate the number of steps by multiplying the step
@@ -239,10 +241,6 @@ begin
 	high_threshold 	<= std_logic_vector("0000000000" & unsigned(expected_freq(23 downto 9)));
 	low_threshold 	<= std_logic_vector(unsigned(not high_threshold) + 1);
 
-	--
-	-- Needed a signal for the direction so that we could read from it
-	--
-	dir			<= new_dir;
 
 	stepClk : process(clk)
 	begin
@@ -329,11 +327,11 @@ begin
 						-- Wait for the divide data to be ready. If it is,
 						--	then we need to latch the data because it is 
 						--	only valid for one cycle.
-
 						divide_nd <= '0';
 
 						if (divide_rdy = '1') then
-							step_multiplier <= step_multiplier_mux;
+							latched_quotient 	<= quotient;
+							latched_fractional 	<= fractional;
 							curr_state 		<= GET_NEW_STEPS;
 						else
 							curr_state 		<= DO_DIVIDE;
@@ -366,17 +364,10 @@ begin
 					--
 					when SEND_STEPS_PREP =>
 
-						-- Need tof igure out which direction
-						--	to run the stepper motor
-						if (first_run = '1') then
-							new_dir <= '1';
-						else
-							if (new_steps(9) = '1') then
-								new_dir <= not old_dir;
-							else
-								new_dir <= old_dir;
-							end if; 
-						end if;
+						-- Always send the stepper motor
+						--	in the direction of the
+						--	steps
+						dir <= new_steps(9);
 
 						-- Latch the number of steps which need
 						--	to be taken.
@@ -426,7 +417,7 @@ begin
 							-- If we just sent the last step
 							if (unsigned(num_steps) = 1) then
 								-- Remember the direction we stepped in
-								old_dir 	<= new_dir;
+								old_dir 	<= dir;
 								-- Reset the first_run signal
 								first_run 	<= '0';
 								-- And go back to idle
