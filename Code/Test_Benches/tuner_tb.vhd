@@ -182,11 +182,14 @@ begin
 				wait for 10 ns;
 				test_new_data <= '0';
 
+				wait for 5 ns;
 				-- Check for tuned here, and if it is tuned then break out of the loop. It's
 				--	kind of an awkward setup to break out, but that's how it's gotta be.
 				if (test_tuned = '1') then
 					exit;
 				end if;
+
+				wait for 5 ns;
 
 	            --
 	            -- Now, wait for the stepping to begin
