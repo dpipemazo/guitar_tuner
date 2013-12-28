@@ -170,7 +170,7 @@ begin
 	--
 
 	divide_nd_sig <= divide_nd and n_reset;
-	stepHzDiv: entity STEPS_HZ_DIVIDER
+	stepHzDiv: entity STEPS_HZ_DIVIDER(STRUCTURE)
 		port map(
 			rfd 		=> divide_rfd,
 			rdy 		=> divide_rdy,
