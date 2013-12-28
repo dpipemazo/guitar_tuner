@@ -122,7 +122,7 @@ architecture TB_ARCHITECTURE of tuner_tb is
 	-- Variable for the random frequency
 	variable string_freq : real;
 
-	signal auto_reset : std_logic;
+	signal auto_n_reset : std_logic;
 
 begin
 
@@ -180,14 +180,14 @@ begin
         -- this process generates a 10 ps period, 50% duty cycle clock, 
         -- which is equivalent to the clock which we will have in our system. 
         if END_SIM = FALSE then
-            test_clock <= '1';
+            test_clk <= '1';
             wait for 5 ps;
         else
             wait;
         end if;
 
         if END_SIM = FALSE then
-            test_clock <= '0';
+            test_clk <= '0';
             wait for 5 ps;
         else
             wait;
@@ -200,10 +200,11 @@ begin
     do_samples : process
     	variable time_count : real;
     	variable sin_val	: real;
+    	variable END_SIM 	: boolean := FALSE;
     begin
 
     	-- Initialize the time count to 0.
-    	time_count := 0;
+    	time_count := 0.0;
 
     	while(END_SIM = FALSE) loop
 
@@ -256,11 +257,11 @@ begin
 		test_run_motor <= '1';
 
 		-- Send the system reset after a clock
-		n_reset <= '1';
+		test_n_reset <= '1';
 		wait for 10 ps;
-		n_reset <= '0';
+		test_n_reset <= '0';
 		wait for 10 ps;
-		n_reset <= '1';
+		test_n_reset <= '1';
 
 		-- Now loop, testing each of the strings
 		while (END_SIM = FALSE) loop
@@ -286,7 +287,7 @@ begin
 
 				-- Wait for the autocorrelation unit to finish. When it does finish,
 				--	make sure that it detects the frequency correctly.
-				while(test_done /= '1') loop
+				while(test_sample_done /= '1') loop
 					wait for 10 ps;
 				end loop;
 
@@ -306,7 +307,7 @@ begin
 	            --
 	            -- Now, wait for the freq_convert unit to finish
 	            --
-	            while(new_freq /= '1') loop
+	            while(test_new_data /= '1') loop
 	            	wait for 10 ps;
 	            end loop;
 
@@ -324,18 +325,18 @@ begin
 	            --
 	            -- Now, wait for the stepping to begin
 	            --
-	   			while(n_stepping /= '0') loop
+	   			while(test_n_stepping /= '0') loop
 	   				wait for 10 ps;
 	   			end loop;
 
 	   			-- Once the stepping has begun, adjust the sample frequency 
 	   			--	after each step
-	   			while(n_stepping = '0') loop
+	   			while(test_n_stepping = '0') loop
 	   				if (test_step = '1') then
 	   					if (test_dir = '1') then
-	   						string_freq := string_freq + 1/rand_step_hz;
+	   						string_freq := string_freq + (1.0/rand_step_hz);
 	   					else
-	   						string_freq := string_freq - 1/rand_steps_hs;
+	   						string_freq := string_freq - (1.0/rand_steps_hz);
 	   					end if;
 
 	   					while(test_step = '1') loop
