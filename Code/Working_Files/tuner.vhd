@@ -258,7 +258,7 @@ begin
 			-- If we get a reset signal or the current string changes or we shouldn't 
 			--	be running the stepper motor
 			--
-			if ( (n_reset = '0') or (not std_match(curr_string, curr_string_latch)) or (run_motor = '0') ) then
+			if ( (n_reset = '0') or (not std_match(curr_string, curr_string_latch)) or (run_motor = '0') or std_match(curr_string, "000") ) then
 				step_wait_counter 	<= (others => '0');
 				curr_state 			<= IDLE;
 				first_run			<= '1';
