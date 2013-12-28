@@ -15,6 +15,7 @@ use work.autocorrelate;
 use work.display;
 use work.user_interface;
 use work.freq_convert;
+use work.tuner;
 
 
 library ieee;
@@ -99,6 +100,15 @@ architecture structural of system is
     signal curr_string          : std_logic_vector(2 downto 0);
     signal motors_thresh        : std_logic_vector(2 downto 0);
 
+    -- Signals for the tuner unit
+    signal new_tune_freq        : std_logic;
+    signal step                 : std_logic;
+    signal dir                  : std_logic;
+    signal tuned                : std_logic;
+    signal n_stepping           : std_logic;
+
+    signal auto_reset          : std_logic;
+
 begin
 
     --
@@ -155,11 +165,15 @@ begin
         port map(
             clk         => clk,
             sample      => sample,
-            n_reset     => n_reset,
+            n_reset     => auto_reset,
             result_div  => auto_result_div,
             result_idx  => auto_result_idx,
             done        => auto_done                                               
         );
+
+    -- Want to reset the autocorrelation unit if we either
+    --  get the reset signal or we are currently stepping
+    auto_reset <= n_reset and n_stepping;
 
     --
     -- The frequency conversion unit. Takes an index and
@@ -175,7 +189,8 @@ begin
             disp_wr_en      => freq_convert_wr_en,
             disp_data       => freq_convert_data,
             quot_out        => freq_quot,
-            frac_out        => freq_frac
+            frac_out        => freq_frac,
+            new_freq        => new_tune_freq
 
         );
 
@@ -193,6 +208,25 @@ begin
             current_string      => curr_string,
             run_auto_tune       => run_motors,
             auto_tune_thresh    => motors_thresh
+        );
+
+    --
+    -- And the tuner unit
+    --
+    tunr : entity TUNER
+        port map(
+            clk             => clk,
+            n_reset         => n_reset,
+            run_motor       => run_motors,
+            curr_string     => curr_string, 
+            div_quotient    => freq_quot,
+            div_fractional  => freq_frac,
+            new_data        => new_tune_freq,
+            step            => step,
+            dir             => dir,
+            tuned           => tuned,
+            n_stepping      => n_stepping
+
         );
 
     --
@@ -219,12 +253,13 @@ begin
     -- Put interesting things on the LEDs
     --
     led(7)          <= sample_valid;
-    led(6)          <=   '1' when std_match(sample, "11") else '0';
-    led(5)          <=   '1' when std_match(sample, "01") else '0';
-    led(4)          <=   '1' when std_match(sample, "00") else '0';
-    led(3)          <=  run_motors;
-    led(2 downto 0) <=  curr_string when (debug_sw = '1') else
-                        motors_thresh;
+    led(6)          <= '1' when std_match(sample, "11") else '0';
+    led(5)          <= '1' when std_match(sample, "01") else '0';
+    led(4)          <= '1' when std_match(sample, "00") else '0';
+    led(3)          <= run_motors;
+    led(2)          <= tuned;
+    led(1)          <= step;
+    led(0)          <= new_tune_freq;
 
     --
     -- Need to synchronize the reset button
