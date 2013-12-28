@@ -213,21 +213,21 @@ begin
     --
     -- And the tuner unit
     --
-    tunr : entity TUNER
-        port map(
-            clk             => clk,
-            n_reset         => n_reset,
-            run_motor       => run_motors,
-            curr_string     => curr_string, 
-            div_quotient    => freq_quot,
-            div_fractional  => freq_frac,
-            new_data        => new_tune_freq,
-            step            => step,
-            dir             => dir,
-            tuned           => tuned,
-            n_stepping      => n_stepping
+    -- tunr : entity TUNER
+    --     port map(
+    --         clk             => clk,
+    --         n_reset         => n_reset,
+    --         run_motor       => run_motors,
+    --         curr_string     => curr_string, 
+    --         div_quotient    => freq_quot,
+    --         div_fractional  => freq_frac,
+    --         new_data        => new_tune_freq,
+    --         step            => step,
+    --         dir             => dir,
+    --         tuned           => tuned,
+    --         n_stepping      => n_stepping
 
-        );
+    --     );
 
     --
     -- Need to set up a multiplexer for the FIFO data. Priority
