@@ -100,7 +100,7 @@ architecture TB_ARCHITECTURE of tuner_tb is
 	signal test_run_motor		: std_logic;
 	signal test_curr_string		: std_logic_vector(2 downto 0);
 	signal test_div_quotient	: std_logic_vector(13 downto 0);
-	signal test_div_fractional	: std_logic_vector(10 downto 0);
+	signal test_div_fractional	: std_logic_vector(9 downto 0);
 	signal test_new_data		: std_logic;
 	signal test_step			: std_logic;
 	signal test_dir				: std_logic;
