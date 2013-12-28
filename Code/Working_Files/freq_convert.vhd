@@ -47,9 +47,6 @@ use ieee.std_logic_1164.all;
 use ieee.std_logic_misc.all;
 use ieee.numeric_std.all;
 
-library work;
-use work.freq_divider;
-
 --
 -- The entity declaration
 --
@@ -120,15 +117,25 @@ architecture behavioral of FREQ_CONVERT is
 
 	signal new_freq_latch : std_logic;
 
-
-
+	component FREQ_DIVIDER is 
+		port(	
+			rfd 		: 	out std_logic;
+			rdy 		: 	out std_logic;
+			nd 			: 	in std_logic;
+			clk 		:	in std_logic;
+			dividend 	:	in std_logic_vector(27 downto 0);
+			quotient 	:	out std_logic_vector(27 downto 0);
+			divisor 	:	in std_logic_vector(23 downto 0);
+			fractional	:	out std_logic_vector(9 downto 0)
+		);
+	end component;
 
 begin
 
 	--
 	-- Wire up the divider
 	--
-	div: entity FREQ_DIVIDER
+	div:  FREQ_DIVIDER
 		port map(
 		    rfd 		=> divide_rfd,
 		    rdy 		=> divide_rdy,
@@ -139,6 +146,7 @@ begin
 		    divisor 	=> freq_divisor,
 		    fractional 	=> freq_fractional
 		);
+		
 	-- New data is the done signal from the autocorrelation unit
 	divide_nd <= sample_done;
 	-- the divisor is the multiplied value of the bin and the divisor
