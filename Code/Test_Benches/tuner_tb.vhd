@@ -14,9 +14,7 @@ use ieee.numeric_std.all;
 use ieee.math_real.all;
 
 library work;
-use work.autocorrelate;
 use work.tuner;
-use work.freq_convert;
 
 -- Test bench entity declaration
 entity tuner_tb is 
