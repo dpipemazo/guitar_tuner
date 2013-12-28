@@ -337,6 +337,7 @@ begin
 							curr_state 		<= DO_DIVIDE;
 						end if;
 
+
 					--
 					-- We need to latch the new number of steps to take
 					--	as well as update the old number of steps
@@ -349,11 +350,9 @@ begin
 						--	just make up the step values
 						if (first_run = '1') then
 							new_steps <= steps_reset_val;
-							old_steps <= steps_reset_val;
 						else
 							-- Latch the step values
 							new_steps <= new_steps_mux;
-							old_steps <= new_steps;
 						end if;
 
 						-- Move onto sending the new steps
@@ -363,6 +362,9 @@ begin
 					-- Need to get ready to send the steps
 					--
 					when SEND_STEPS_PREP =>
+
+						-- Need to update the 'old' steps for next time.
+						old_steps <= new_steps;
 
 						-- Always send the stepper motor
 						--	in the direction of the
