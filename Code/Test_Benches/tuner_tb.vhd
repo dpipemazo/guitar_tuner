@@ -207,6 +207,8 @@ begin
 	   				end if;
 	   			end loop;
 
+	   			wait for 20 ns;
+
 	   		end loop;
 
    			-- Make sure that the frequency which we have after tuning is within
