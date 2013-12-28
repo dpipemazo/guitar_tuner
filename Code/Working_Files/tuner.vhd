@@ -97,6 +97,7 @@ architecture behavioral of TUNER is
 
 	signal old_dir				: std_logic;
 	signal step_dir				: std_logic;
+	signal step_sig				: std_logic;
 
 	--
 	-- Signals for the differences
@@ -143,7 +144,7 @@ architecture behavioral of TUNER is
 	type tune_states is (
 		IDLE,
 		CHECK_TUNED, 
-		DO_DIVDE, 
+		DO_DIVIDE, 
 		GET_NEW_STEPS, 
 		SEND_STEPS			
 	);
@@ -215,7 +216,7 @@ begin
 	--	multiplier by the past number of steps and then truncating
 	--	the low 10 bits 
 	--
-	new_steps_x_1024 	<= signed(old_steps) * signed(step_multiplier);
+	new_steps_x_1024 	<= std_logic_vector(signed(old_steps) * signed(step_multiplier));
 	--
 	-- We are multiplying the old steps value by 2, so we need
 	--	to threshold it at the max and min of +/- 511
@@ -403,6 +404,7 @@ begin
 	-- Now act on the stepper
 	--
 	n_stepping <= done_steps;
+	step 		<= step_sig;
 
 	doStep : process(step_clk)
 	begin
@@ -421,7 +423,7 @@ begin
 			-- If we got a rising edge on the signal to do steps
 			--	then reset the step count and latch 
 			--	the number of steps to do.
-			if ((do_steps) and not (do_steps_latch)) then
+			if ((do_steps = '1') and (do_steps_latch = '0')) then
 
 				-- Reinitialize the step count
 				step_count <= (others => '0');
@@ -438,16 +440,16 @@ begin
 				end if;
 
 				-- Reset the step signal
-				step 	   <= '0';
+				step_sig 	   <= '0';
 			end if;
 
 			-- If our step count is less that the latched number of steps, 
 			--	take a step and increment the step count
-			if ((unsigned(step_count) < unsigned(num_steps)) and (step = '0') and (do_steps = '1')) then
-				step <= '1';
+			if ((unsigned(step_count) < unsigned(num_steps)) and (step_sig = '0') and (do_steps = '1')) then
+				step_sig <= '1';
 				step_count <= std_logic_vector(unsigned(step_count) + 1);
 			else
-				step <= '0';
+				step_sig <= '0';
 			end if;
 
 			--
@@ -456,7 +458,7 @@ begin
 			--
 			if (unsigned(step_count) = unsigned(num_steps))then
 				done_steps 	<= '1';
-				step 		<= '0';
+				step_sig 	<= '0';
 				old_dir 	<= step_dir;
 			else
 				done_steps <= '0';
