@@ -119,7 +119,6 @@ architecture behavioral of TUNER is
 	-- Signals for the stepper controller to know
 	--	to send steps
 	signal do_steps			: std_logic;
-	signal do_steps_latch	: std_logic;
 	signal step_count		: std_logic_vector(8 downto 0);
 	signal num_steps		: std_logic_vector(8 downto 0);
 	signal done_steps_latch : std_logic; -- main clock domain
@@ -248,7 +247,7 @@ begin
 
 
 	-- Do the clock itself
-	step_clk <= not step_clk_counter(7);
+	step_clk <= step_clk_counter(7);
 
 	stepClk : process(clk)
 	begin
@@ -383,6 +382,7 @@ begin
 							curr_state <= IDLE;
 							-- reset first run if it is set.
 							first_run <= '0';
+							do_steps  <= '0';
 						else
 							curr_state <= SEND_STEPS;
 						end if;
@@ -412,62 +412,55 @@ begin
 
 		if (rising_edge(step_clk)) then
 
-			if (n_reset = '0') then
-				old_dir <= '0';
-				step_sig <= '0';
-				step_dir <= '0';
-				done_steps <= '0';
-				do_steps_latch <= '0';
-			else
+			-- If we got a rising edge on the signal to do steps
+			--	then reset the step count and latch 
+			--	the number of steps to do.
+			if (do_steps = '1') then
 
-				-- Need to perform rising-edge detection 
-				--	on the do_steps signal.
-				do_steps_latch <= do_steps;
+				-- Reinitialize the step count
+				step_count <= (others => '0');
 
-				-- If we got a rising edge on the signal to do steps
-				--	then reset the step count and latch 
-				--	the number of steps to do.
-				if ((do_steps = '1') and (do_steps_latch = '0')) then
+				-- Latch the number of steps which need to be taken
+				num_steps  <= abs_steps(8 downto 0);
 
-					-- Reinitialize the step count
-					step_count <= (others => '0');
+				-- If the new number of steps is negative, then
+				--	we need to reset the direction
 
-					-- Latch the number of steps which need to be taken
-					num_steps  <= abs_steps(8 downto 0);
-
-					-- If the new number of steps is negative, then
-					--	we need to reset the direction
+				-- If this is the first run, then we do not have an old_dir,
+				--	so arbitrarily initialize the step direction.
+				if (first_run = '1') then
+					step_dir <= '1'
+				else
 					if (new_steps(9) = '1') then
 						step_dir <= not old_dir;
 					else
 						step_dir <= old_dir;
 					end if;
-
-					-- Reset the step signal
-					step_sig 	   <= '0';
 				end if;
 
-				-- If our step count is less that the latched number of steps, 
-				--	take a step and increment the step count
-				if ((unsigned(step_count) < unsigned(num_steps)) and (step_sig = '0') and (do_steps = '1')) then
-					step_sig <= '1';
-					step_count <= std_logic_vector(unsigned(step_count) + 1);
-				else
-					step_sig <= '0';
-				end if;
+				-- Reset the step signal
+				step_sig 	   <= '0';
+			end if;
 
-				--
-				-- If our step count is equal to the number of steps, then we are done
-				--	and should tell the control loop so
-				--
-				if (unsigned(step_count) = unsigned(num_steps))then
-					done_steps 	<= '1';
-					step_sig 	<= '0';
-					old_dir 	<= step_dir;
-				else
-					done_steps <= '0';
-				end if;
+			-- If our step count is less that the latched number of steps, 
+			--	take a step and increment the step count
+			if ((unsigned(step_count) < unsigned(num_steps)) and (step_sig = '0') and (do_steps = '1')) then
+				step_sig <= '1';
+				step_count <= std_logic_vector(unsigned(step_count) + 1);
+			else
+				step_sig <= '0';
+			end if;
 
+			--
+			-- If our step count is equal to the number of steps, then we are done
+			--	and should tell the control loop so
+			--
+			if (unsigned(step_count) = unsigned(num_steps))then
+				done_steps 	<= '1';
+				step_sig 	<= '0';
+				old_dir 	<= step_dir;
+			else
+				done_steps <= '0';
 			end if;
 
 		end if;
