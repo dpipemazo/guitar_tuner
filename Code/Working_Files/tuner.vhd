@@ -189,15 +189,13 @@ begin
 	-- The inputs to the divider are freq_to_go and freq_moved. We cap these
 	--	values at +/- 127 in Q7.10 form, so need to add that logic in. 
 	--
-	dividend 	<= "011111110000000000" 	when (signed(freq_to_go(24 downto 10)) >= 127) else
-				   freq_to_go(17 downto 0) 	when (signed(freq_to_go(24 downto 10)) > -127) else
-				   "100000010000000000";
-				   
+	dividend 	<= "011111110000000000" when (signed(freq_to_go(24 downto 10)) >= 128) else
+				   "100000010000000000" when (signed(freq_to_go(24 downto 10)) <= -127) else
+				   freq_to_go(17 downto 0);
 
-	divisor 	<= "011111110000000000" 	when (signed(freq_moved(24 downto 10)) >= 127) else
-				   freq_moved(17 downto 0) 	when (signed(freq_moved(24 downto 10)) > -127) else
-				   "100000010000000000";
-				   
+	divisor 	<= "011111110000000000" when (signed(freq_moved(24 downto 10)) >= 128) else
+				   "100000010000000000" when (signed(freq_moved(24 downto 10)) <= -127) else
+				   freq_moved(17 downto 0);
 	--
 	-- The quotient will be limited to +/- 2 plus fractional. When the algorithm starts, 
 	--	the number of steps taken will be small, and this value will most likely 
@@ -267,6 +265,7 @@ begin
 				n_stepping 			<= '1';
 				new_freq			<= (others => '0');
 				old_freq 			<= (others => '0');
+				divide_nd 			<= '0';
 			else
 
 				--
