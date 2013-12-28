@@ -398,7 +398,7 @@ begin
 						step_wait_counter <= std_logic_vector(unsigned(step_wait_counter) + 1);
 
 						-- If the counter is at a max, then move onto the low portion of the step
-						if (unsigned(step_wait_counter) = 255) then
+						if (unsigned(step_wait_counter) = 2) then
 							curr_state <= SEND_STEPS_LOW;
 						else
 							curr_state <= SEND_STEPS_HIGH;
@@ -417,7 +417,7 @@ begin
 
 						-- If the counter is at a max, move onto the high portion of the
 						--	step unless we are done.
-						if (unsigned(step_wait_counter) = 255) then
+						if (unsigned(step_wait_counter) = 2) then
 
 							-- If we just sent the last step
 							if (unsigned(num_steps) = 1) then
