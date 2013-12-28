@@ -22,7 +22,6 @@ use ieee.std_logic_misc.all;
 use ieee.numeric_std.all;
 
 library work;
-use work.steps_hz_divider;
 use work.freq_constants.all;
 
 entity TUNER is
@@ -147,6 +146,19 @@ architecture behavioral of TUNER is
 
 	signal curr_state : tune_states;
 
+	component STEPS_HZ_DIVIDER is 
+		port(	
+			rfd 		: 	out std_logic;
+			rdy 		: 	out std_logic;
+			nd 			: 	in std_logic;
+			clk 		:	in std_logic;
+			dividend 	:	in std_logic_vector(17 downto 0);
+			quotient 	:	out std_logic_vector(17 downto 0);
+			divisor 	:	in std_logic_vector(17 downto 0);
+			fractional	:	out std_logic_vector(9 downto 0)
+		);
+	end component;
+
 begin
 
 	--
@@ -170,7 +182,7 @@ begin
 	--
 
 	divide_nd_sig <= divide_nd and n_reset;
-	stepHzDiv: entity STEPS_HZ_DIVIDER
+	stepHzDiv:  STEPS_HZ_DIVIDER
 		port map(
 			rfd 		=> divide_rfd,
 			rdy 		=> divide_rdy,
