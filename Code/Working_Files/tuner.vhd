@@ -429,7 +429,7 @@ begin
 				-- If this is the first run, then we do not have an old_dir,
 				--	so arbitrarily initialize the step direction.
 				if (first_run = '1') then
-					step_dir <= '1'
+					step_dir <= '1';
 				else
 					if (new_steps(9) = '1') then
 						step_dir <= not old_dir;
