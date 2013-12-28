@@ -240,8 +240,9 @@ begin
 	sample_high_threshold 	<= std_logic_vector(unsigned(auto_sample_max) - unsigned("000" & sample_amplitude(17 downto 3)));
 	sample_low_threshold 	<= std_logic_vector(unsigned(auto_sample_min) + unsigned("000" & sample_amplitude(17 downto 3)));
 
-	-- Make the sample valid always for now.
-	sample_valid <= '1';
+	-- Make the sample valid when it is above a certain threshold.
+	sample_valid <= '1' when (unsigned(auto_sample_max) > 2**15 ) else
+					'0';
 	--
 	-- And finally we can do our sample thresholding
 	--
