@@ -71,6 +71,8 @@ architecture TB_ARCHITECTURE of tuner_tb is
 	type string_freqs is array(0 to 5) of real;
 	constant strings : string_freqs := (82.407, 110.000, 146.832, 195.998, 246.942, 329.628);
 
+	shared variable END_SIM : boolean := FALSE;
+
 begin
 
 	--
@@ -93,9 +95,6 @@ begin
 
 	-- Make the system clock
 	make_clock: process
-
-        variable END_SIM : boolean := FALSE;
-
 	begin
         -- this process generates a 10 ns period, 50% duty cycle clock, 
         -- which is equivalent to the clock which we will have in our system. 
@@ -129,7 +128,6 @@ begin
 	--
 	do_test : process
 		variable string_idx : integer range 0 to 5;
-		variable END_SIM 	: boolean := FALSE;
 		variable string_freq : real;
 		variable rand_step_hz, reported_freq 	: real;
 		variable rand 		 	: real;
@@ -180,14 +178,12 @@ begin
 				wait for 10 ns;
 				test_new_data <= '0';
 
-				wait for 5 ns;
+				wait for 10 ns;
 				-- Check for tuned here, and if it is tuned then break out of the loop. It's
 				--	kind of an awkward setup to break out, but that's how it's gotta be.
 				if (test_tuned = '1') then
 					exit;
 				end if;
-
-				wait for 5 ns;
 
 	            --
 	            -- Now, wait for the stepping to begin
@@ -227,6 +223,12 @@ begin
 
             -- Wait for the tuned signal to drop
             wait for 10 ns;
+
+            if(string_idx = 5) then
+            	string_idx := 0;
+            else
+            	string_idx := string_idx + 1;
+            end if;
 
         end loop;
 
