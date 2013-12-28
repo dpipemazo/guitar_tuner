@@ -263,6 +263,8 @@ begin
 				first_run			<= '1';
 				tuned				<= '0';
 				n_stepping 			<= '1';
+				new_freq			<= (others => '0');
+				old_freq 			<= (others => '0');
 			else
 
 				--
