@@ -266,7 +266,7 @@ begin
 			-- Need to monitor if we are changing strings. If so, 
 			--	act as if it were a reset
 			--
-			curr_string_latch <= not curr_string;
+			curr_string_latch <= curr_string;
 
 			--
 			-- If we get a reset signal or the current string changes or we shouldn't 
@@ -414,55 +414,60 @@ begin
 
 			if (n_reset = '0') then
 				old_dir <= '0';
+				step_sig <= '0';
+				step_dir <= '0';
+				done_steps <= '0';
+				do_steps_latch <= '0';
+			else
 
-			end if;
+				-- Need to perform rising-edge detection 
+				--	on the do_steps signal.
+				do_steps_latch <= do_steps;
 
-			-- Need to perform rising-edge detection 
-			--	on the do_steps signal.
-			do_steps_latch <= do_steps;
+				-- If we got a rising edge on the signal to do steps
+				--	then reset the step count and latch 
+				--	the number of steps to do.
+				if ((do_steps = '1') and (do_steps_latch = '0')) then
 
-			-- If we got a rising edge on the signal to do steps
-			--	then reset the step count and latch 
-			--	the number of steps to do.
-			if ((do_steps = '1') and (do_steps_latch = '0')) then
+					-- Reinitialize the step count
+					step_count <= (others => '0');
 
-				-- Reinitialize the step count
-				step_count <= (others => '0');
+					-- Latch the number of steps which need to be taken
+					num_steps  <= abs_steps(8 downto 0);
 
-				-- Latch the number of steps which need to be taken
-				num_steps  <= abs_steps(8 downto 0);
+					-- If the new number of steps is negative, then
+					--	we need to reset the direction
+					if (new_steps(9) = '1') then
+						step_dir <= not old_dir;
+					else
+						step_dir <= old_dir;
+					end if;
 
-				-- If the new number of steps is negative, then
-				--	we need to reset the direction
-				if (new_steps(9) = '1') then
-					step_dir <= not old_dir;
-				else
-					step_dir <= old_dir;
+					-- Reset the step signal
+					step_sig 	   <= '0';
 				end if;
 
-				-- Reset the step signal
-				step_sig 	   <= '0';
-			end if;
+				-- If our step count is less that the latched number of steps, 
+				--	take a step and increment the step count
+				if ((unsigned(step_count) < unsigned(num_steps)) and (step_sig = '0') and (do_steps = '1')) then
+					step_sig <= '1';
+					step_count <= std_logic_vector(unsigned(step_count) + 1);
+				else
+					step_sig <= '0';
+				end if;
 
-			-- If our step count is less that the latched number of steps, 
-			--	take a step and increment the step count
-			if ((unsigned(step_count) < unsigned(num_steps)) and (step_sig = '0') and (do_steps = '1')) then
-				step_sig <= '1';
-				step_count <= std_logic_vector(unsigned(step_count) + 1);
-			else
-				step_sig <= '0';
-			end if;
+				--
+				-- If our step count is equal to the number of steps, then we are done
+				--	and should tell the control loop so
+				--
+				if (unsigned(step_count) = unsigned(num_steps))then
+					done_steps 	<= '1';
+					step_sig 	<= '0';
+					old_dir 	<= step_dir;
+				else
+					done_steps <= '0';
+				end if;
 
-			--
-			-- If our step count is equal to the number of steps, then we are done
-			--	and should tell the control loop so
-			--
-			if (unsigned(step_count) = unsigned(num_steps))then
-				done_steps 	<= '1';
-				step_sig 	<= '0';
-				old_dir 	<= step_dir;
-			else
-				done_steps <= '0';
 			end if;
 
 		end if;
