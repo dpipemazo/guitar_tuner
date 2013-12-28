@@ -42,15 +42,17 @@ entity TUNER is
 		-- the frequency result
 		div_quotient	: in std_logic_vector(13 downto 0);
 		div_fractional	: in std_logic_vector(9 downto 0);
-		auto_done		: in std_logic;
+		new_data		: in std_logic;
 
 		-- Stepper motor commands
 		step			: out std_logic;
 		dir				: out std_logic;
-		micro			: out std_logic_vector(1 downto 0);
 
 		-- Whether or not the frequency is in tune
-		tuned			: out std_logic
+		tuned			: out std_logic;
+		-- Whether or not the unit is in the process of sending steps
+		--	active low when in the process of stepping. 
+		n_stepping		: out std_logic
 
 	);
 
@@ -131,19 +133,17 @@ architecture behavioral of TUNER is
 	-- Signal telling that it's the first run of the algorithm
 	signal first_run 	: std_logic;
 
+	-- Latch for the old current string to see if we got a nw current string
+
 	--
 	-- States for the tuning state machine
 	--
 	type tune_states is (
-		IDLE, 				-- Waiting for action
-		GET_DIFFERENCE, 	-- Check the difference between the reported 
-							-- frequency and the expected. 
-		GET_HZ_PER_STEP, 	-- Got a new frequency reading, so calculate the 
-							--	new hertz per step constant
-		CALC_NEW_STEPS, 	-- Calculate the number of steps to 
-							--	send in this iteration.
-		SEND_STEPS,			-- Send out the calculated number of 
-							--	steps
+		IDLE,
+		CHECK_TUNED, 
+		DO_DIVDE, 
+		GET_NEW_STEPS, 
+		SEND_STEPS			
 	);
 
 
@@ -259,14 +259,22 @@ begin
 			done_steps_latch <= done_steps;
 			steps_done 		 <= done_steps and not done_steps_latch;
 
+			--
+			-- Need to monitor if we are changing strings. If so, 
+			--	act as if it were a reset
+			--
+			curr_string_latch <= not curr_string;
 
 			--
-			-- Make the stepper clock
+			-- If we get a reset signal or the current string changes or we shouldn't 
+			--	be running the stepper motor
 			--
-			if (n_reset = '0') then
+			if ( (n_reset = '0') or (not std_match(curr_string, curr_string_latch)) or (run_motor = '0') ) then
 				step_clk_counter 	<= (others => '0');
 				curr_state 			<= IDLE;
 				first_run			<= '1';
+				do_steps 			<= '0';
+				tuned				<= '0';
 			else
 				-- Increment the step clock counter
 				step_clk_counter <= std_logic_vector(unsigned(step_clk_counter) + 1);
@@ -283,12 +291,12 @@ begin
 
 						-- If we get a new reading, then move on to
 						--	check the thresholds.
-						if (auto_done = '1') then
+						if (new_data = '1') then
 							-- The new frequency is always the new reading
 							new_freq 	<= div_quotient & div_fractional;
 							old_freq	<= new_freq;
-
 							curr_state 	<= CHECK_TUNED;
+							tuned		<= '0';
 						else
 							curr_state <= IDLE;
 						end if;
@@ -395,6 +403,7 @@ begin
 
 			if (n_reset = '0') then
 				old_dir <= '0';
+
 			end if;
 
 			-- Need to perform rising-edge detection 
@@ -426,7 +435,7 @@ begin
 
 			-- If our step count is less that the latched number of steps, 
 			--	take a step and increment the step count
-			if ((unsigned(step_count) < unsigned(num_steps)) and (step = '0')) then
+			if ((unsigned(step_count) < unsigned(num_steps)) and (step = '0') and (do_steps = '1')) then
 				step <= '1';
 				step_count <= std_logic_vector(unsigned(step_count) + 1);
 			else
@@ -437,7 +446,7 @@ begin
 			-- If our step count is equal to the number of steps, then we are done
 			--	and should tell the control loop so
 			--
-			if (unsigned(step_count) = unsigned(num_steps)) then
+			if (unsigned(step_count) = unsigned(num_steps))then
 				done_steps 	<= '1';
 				step 		<= '0';
 				old_dir 	<= step_dir;

@@ -19,7 +19,7 @@ end freq_convert_tb;
 -- Declare the architecture of the test bench
 architecture TB_ARCHITECTURE of freq_convert_tb is
 	
-	-- The autocorrelation component
+	-- The frequency conversion component
 	component FREQ_CONVERT is 
 		
 		port(
