@@ -23,19 +23,6 @@ end tuner_tb;
 -- Declare the architecture of the test bench
 architecture TB_ARCHITECTURE of tuner_tb is
 
-	-- The autocorrelation component
-	component AUTOCORRELATE is 
-        port (
-            -- Inputs
-            clk       	: in std_logic; 
-            sample      : in std_logic_vector(1 downto 0); 
-            n_reset     : in std_logic;
-            result_div  : out std_logic_vector(11 downto 0);
-            result_idx  : out std_logic_vector(10 downto 0);
-            done        : out std_logic                     
-                                                            
-        );
-    end component;
 
     -- The tuner component
     component TUNER is 
@@ -67,31 +54,6 @@ architecture TB_ARCHITECTURE of tuner_tb is
 		);
     end component;
 
-    -- The frequency conversion component
-	component FREQ_CONVERT is 
-		
-		port(
-			-- System clock 
-			clk 		: in std_logic;						-- system clock
-
-			-- Results from the audio unit
-			divider		: in std_logic_vector(11 downto 0); -- auto divider
-			bin			: in std_logic_vector(10 downto 0); -- auto result
-			sample_done : in std_logic;
-
-			-- Output to the display FIFO
-			disp_wr_en	: out std_logic;					 -- active high
-			disp_data	: out std_logic_vector(15 downto 0); -- data to be written to FIFO
-
-			-- Output frequency to the motors unit
-			quot_out	: out std_logic_vector(13 downto 0);
-			frac_out	: out std_logic_vector(9 downto 0);
-			new_freq	: out std_logic
-
-	);
-
-	end component;
-
     -- Signals to hook up the components
 	signal test_clk				: std_logic;		
 	signal test_n_reset			: std_logic;
@@ -105,22 +67,9 @@ architecture TB_ARCHITECTURE of tuner_tb is
 	signal test_tuned			: std_logic;
 	signal test_n_stepping		: std_logic;
 
-	signal test_result_div		: std_logic_vector(11 downto 0);
-	signal test_result_idx		: std_logic_vector(10 downto 0);
-	signal test_sample_done		: std_logic;
-	signal test_sample			: std_logic_vector(1 downto 0);
-
-	signal test_disp_wr_en		: std_logic;
-	signal test_disp_data		: std_logic_vector(15 downto 0);
-
 	-- type for the string
 	type string_freqs is array(0 to 5) of real;
 	constant strings : string_freqs := (82.407, 110.000, 146.832, 195.998, 246.942, 329.628);
-
-	-- Variable for the random frequency
-	shared variable string_freq : real;
-
-	signal auto_n_reset : std_logic;
 
 begin
 
@@ -165,39 +114,6 @@ begin
         end if;
     end process;    -- end of clock process
 
-    --
-    -- Send out the samples
-    --
-    do_samples : process
-    	variable time_count : real;
-    	variable sin_val	: real;
-    	variable END_SIM 	: boolean := FALSE;
-    begin
-
-    	-- Initialize the time count to 0.
-    	time_count := 0.0;
-
-    	while(END_SIM = FALSE) loop
-
-			-- Calculate the sine.
-            sin_val := sin(MATH_2_PI*time_count*string_freq*1000.0);
-
-            if (sin_val > 0.8) then
-                test_sample <= "10";
-            elsif (sin_val < -0.8) then
-                test_sample <= "11";
-            else
-                test_sample <= "00";
-            end if;
-
-            -- Increment the time count and wait for 10 ps
-            time_count := time_count + 0.00000000001;
-            wait for 10 ps;
-
-        end loop;
-    end process;
-
-
 	--
 	-- Now do the actual test. Test each string by performing the following
 	--	sequence of events:
@@ -214,9 +130,8 @@ begin
 	do_test : process
 		variable string_idx : integer range 0 to 5;
 		variable END_SIM 	: boolean := FALSE;
-
+		variable string_freq : real;
 		variable rand_step_hz, reported_freq 	: real;
-		variable sin_val, time_count : real; 
 		variable rand 		 	: real;
 		variable seed1, seed2 	: positive;
 
