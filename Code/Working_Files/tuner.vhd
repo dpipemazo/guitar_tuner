@@ -129,7 +129,7 @@ architecture behavioral of TUNER is
 	--
 	-- Reset values for old_steps and old_freq
 	--
-	constant steps_reset_val 	: std_logic_vector(9 downto 0) := "00000010000";
+	constant steps_reset_val 	: std_logic_vector(9 downto 0) := "0000010000";
 	constant freq_reset_val 	: std_logic_vector(23 downto 0) := "000000000000000000000000";
 
 	-- Signal telling that it's the first run of the algorithm
