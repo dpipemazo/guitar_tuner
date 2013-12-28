@@ -244,7 +244,7 @@ begin
 		variable END_SIM 	: boolean := FALSE;
 
 		variable rand_step_hz, reported_freq 	: real;
-		variable sin_val, time_count; 
+		variable sin_val, time_count : real; 
 		variable rand 		 	: real;
 		variable seed1, seed2 	: positive;
 
