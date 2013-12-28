@@ -82,7 +82,7 @@ architecture behavioral of TUNER is
 	-- Range 0-255. Used as a wait counter in the state machine in order
 	--	to dilute the system clock down to a level that
 	--	is acceptable for the stpper chip.
-	signal step_wait_counter : std_logic_vector(6 downto 0);
+	signal step_wait_counter : std_logic_vector(7 downto 0);
 
 	-- The number of steps to take, multiplied by 1024
 	signal new_steps_x_1024 	: std_logic_vector(22 downto 0);
