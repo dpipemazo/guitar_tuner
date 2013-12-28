@@ -263,9 +263,7 @@ begin
 				step_wait_counter 	<= (others => '0');
 				curr_state 			<= IDLE;
 				first_run			<= '1';
-				do_steps 			<= '0';
 				tuned				<= '0';
-				step_sig			<= '0';
 				n_stepping 			<= '1';
 			else
 
@@ -357,7 +355,6 @@ begin
 						end if;
 
 						-- Move onto sending the new steps
-						do_steps <= '1';
 						curr_state <= SEND_STEPS_PREP;
 
 					--
