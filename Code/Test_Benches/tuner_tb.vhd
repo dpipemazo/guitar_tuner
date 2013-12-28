@@ -169,7 +169,7 @@ begin
 			--	string constant, we need to run the algorithm to completion and
 			--	see if the string gets tuned
 			--
-			while (test_tuned /= '1') loop
+			while (TRUE) loop
 
 				-- Put the frequency data out for the tuner unit
 				test_div_quotient <= std_logic_vector(to_unsigned(integer(trunc(string_freq)), test_div_quotient'length));
@@ -181,6 +181,12 @@ begin
 				test_new_data <= '1';
 				wait for 10 ns;
 				test_new_data <= '0';
+
+				-- Check for tuned here, and if it is tuned then break out of the loop. It's
+				--	kind of an awkward setup to break out, but that's how it's gotta be.
+				if (test_tuned = '1') then
+					exit;
+				end if;
 
 	            --
 	            -- Now, wait for the stepping to begin
@@ -206,8 +212,6 @@ begin
 	   					wait for 10 ns;
 	   				end if;
 	   			end loop;
-
-	   			wait for 20 ns;
 
 	   		end loop;
 
