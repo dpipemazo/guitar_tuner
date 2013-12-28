@@ -416,8 +416,6 @@ begin
 
 							-- If we just sent the last step
 							if (unsigned(num_steps) = 1) then
-								-- Remember the direction we stepped in
-								old_dir 	<= dir;
 								-- Reset the first_run signal
 								first_run 	<= '0';
 								-- And go back to idle
