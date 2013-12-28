@@ -142,9 +142,7 @@ begin
 		-- Want to run the motor
 		test_run_motor <= '1';
 
-		-- Send the system reset after a clock
-		test_n_reset <= '1';
-		wait for 10 ns;
+		-- Send the system reset immediately to stop the divider from complaining
 		test_n_reset <= '0';
 		wait for 10 ns;	-- Need the step clock to go high
 		test_n_reset <= '1';
