@@ -242,7 +242,7 @@ begin
 	-- We need to figure out the thresholds. Initially, set the
 	--	error to a bit under 5 cents by calculating the 
 	--	expected frequency +/- the expected frequency/12. 
-	high_threshold 	<= "0000000000" & unsigned(expected_freq(23 downto 9);
+	high_threshold 	<= std_logic_vector("0000000000" & unsigned(expected_freq(23 downto 9)));
 	low_threshold 	<= std_logic_vector(unsigned(not high_threshold) + 1);
 
 
@@ -380,7 +380,7 @@ begin
 						if (steps_done = '1') then
 							curr_state <= IDLE;
 							-- reset first run if it is set.
-							first_run <= '0'
+							first_run <= '0';
 						else
 							curr_state <= SEND_STEPS;
 						end if;

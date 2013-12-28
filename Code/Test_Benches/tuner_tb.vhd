@@ -116,7 +116,7 @@ architecture TB_ARCHITECTURE of tuner_tb is
 	signal test_disp_data		: std_logic_vector(15 downto 0);
 
 	-- type for the string
-	type string_freqs is array 0 to 5 of real;
+	type string_freqs is array(0 to 5) of real;
 	constant strings : string_freqs := (82.407, 110.000, 146.832, 195.998, 246.942, 329.628);
 
 	-- Variable for the random frequency
@@ -131,7 +131,7 @@ begin
 	--
 	testTuner : TUNER
 		port map(
-			clk				=> test_clk.
+			clk				=> test_clk,
 			n_reset			=> test_n_reset,
 			run_motor		=> test_run_motor,	
 			curr_string		=> test_curr_string,	
@@ -244,7 +244,7 @@ begin
 		variable END_SIM 	: boolean := FALSE;
 
 		variable rand_step_hz, reported_freq 	: real;
-		variable sin_val, time_count 
+		variable sin_val, time_count; 
 		variable rand 		 	: real;
 		variable seed1, seed2 	: positive;
 
