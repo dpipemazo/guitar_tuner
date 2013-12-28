@@ -273,7 +273,7 @@ begin
         when 3     => cmd <= X"04" & "000" & atn & "000" & atn;  -- headphone volume
         when 5     => cmd <= X"18_0808";  -- PCM volume
         when 6     => cmd <= X"1A" & "00000" & source & "00000" & source;  -- Record source select
-        when 7     => cmd <= X"1C_0808";  -- Record gain = half max
+        when 7     => cmd <= X"1C_0F0F";  -- Record gain = max
         when 9     => cmd <= X"0E_8048";  -- set +20db mic gain
         when 10     => cmd <= X"0A_0000";  -- Set beep volume
         when 11     => cmd <= X"20_8000";  -- PCM out bypass mix1
