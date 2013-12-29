@@ -237,8 +237,8 @@ begin
 	--
 
 	-- Now divide by 4 to get the threshold
-	sample_high_threshold 	<= std_logic_vector(unsigned(auto_sample_max) - unsigned("00" & sample_amplitude(17 downto 2)));
-	sample_low_threshold 	<= std_logic_vector(unsigned(auto_sample_min) + unsigned("00" & sample_amplitude(17 downto 2)));
+	sample_high_threshold 	<= std_logic_vector(unsigned(auto_sample_max) - to_unsigned(1024, auto_sample_max'length));
+	sample_low_threshold 	<= std_logic_vector(unsigned(auto_sample_min) + to_unsigned(1024, auto_sample_max'length));
 
 	-- Make the sample valid when we have maxed out the ADC of the sampler
 	sample_valid <= '1' when ( unsigned(sample_amplitude) > (2**17) ) else
