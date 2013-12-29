@@ -192,7 +192,6 @@ begin
 					-- Clock the new max/min
 					auto_sample_max <= temp_max;
 					auto_sample_min <= temp_min;
-					sample_avg 		<= sample_avg_sum(27 downto 10);
 
 					-- reset the temporary max/min
 					temp_max <= (others => '0');	-- Reset the max to 0
@@ -202,12 +201,12 @@ begin
 				else
 
 					-- If we got a new max
-					if ((signed(ac97_sample_l_in) - signed(sample_avg)) > signed(temp_max)) then
+					if (signed(ac97_sample_l_in) > signed(temp_max)) then
 						temp_max <= ac97_sample_l_in;
 					end if;
 
 					-- If we got a new min
-					if ((signed(ac97_sample_l_in) - signed(sample_avg)) < signed(temp_min)) then
+					if (signed(ac97_sample_l_in) < signed(temp_min)) then
 						temp_min <= ac97_sample_l_in;
 					end if;
 
