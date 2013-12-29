@@ -78,10 +78,10 @@ architecture behavioral of TUNER is
 	signal new_freq		: std_logic_vector(23 downto 0);
 	signal old_freq		: std_logic_vector(23 downto 0);
 
-	-- Range 0-255. Used as a wait counter in the state machine in order
+	-- Range 0-64k. Used as a wait counter in the state machine in order
 	--	to dilute the system clock down to a level that
-	--	is acceptable for the stpper chip.
-	signal step_wait_counter : std_logic_vector(7 downto 0);
+	--	is acceptable for the stpper chip. Want to send roughly 700 - 1000 steps/second
+	signal step_wait_counter : std_logic_vector(15 downto 0);
 
 	-- The number of steps to take, multiplied by 1024
 	signal new_steps_x_1024 	: std_logic_vector(22 downto 0);
@@ -413,7 +413,7 @@ begin
 						step_wait_counter <= std_logic_vector(unsigned(step_wait_counter) + 1);
 
 						-- If the counter is at a max, then move onto the low portion of the step
-						if (unsigned(step_wait_counter) = 255) then
+						if (unsigned(step_wait_counter) = (2**16 - 1)) then
 							curr_state <= SEND_STEPS_LOW;
 						else
 							curr_state <= SEND_STEPS_HIGH;
@@ -432,7 +432,7 @@ begin
 
 						-- If the counter is at a max, move onto the high portion of the
 						--	step unless we are done.
-						if (unsigned(step_wait_counter) = 255) then
+						if (unsigned(step_wait_counter) = (2**16 - 1)) then
 
 							-- If we just sent the last step
 							if (unsigned(num_steps) = 1) then
