@@ -53,7 +53,11 @@ entity system is
         lcd_rs      : out std_logic;
         lcd_rw      : out std_logic;
         lcd_e       : out std_logic;
-        lcd_data    : out std_logic_vector(7 downto 0)
+        lcd_data    : out std_logic_vector(7 downto 0);
+
+        -- Stepper motor I/O
+        motor_step        : out std_logic;
+        motor_dir         : out std_logic
 
     );
 end system;
@@ -229,6 +233,9 @@ begin
 
         );
 
+    motor_step <= step;
+    motor_dir  <= dir;
+
     --
     -- Need to set up a multiplexer for the FIFO data. Priority
     --  is given to the frequency unit. This may cause us to
@@ -257,7 +264,7 @@ begin
     led(5)          <= '1' when std_match(sample, "01") else '0';
     led(4)          <= '1' when std_match(sample, "00") else '0';
     led(3)          <= run_motors;
-    led(2)          <= tuned;
+    led(2)          <= n_stepping;
     led(1)          <= step;
     led(0)          <= dir;
 

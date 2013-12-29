@@ -165,7 +165,7 @@ begin
                     when 3 =>
                         -- If we are not tuned
                         if (got_tuned = '0') then
-                            if (auto_tune = '1') then
+                            if (auto_tune = '1' and not (unsigned(curr_string) = '0')) then
                                 if (run_auto_tune_sig = '0') then
                                     disp_data(7 downto 0) <= auto_tune_stopped(redraw_col);
                                 else
