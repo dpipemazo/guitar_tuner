@@ -211,7 +211,7 @@ begin
 				-- Oterwise we just want to check for a new max/min
 				else
 
-					sample_avg_sum <= signed(sample_avg_sum) + ("0000000000" & signed(ac97_sample_l_in));
+					sample_avg_sum <= std_logic_vector(signed(sample_avg_sum) + ("0000000000" & signed(ac97_sample_l_in)));
 
 					-- If we got a new max
 					if (signed(ac97_sample_l_in) > signed(temp_max)) then
