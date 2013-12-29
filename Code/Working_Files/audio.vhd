@@ -232,7 +232,7 @@ begin
 	-- Compute the amplitude of the sample stream by doing the 
 	--	max minus the min
 	--
-	sample_amplitude <= std_logic_vector(("0" & signed(auto_sample_max)) - ("1" & signed(auto_sample_min)));
+	sample_amplitude <= std_logic_vector(signed("0" & auto_sample_max) - signed("1" & auto_sample_min));
 
 	--
 	-- Now compute the thresholds by subtracting amplitude/4 from the max and adding
@@ -241,8 +241,8 @@ begin
 	--
 
 	-- Now divide by 4 to get the threshold
-	sample_high_threshold 	<= std_logic_vector(signed(auto_sample_max) - ("00" & signed(sample_amplitude(18 downto 3))));
-	sample_low_threshold 	<= std_logic_vector(signed(auto_sample_min) + ("00" & signed(sample_amplitude(18 downto 3))));
+	sample_high_threshold 	<= std_logic_vector(signed(auto_sample_max) - signed("00" & sample_amplitude(18 downto 3))));
+	sample_low_threshold 	<= std_logic_vector(signed(auto_sample_min) + signed("00" & sample_amplitude(18 downto 3))));
 
 	-- Make the sample valid at 1 for now.
 	sample_valid <= '1';
