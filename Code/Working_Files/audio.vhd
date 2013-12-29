@@ -84,7 +84,7 @@ architecture behavioral of AUDIO is
 	-- Signals for finsing the threshold
 	signal sample_high_threshold  	: std_logic_vector(17 downto 0);
 	signal sample_low_threshold	  	: std_logic_vector(17 downto 0);
-	signal sample_amplitude			: std_logic_vector(17 downto 0);
+	signal sample_amplitude			: std_logic_vector(18 downto 0);
 
 	-- Sync signal. Will be acting like a clock so let's buffer it
 	signal sync_clk	: std_logic;
@@ -230,7 +230,7 @@ begin
 	-- Compute the amplitude of the sample stream by doing the 
 	--	max minus the min
 	--
-	-- sample_amplitude <= std_logic_vector(signed(auto_sample_max) - unsigned(auto_sample_min));
+	sample_amplitude <= std_logic_vector(("0" & signed(auto_sample_max)) - ("0" & signed(auto_sample_min)));
 
 	--
 	-- Now compute the thresholds by subtracting amplitude/4 from the max and adding
@@ -239,12 +239,11 @@ begin
 	--
 
 	-- Now divide by 4 to get the threshold
-	sample_high_threshold 	<= std_logic_vector(signed(auto_sample_max) - ("0" & signed(auto_sample_max(17 downto 1))));
-	sample_low_threshold 	<= std_logic_vector(signed(auto_sample_min) + ("0" & signed(auto_sample_max(17 downto 1))));
+	sample_high_threshold 	<= std_logic_vector(signed(auto_sample_max) - ("0" & signed(auto_sample_amplitude(18 downto 2))));
+	sample_low_threshold 	<= std_logic_vector(signed(auto_sample_min) + ("0" & signed(auto_sample_amplitude(18 downto 2))));
 
-	-- Make the sample valid when we have maxed out the ADC of the sampler
-	sample_valid <= '1' when ( signed(auto_sample_max) > (2**16) ) else
-					'0';
+	-- Make the sample valid at 1 for now.
+	sample_valid <= '1';
 	--
 	-- And finally we can do our sample thresholding
 	--
