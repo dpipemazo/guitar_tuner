@@ -142,7 +142,7 @@ begin
 	-- Do "noise cancellation" on the sample out to see if it works
 	--
 	ac97_sample_l_avg_cancelled 	<= std_logic_vector(signed(ac97_sample_l_in) - signed(sample_avg));
-	ac97_sample_r_avg_calcelled		<= std_logic_vector(signed(ac97_sample_r_in) - signed(sample_avg));
+	ac97_sample_r_avg_cancelled		<= std_logic_vector(signed(ac97_sample_r_in) - signed(sample_avg));
 
 	--
 	-- Hook up the state machine that helps 
