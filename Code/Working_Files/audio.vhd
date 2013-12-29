@@ -191,18 +191,18 @@ begin
 
 					-- reset the temporary max/min
 					temp_max <= (others => '0');	-- Reset the max to 0
-					temp_min <= (others => '1');	-- Reset the min to the maximum
+					temp_min <= (others => '1');	-- Reset the min to -1
 
 				-- Oterwise we just want to check for a new max/min
 				else
 
 					-- If we got a new max
-					if (unsigned(ac97_sample_l_in) > unsigned(temp_max)) then
+					if (signed(ac97_sample_l_in) > signed(temp_max)) then
 						temp_max <= ac97_sample_l_in;
 					end if;
 
 					-- If we got a new min
-					if (unsigned(ac97_sample_l_in) < unsigned(temp_min)) then
+					if (signed(ac97_sample_l_in) < signed(temp_min)) then
 						temp_min <= ac97_sample_l_in;
 					end if;
 
@@ -230,24 +230,26 @@ begin
 	-- Compute the amplitude of the sample stream by doing the 
 	--	max minus the min
 	--
-	sample_amplitude <= std_logic_vector(unsigned(auto_sample_max) - unsigned(auto_sample_min));
+	-- sample_amplitude <= std_logic_vector(signed(auto_sample_max) - unsigned(auto_sample_min));
+
 	--
 	-- Now compute the thresholds by subtracting amplitude/8 from the max and adding
-	--	amplitude/8 to the min
+	--	amplitude/8 to the min. We are making the assumption here that
+	--	the max is roughly equal to the min, so that the max/4 is the aplitude/8
 	--
 
 	-- Now divide by 4 to get the threshold
-	sample_high_threshold 	<= std_logic_vector(unsigned(auto_sample_max) - to_unsigned(1024, auto_sample_max'length));
-	sample_low_threshold 	<= std_logic_vector(unsigned(auto_sample_min) + to_unsigned(1024, auto_sample_max'length));
+	sample_high_threshold 	<= std_logic_vector(signed(auto_sample_max) - ("00" & signed(auto_sample_max(17 downto 2)));
+	sample_low_threshold 	<= std_logic_vector(signed(auto_sample_min) + ("00" & signed(auto_sample_max(17 downto 2)));
 
 	-- Make the sample valid when we have maxed out the ADC of the sampler
-	sample_valid <= '1' when ( unsigned(sample_amplitude) > (2**17) ) else
+	sample_valid <= '1' when ( signed(auto_sample_max) > (2**16) ) else
 					'0';
 	--
 	-- And finally we can do our sample thresholding
 	--
-	auto_sample_mux <= 	"11" when (unsigned(ac97_sample_l_in) < unsigned(sample_low_threshold)) else 	-- Sample below min thresh
-						"01" when (unsigned(ac97_sample_l_in) > unsigned(sample_high_threshold)) else 	-- Sample above max thresh
+	auto_sample_mux <= 	"11" when (signed(ac97_sample_l_in) < signed(sample_low_threshold)) else 	-- Sample below min thresh
+						"01" when (signed(ac97_sample_l_in) > signed(sample_high_threshold)) else 	-- Sample above max thresh
 						"00";
 
 
