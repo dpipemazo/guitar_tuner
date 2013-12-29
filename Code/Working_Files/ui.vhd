@@ -41,7 +41,8 @@ entity USER_INTERFACE is
         -- String output
         current_string      : out std_logic_vector(2 downto 0);
         run_auto_tune       : out std_logic;
-        auto_tune_thresh    : out std_logic_vector(2 downto 0)
+        -- Did we get tuned?
+        tuned               : in std_logic
 
 	); 
 
@@ -63,17 +64,14 @@ architecture behavioral of USER_INTERFACE is
     -- Need a signal for toggling the auto tune
     signal run_auto_tune_sig : std_logic;
 
-    -- Need a signal for the auto tune threshold
-    signal auto_tune_thresh_sig : std_logic_vector(2 downto 0);
-
     signal do_reset   : std_logic;
 
+    signal got_tuned  : std_logic;
 begin
 
     -- Put the outputs out
     current_string      <= curr_string;
     run_auto_tune       <= run_auto_tune_sig;
-    auto_tune_thresh    <= auto_tune_thresh_sig;
 
 
 	--
@@ -101,7 +99,7 @@ begin
                 redraw                  <= '0';
                 do_reset                <= '1';
                 run_auto_tune_sig       <= '0';
-                auto_tune_thresh_sig    <= (others => '0');
+                got_tuned               <= '0';
 
             -- Send the reset command to the display unit and then
             --  trigger a normal redraw
@@ -163,17 +161,24 @@ begin
                     when 2 =>
                         disp_data(7 downto 0) <= input_freq_line(redraw_col);
 
-                    -- Row 4: Used if in auto-tune mode. 
+                    -- Row 4: Used if in auto-tune mode or to display that we are tuned
                     when 3 =>
-                        if (auto_tune = '1') then
-                            if (run_auto_tune_sig = '0') then
-                                disp_data(7 downto 0) <= auto_tune_stopped(redraw_col);
+                        -- If we are not tuned
+                        if (got_tuned = '0') then
+                            if (auto_tune = '1') then
+                                if (run_auto_tune_sig = '0') then
+                                    disp_data(7 downto 0) <= auto_tune_stopped(redraw_col);
+                                else
+                                    disp_data(7 downto 0) <= auto_tune_running(redraw_col);
+                                end if;
                             else
-                                disp_data(7 downto 0) <= auto_tune_running(redraw_col);
+                                disp_data(7 downto 0) <= X"20";
                             end if;
+                        -- We are tuned!
                         else
-                            disp_data(7 downto 0) <= X"20";
+                            disp_data(7 downto 0) <= tuned_line(redraw_col);
                         end if;
+                            
                 end case;
 
                 --
@@ -237,16 +242,22 @@ begin
                     auto_tune <= not auto_tune;
                 end if;
 
-                -- Down button. Increments the auto-tune threshold until
-                --  it wraps around
+                -- Down button. Clears the tuned message
                 if(db_buttons(2) = '1') then
-                    auto_tune_thresh_sig <= std_logic_vector(unsigned(auto_tune_thresh_sig) + 1);
+                    got_tuned <= '0';
                 end if;
 
                 -- Every time we get a button, redraw the display.
                 redraw <= '1';
 
+            -- If we got the tuned signal, do a redraw            
+            elsif (tuned = '1') then
+                -- Do the redraw
+                redraw            <= '1';
+                -- Note that we got tuned
+                got_tuned         <= '1';
             end if;
+
 
         end if;
 

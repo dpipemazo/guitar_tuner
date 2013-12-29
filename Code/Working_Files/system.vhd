@@ -98,7 +98,6 @@ architecture structural of system is
     -- Signals for the controls coming from the user interface unit
     signal run_motors           : std_logic;
     signal curr_string          : std_logic_vector(2 downto 0);
-    signal motors_thresh        : std_logic_vector(2 downto 0);
 
     -- Signals for the tuner unit
     signal new_tune_freq        : std_logic;
@@ -208,7 +207,7 @@ begin
             disp_fifo_full      => disp_fifo_full,
             current_string      => curr_string,
             run_auto_tune       => run_motors,
-            auto_tune_thresh    => motors_thresh
+            tuned               => tuned
         );
 
     --
@@ -260,7 +259,7 @@ begin
     led(3)          <= run_motors;
     led(2)          <= tuned;
     led(1)          <= step;
-    led(0)          <= new_tune_freq;
+    led(0)          <= dir;
 
     --
     -- Need to synchronize the reset button
