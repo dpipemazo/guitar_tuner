@@ -41,7 +41,7 @@ package display_constants is
     constant input_freq_line : disp_line :=
         --I     n     p     u     t    ' '   ' '    F     r     e     q    ' '    X     X     X     X     .     X     X     X
         (X"49",X"6E",X"70",X"75",X"74",X"20",X"20",X"46",X"72",X"65",X"71",X"20",X"58",X"58",X"58",X"58",X"2E",X"58",X"58",X"58");
-    constant note_line       : disp_line := 
+    constant tuned_line       : disp_line := 
         --  =     =     =    =     =     =     =     T     u     n    e     d     !      =     =     =     =     =     =     =  
         (X"FE",X"FE",X"FE",X"FE",X"FE",X"FE",X"FE",X"54",X"75",X"6E",X"65",X"64",X"21",X"FE",X"FE",X"FE",X"FE",X"FE",X"FE",X"FE");
     constant auto_tune_running       : disp_line := 
