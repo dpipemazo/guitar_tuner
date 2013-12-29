@@ -195,18 +195,18 @@ begin
 
 					-- reset the temporary max/min
 					temp_max <= (others => '0');	-- Reset the max to 0
-					temp_min <= (others => '1');	-- Reset the min to -1
+					temp_min <= (others => '0');	-- Reset the min to -1
 
 				-- Oterwise we just want to check for a new max/min
 				else
 
 					-- If we got a new max
-					if (signed(ac97_sample_l_in) > signed(temp_max)) then
+					if (signed(ac97_sample_l_in) > signed(temp_max) or (signed(temp_max) = 0)) then
 						temp_max <= ac97_sample_l_in;
 					end if;
 
 					-- If we got a new min
-					if (signed(ac97_sample_l_in) < signed(temp_min)) then
+					if (signed(ac97_sample_l_in) < signed(temp_min) or (signed(temp_min) = 0)) then
 						temp_min <= ac97_sample_l_in;
 					end if;
 
@@ -232,7 +232,7 @@ begin
 	-- Compute the amplitude of the sample stream by doing the 
 	--	max minus the min
 	--
-	sample_amplitude <= std_logic_vector(signed("0" & auto_sample_max) - signed("1" & auto_sample_min));
+	sample_amplitude <= std_logic_vector(signed(auto_sample_max(17) & auto_sample_max) - signed(auto_sample_min(17) & auto_sample_min));
 
 	--
 	-- Now compute the thresholds by subtracting amplitude/4 from the max and adding
