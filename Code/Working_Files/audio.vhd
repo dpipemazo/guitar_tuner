@@ -241,8 +241,8 @@ begin
 	--
 
 	-- Now divide by 4 to get the threshold
-	sample_high_threshold 	<= std_logic_vector(signed(auto_sample_max) - signed("00" & sample_amplitude(18 downto 3))));
-	sample_low_threshold 	<= std_logic_vector(signed(auto_sample_min) + signed("00" & sample_amplitude(18 downto 3))));
+	sample_high_threshold 	<= std_logic_vector(signed(auto_sample_max) - signed("00" & sample_amplitude(18 downto 3)));
+	sample_low_threshold 	<= std_logic_vector(signed(auto_sample_min) + signed("00" & sample_amplitude(18 downto 3)));
 
 	-- Make the sample valid at 1 for now.
 	sample_valid <= '1';
