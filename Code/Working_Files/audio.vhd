@@ -96,7 +96,7 @@ architecture behavioral of AUDIO is
 	signal ac97_sample_r_in	: std_logic_vector(17 downto 0);
 	signal ac97_sample_l_in	: std_logic_vector(17 downto 0);
 	signal ac97_sample_l_out: std_logic_vector(17 downto 0);
-	signal ac97_sample_l_out: std_logic_vector(17 downto 0);
+	signal ac97_sample_r_out: std_logic_vector(17 downto 0);
 	signal ac97_rdy			: std_logic;
 	signal ac97_cmd_addr	: std_logic_vector(7 downto 0);
 	signal ac97_cmd_data	: std_logic_vector(15 downto 0);
@@ -211,7 +211,7 @@ begin
 				-- Oterwise we just want to check for a new max/min
 				else
 
-					sample_avg_sum <= signed(sample_avg_sum) + signed(ac97_sample_l_in);
+					sample_avg_sum <= signed(sample_avg_sum) + ("0000000000" & signed(ac97_sample_l_in));
 
 					-- If we got a new max
 					if (signed(ac97_sample_l_in) > signed(temp_max)) then
