@@ -245,7 +245,7 @@ begin
 	sample_low_threshold 	<= std_logic_vector(signed(auto_sample_min) + signed("00" & sample_amplitude(18 downto 3)));
 
 	-- Make the sample valid at 1 for now.
-	sample_valid <= '1';
+	sample_valid <= '1' when (signed(sample_amplitude) > 2**15) else '0';
 	--
 	-- And finally we can do our sample thresholding
 	--

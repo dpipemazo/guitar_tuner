@@ -575,7 +575,7 @@ begin
 				samp_counter 	<= (others => '0');
 
 				-- If we are done finding the pitch
-				if (std_match(clk_div, new_clk_div)) then
+				if (std_match(clk_div, new_clk_div) or (unsigned(peak_idx) >= 1024)) then
 					clk_div 		<= (others => '1');
 					done_sig		<= '1';
 
