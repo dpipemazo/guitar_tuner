@@ -95,6 +95,8 @@ architecture behavioral of AUDIO is
 	-- Signals to hook up the ac97 unit
 	signal ac97_sample_r_in	: std_logic_vector(17 downto 0);
 	signal ac97_sample_l_in	: std_logic_vector(17 downto 0);
+	signal ac97_sample_l_out: std_logic_vector(17 downto 0);
+	signal ac97_sample_l_out: std_logic_vector(17 downto 0);
 	signal ac97_rdy			: std_logic;
 	signal ac97_cmd_addr	: std_logic_vector(7 downto 0);
 	signal ac97_cmd_data	: std_logic_vector(15 downto 0);
@@ -102,6 +104,10 @@ architecture behavioral of AUDIO is
 	-- Need a signal to do the source selection since we only
 	--	care about one bit
 	signal source_sig : std_logic_vector(2 downto 0);
+
+	-- Do noise cancellation on the sample average
+	signal sample_avg : std_logic_vector(17 downto 0);
+	signal sample_avg_sum : std_logic_vector(27 downto 0);
 
 
 begin
@@ -124,13 +130,19 @@ begin
 	      ac97_bitclk  => bitclk,
 	      ac97_reset   => audrst,
 	      ready        => ac97_rdy,
-	      L_o          => ac97_sample_l_in, -- For debug purposes, just
-	      R_o          => ac97_sample_r_in,	-- feed the input back out for
+	      L_o          => ac97_sample_l_out, -- For debug purposes, just
+	      R_o          => ac97_sample_r_out,	-- feed the input back out for
 	      L_i          => ac97_sample_l_in, -- the time being
 	      R_i          => ac97_sample_r_in,
 	      cmd_addr     => ac97_cmd_addr,
 	      cmd_data     => ac97_cmd_data
 		);
+
+	--
+	-- Do "noise cancellation" on the sample out to see if it works
+	--
+	ac97_sample_l_out 	<= std_logic_vector(signed(ac97_sample_l_in) - signed(sample_avg));
+	ac97_sample_r_out	<= std_logic_vector(signed(ac97_sample_r_in) - signed(sample_avg));
 
 	--
 	-- Hook up the state machine that helps 
@@ -175,6 +187,8 @@ begin
 				sync_clk_counter <= (others => '0');
 				temp_max <= (others => '0');
 				temp_min <= (others => '1');
+				sample_avg_sum <= (others => '0');
+				sample_avg <= (others => '0');
 
 			-- Else, not reset. We should be okay
 			else
@@ -188,6 +202,7 @@ begin
 					-- Clock the new max/min
 					auto_sample_max <= temp_max;
 					auto_sample_min <= temp_min;
+					sample_avg 		<= sample_avg_sum(27 downto 10);
 
 					-- reset the temporary max/min
 					temp_max <= (others => '0');	-- Reset the max to 0
@@ -195,6 +210,8 @@ begin
 
 				-- Oterwise we just want to check for a new max/min
 				else
+
+					sample_avg_sum <= signed(sample_avg_sum) + signed(ac97_sample_l_in);
 
 					-- If we got a new max
 					if (signed(ac97_sample_l_in) > signed(temp_max)) then
@@ -230,7 +247,7 @@ begin
 	-- Compute the amplitude of the sample stream by doing the 
 	--	max minus the min
 	--
-	sample_amplitude <= std_logic_vector(("0" & signed(auto_sample_max)) - ("0" & signed(auto_sample_min)));
+	sample_amplitude <= std_logic_vector(("0" & signed(auto_sample_max)) - ("0" & signed(auto_sample_min)) - ("0" & signed(sample_avg)));
 
 	--
 	-- Now compute the thresholds by subtracting amplitude/4 from the max and adding
@@ -239,8 +256,8 @@ begin
 	--
 
 	-- Now divide by 4 to get the threshold
-	sample_high_threshold 	<= std_logic_vector(signed(auto_sample_max) - ("0" & signed(sample_amplitude(18 downto 2))));
-	sample_low_threshold 	<= std_logic_vector(signed(auto_sample_min) + ("0" & signed(sample_amplitude(18 downto 2))));
+	sample_high_threshold 	<= std_logic_vector(signed(auto_sample_max) - ("00" & signed(sample_amplitude(18 downto 3))));
+	sample_low_threshold 	<= std_logic_vector(signed(auto_sample_min) + ("00" & signed(sample_amplitude(18 downto 3))));
 
 	-- Make the sample valid at 1 for now.
 	sample_valid <= '1';
