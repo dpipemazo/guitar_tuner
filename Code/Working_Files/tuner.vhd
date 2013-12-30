@@ -232,9 +232,10 @@ begin
 	new_steps_x_1024 	<= std_logic_vector(unsigned(old_steps) * unsigned(step_multiplier));
 	--
 	-- We are multiplying the old steps value by 2, so we need
-	--	to threshold it at the max and min of 511, or 9 bis
+	--	to threshold it at the max and min of 511, or 9 bis. If we got to the max, 
+	--	then we should reset the algorithm, since it has gotten out of hand. 
 	--
-	new_steps_mux 		<=  (others => '1') when ( unsigned(new_steps_x_1024(20 downto 10)) >= 512 ) else
+	new_steps_mux 		<=  steps_reset_val when ( unsigned(new_steps_x_1024(20 downto 10)) >= 512 ) else
 							new_steps_x_1024(18 downto 10);
 
 
