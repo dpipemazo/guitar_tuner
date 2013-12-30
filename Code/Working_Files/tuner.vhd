@@ -52,7 +52,10 @@ entity TUNER is
 		tuned			: in std_logic;
 		-- Whether or not the unit is in the process of sending steps
 		--	active low when in the process of stepping. 
-		n_stepping		: out std_logic
+		n_stepping		: out std_logic;
+
+		-- Debug output first_run
+		first_run		: out std_logic
 
 	);
 
