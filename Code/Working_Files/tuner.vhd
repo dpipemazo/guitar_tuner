@@ -190,8 +190,8 @@ begin
 		);
 
 	-- Calculate freq_to_go and freq_moved
-	freq_to_go <= std_logic_vector(signed("0" & expected_freq) 	- signed("0" & new_freq));
-	freq_moved <= std_logic_vector(signed("0" & new_freq) 		- signed("0" & old_freq));
+	freq_to_go <= std_logic_vector(signed('0' & expected_freq) 	- signed('0' & new_freq));
+	freq_moved <= std_logic_vector(signed('0' & new_freq) 		- signed('0' & old_freq));
 
 	-- Calculate the absolute frequency to go and frequency moved
 	abs_freq_to_go <= 	freq_to_go when (freq_to_go(24) = '0') else

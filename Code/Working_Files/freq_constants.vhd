@@ -86,6 +86,4 @@ package freq_constants is
 											);
 
 
-
-
 end package;
