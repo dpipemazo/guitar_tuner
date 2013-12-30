@@ -241,7 +241,7 @@ begin
     --
     motor_step  <= step;
     motor_dir   <= dir;
-    n_step_en   <= n_stepping;
+    n_step_en   <= not run_motors;
     motor_m0    <= '0';
     motor_m1    <= '0';
 
