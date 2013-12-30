@@ -176,7 +176,8 @@ begin
             result_idx  => auto_result_idx,
             done        => auto_done,
             curr_string => curr_string,
-            tuned       => tuned                                               
+            tuned       => tuned,
+            auto_tune   => run_motors                                               
         );
 
     -- Want to reset the autocorrelation unit if we either
