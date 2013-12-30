@@ -78,7 +78,7 @@ architecture behavioral of TUNER is
 	signal step_wait_counter : std_logic_vector(15 downto 0);
 
 	-- The number of steps to take, multiplied by 1024
-	signal new_steps_x_1024 	: std_logic_vector(21 downto 0);
+	signal new_steps_x_1024 	: std_logic_vector(20 downto 0);
 	signal step_multiplier		: std_logic_vector(11 downto 0);
 	signal new_steps_mux		: std_logic_vector(8 downto 0);
 	signal new_steps			: std_logic_vector(8 downto 0);
@@ -223,8 +223,8 @@ begin
 	-- We are multiplying the old steps value by 2, so we need
 	--	to threshold it at the max and min of 511, or 9 bis
 	--
-	new_steps_mux 		<=  (others => '1') when ( unsigned(new_steps_x_1024(21 downto 10)) >= 512 ) else
-							new_steps_x_1024(19 downto 10);
+	new_steps_mux 		<=  (others => '1') when ( unsigned(new_steps_x_1024(20 downto 10)) >= 512 ) else
+							new_steps_x_1024(18 downto 10);
 
 
 	stepClk : process(clk)
