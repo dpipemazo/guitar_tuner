@@ -56,8 +56,11 @@ entity system is
         lcd_data    : out std_logic_vector(7 downto 0);
 
         -- Stepper motor I/O
-        motor_step        : out std_logic;
-        motor_dir         : out std_logic
+        motor_step          : out std_logic;
+        motor_dir           : out std_logic;
+        n_step_en           : out std_logic;
+        motor_m0            : out std_logic;
+        motor_m1            : out std_logic
 
     );
 end system;
@@ -233,8 +236,14 @@ begin
 
         );
 
-    motor_step <= step;
-    motor_dir  <= dir;
+    --
+    -- Assign the stepper motor signals
+    --
+    motor_step  <= step;
+    motor_dir   <= dir;
+    n_step_en   <= n_stepping;
+    motor_m0    <= '0';
+    motor_m1    <= '0';
 
     --
     -- Need to set up a multiplexer for the FIFO data. Priority
