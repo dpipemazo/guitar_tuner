@@ -229,10 +229,11 @@ entity AUTOCORRELATE is
 														--	where we attempt to identify any frequency,
 														--	or fixed mode where we are only looking for 
 														--	the frequency of interest
-		tuned		: out std_logic						-- Active high. Is the string 
+		tuned		: out std_logic;					-- Active high. Is the string 
 														--	being tested in tune? To be in tune, 
 														--	the bin must match the expected bin. See
 														--	freq_constants.vhd for more detail.
+		motor_on	: in std_logic
 	);
 
 end AUTOCORRELATE;
@@ -637,12 +638,26 @@ begin
 					result_idx		<= peak_idx(10 downto 0);
 					result_div 		<= clk_div;
 
-					-- Check to see if we are tuned
-					if (std_match(peak_idx(10 downto 0), string_bins(to_integer(unsigned(curr_string) - 1)))) then 
-						tuned <= '1';
+					-- Be more strict on the tuning threshold if we are not using the motors. 
+					--	If we are using the motors, allow for +/- 1 bin.
+					if (auto_on = '0') then
+						-- Check to see if we are tuned
+						if (std_match(peak_idx(10 downto 0), string_bins(to_integer(unsigned(curr_string) - 1)))) then 
+							tuned <= '1';
+						else
+							tuned <= '0';
+						end if;
 					else
-						tuned <= '0';
-					end if;
+						-- Check to see if we are tuned. Allow +/- 1 on the thresholds
+						if (std_match(peak_idx(10 downto 0), string_bins(to_integer(unsigned(curr_string) - 1))) or 
+							std_match(peak_idx(10 downto 0), std_logic_vector(unsigned(string_bins(to_integer(unsigned(curr_string) - 1))) + 1)) or
+							std_match(peak_idx(10 downto 0), std_logic_vector(unsigned(string_bins(to_integer(unsigned(curr_string) - 1))) - 1)) then
+
+							tuned <= '1';
+						else
+							tuned <= '0';
+						end if;
+						
 				end if;	
 
 			--
