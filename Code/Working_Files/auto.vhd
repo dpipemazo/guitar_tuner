@@ -551,7 +551,7 @@ begin
 					-- For now, just take the latest peak, since we are only worried about
 					--	guitar frequencies and we are currently registering overtones
 					--	which is annoying.
-					if (unsigned(max_detect_1) >= (unsigned(peak_val)) ) then
+					if (unsigned(max_detect_1) >= ((unsigned(peak_val)) + std_logic_vector(to_unsigned(100, peak_val'length)))) then
 						peak_val <= "0" & max_detect_1;
 						peak_idx <= std_logic_vector(unsigned(samp_counter) - to_unsigned(1089, samp_counter'length));
 					end if;
