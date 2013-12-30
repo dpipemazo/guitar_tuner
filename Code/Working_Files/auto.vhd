@@ -194,6 +194,9 @@ use ieee.std_logic_1164.all;
 use ieee.std_logic_misc.all;
 use ieee.numeric_std.all; 
 
+library work;
+use work.freq_constants.all;
+
 --
 -- Declare the I/O
 --
@@ -216,9 +219,16 @@ entity AUTOCORRELATE is
 														-- autocorrelation value. Should
 														-- be close to 1024.
 
-		done		: out std_logic						-- Sampling is complete and the 
+		done		: out std_logic;					-- Sampling is complete and the 
 														--	frequency has been found.
 														--	high for one system clock
+
+		curr_string	: in std_logic_vector(2 downto 0)	-- The current string which the system
+														--	is working on. This will tell us
+														--	which mode to search in: free mode
+														--	where we attempt to identify any frequency,
+														--	or fixed mode where we are only looking for 
+														--	the frequency of interest
 	);
 
 end AUTOCORRELATE;
@@ -489,6 +499,7 @@ begin
 	sample_clock_mux <= '1' when ((unsigned(clk_counter) < ("0" & unsigned(clk_div(11 downto 1)))) or (n_reset = '0')) else
 						'0';
 
+
 	-- Generate the sample clock and update the clock counter
 	MakeSampleClock : process(clk)
 	begin
@@ -579,25 +590,39 @@ begin
 				-- We are done with the cycle so reset the sample counter
 				samp_counter 	<= (others => '0');
 
-				-- If we are done finding the pitch
-				if (std_match(clk_div, new_clk_div) or (unsigned(peak_idx) >= 1024)) then
-					clk_div 		<= (others => '1');
-					done_sig		<= '1';
+				-- Proceed with the general tuning algorithm if the current string
+				--	is zero i.e. we are not looking for a particular string.
+				if (std_match(curr_string, "000")) then
+					-- If we are done finding the pitch
+					if (std_match(clk_div, new_clk_div) or (unsigned(peak_idx) >= 1024)) then
+						clk_div 		<= (others => '1');
+						done_sig		<= '1';
+
+						-- Post the results!
+						result_idx		<= peak_idx(10 downto 0);
+						result_div 		<= clk_div;
+					-- If we are not done finding the pitch, 
+					--	but we found a harmonic or our divider got
+					--	messed up.
+					elsif(unsigned(new_clk_div) < 10) then
+						clk_div 		<= (others => '1');
+						done_sig 		<= '0';
+					-- Just need to continue on with the algorithm
+					else
+						clk_div 		<= new_clk_div;
+						done_sig 		<= '0';
+					end if;
+				-- We are looking for a specific string. End the algorithm whenever
+				--	we finish one run at the clock divider rate and
+				--	then output the results.
+				else
+					clk_div 	<= string_dividers(to_integer(unsigned(curr_string) - 1));
+					done_sig 	<= '1';
 
 					-- Post the results!
 					result_idx		<= peak_idx(10 downto 0);
 					result_div 		<= clk_div;
-				-- If we are not done finding the pitch, 
-				--	but we found a harmonic or our divider got
-				--	messed up.
-				elsif(unsigned(new_clk_div) < 10) then
-					clk_div 		<= (others => '1');
-					done_sig 		<= '0';
-				-- Just need to continue on with the algorithm
-				else
-					clk_div 		<= new_clk_div;
-					done_sig 		<= '0';
-				end if;
+				end if;	
 
 			-- If it's any other clock during the cycle, keep everything
 			-- 	as is and increment the sample counter
