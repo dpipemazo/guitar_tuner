@@ -218,11 +218,11 @@
 # onboard VHDCI
 # Channnel 1 connects to P signals, Channel 2 to N signals
 # For the VmodBB, the first IO1-14 are VHDCIIO1<0-13>, and IO15-28 are VHDCIIO02<0-13>
- #NET "motor_dir" 	LOC = "U16" | IOSTANDARD = "LVCMOS33"; # Bank = 2,  Pin name = IO_L2P_CMPCLK,        Sch name = EXP-IO1_P
- #NET "motor_step" 	LOC = "U15" | IOSTANDARD = "LVCMOS33"; # Bank = 2,  Pin name = *IO_L5P,        		Sch name = EXP-IO2_P
- #NET "n_step_en"   LOC = "U13" | IOSTANDARD = "LVCMOS33"; # Bank = 2,  Pin name = IO_L14P_D11,        	Sch name = EXP-IO3_P
- #NET "motor_m0" 	LOC = "M11" | IOSTANDARD = "LVCMOS33"; # Bank = 2,  Pin name = *IO_L15P,        		Sch name = EXP-IO4_P
- #NET "motor_m1" 	LOC = "R11" | IOSTANDARD = "LVCMOS33"; # Bank = 2,  Pin name = IO_L16P,        		Sch name = EXP-IO5_P
+ NET "motor_dir" 	LOC = "U16" | IOSTANDARD = "LVCMOS33"; # Bank = 2,  Pin name = IO_L2P_CMPCLK,        Sch name = EXP-IO1_P
+ NET "motor_step" 	LOC = "U15" | IOSTANDARD = "LVCMOS33"; # Bank = 2,  Pin name = *IO_L5P,        		Sch name = EXP-IO2_P
+ NET "n_step_en"   LOC = "U13" 	| IOSTANDARD = "LVCMOS33"; # Bank = 2,  Pin name = IO_L14P_D11,        	Sch name = EXP-IO3_P
+ NET "motor_m0" 	LOC = "M11" | IOSTANDARD = "LVCMOS33"; # Bank = 2,  Pin name = *IO_L15P,        		Sch name = EXP-IO4_P
+ NET "motor_m1" 	LOC = "R11" | IOSTANDARD = "LVCMOS33"; # Bank = 2,  Pin name = IO_L16P,        		Sch name = EXP-IO5_P
  #NET "VHDCIIO1<5>" LOC = "T12"; # Bank = 2,  Pin name = *IO_L19P,        		Sch name = EXP-IO6_P
  #NET "VHDCIIO1<6>" LOC = "N10"; # Bank = 2,  Pin name = *IO_L20P,        		Sch name = EXP-IO7_P
  #NET "VHDCIIO1<7>" LOC = "M10"; # Bank = 2,  Pin name = *IO_L22P,        		Sch name = EXP-IO8_P
