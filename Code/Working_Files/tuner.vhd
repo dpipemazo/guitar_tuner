@@ -129,6 +129,11 @@ architecture behavioral of TUNER is
 	-- Signal for which direction we need to travel in
 	signal new_dir : std_logic;
 
+	-- wait counter after tuning before beginning autocorrelation again.
+	--	24 bits at 100MHz clock == .16 second wait, which should be enough time to
+	--	let the string settle.
+	signal tune_wait_counter : std_logic_vector(23 downto 0);
+
 	--
 	-- States for the tuning state machine
 	--
@@ -139,7 +144,8 @@ architecture behavioral of TUNER is
 		GET_NEW_STEPS, 
 		SEND_STEPS_PREP,
 		SEND_STEPS_HIGH,
-		SEND_STEPS_LOW			
+		SEND_STEPS_LOW,
+		TUNE_WAIT			
 	);
 
 	signal curr_state : tune_states;
@@ -392,7 +398,7 @@ begin
 						step_wait_counter <= std_logic_vector(unsigned(step_wait_counter) + 1);
 
 						-- If the counter is at a max, then move onto the low portion of the step
-						if (unsigned(step_wait_counter) = (2**16 - 1)) then
+						if (step_wait_counter = (others => '1')) then
 							curr_state <= SEND_STEPS_LOW;
 						else
 							curr_state <= SEND_STEPS_HIGH;
@@ -411,14 +417,14 @@ begin
 
 						-- If the counter is at a max, move onto the high portion of the
 						--	step unless we are done.
-						if (unsigned(step_wait_counter) = (2**16 - 1)) then
+						if (step_wait_counter = (others => '1')) then
 
 							-- If we just sent the last step
 							if (unsigned(num_steps) = 1) then
 								-- Reset the first_run signal
 								first_run 	<= '0';
 								-- And go back to idle
-								curr_state 	<= IDLE;
+								curr_state 	<= TUNE_WAIT;
 
 							-- Otherwise decrement the number of steps to go and 
 							--	go back to the high part
@@ -430,6 +436,17 @@ begin
 						else
 							curr_state <= SEND_STEPS_LOW;
 						end if;
+
+					--
+					-- After sending steps, wait for a bit to let the string pick up its new pitch
+					--
+					when TUNE_WAIT =>
+
+						if (tune_wait_counter = (others => '1')) then
+							curr_state <= IDLE;
+						end if;
+
+						tune_wait_counter <= std_logic_vector(unsigned(wait_counter) + 1);
 
 					--
 					-- In case something goes wrong
