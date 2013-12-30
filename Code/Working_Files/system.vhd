@@ -115,6 +115,8 @@ architecture structural of system is
 
     signal auto_reset          : std_logic;
 
+    signal first_run            : std_logic;
+
 begin
 
     --
@@ -235,7 +237,8 @@ begin
             step            => step,
             dir             => dir,
             tuned           => tuned,
-            n_stepping      => n_stepping
+            n_stepping      => n_stepping,
+            first_run       => first_run
 
         );
 
@@ -275,7 +278,7 @@ begin
     led(6)          <= '1' when std_match(sample, "11") else '0';
     led(5)          <= '1' when std_match(sample, "01") else '0';
     led(4)          <= '1' when std_match(sample, "00") else '0';
-    led(3)          <= run_motors;
+    led(3)          <= first_run;
     led(2)          <= step;
     led(1)          <= dir;
     led(0)          <= tuned;

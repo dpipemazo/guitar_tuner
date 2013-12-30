@@ -52,7 +52,10 @@ entity TUNER is
 		tuned			: in std_logic;
 		-- Whether or not the unit is in the process of sending steps
 		--	active low when in the process of stepping. 
-		n_stepping		: out std_logic
+		n_stepping		: out std_logic;
+
+		-- Debug output first_run
+		first_run		: out std_logic
 
 	);
 
@@ -114,7 +117,7 @@ architecture behavioral of TUNER is
 	--
 	-- Reset values for old_steps and old_freq
 	--
-	constant steps_reset_val 	: std_logic_vector(8 downto 0) := "000100000";
+	constant steps_reset_val 	: std_logic_vector(8 downto 0) := "000001000";
 	constant freq_reset_val 	: std_logic_vector(23 downto 0) := "000000000000000000000000";
 
 	-- Signal telling that it's the first run of the algorithm
