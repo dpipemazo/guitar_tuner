@@ -299,15 +299,15 @@ begin
 
 						-- Cap the dividend at 128 Hz. If we're off by more than 
 						--	128 Hz we have bigger problems
-						if (unsigned(abs_freq_to_go) >= 128) then
-							dividend <= std_logic_vector(to_unsigned(127, dividend'length));
+						if (unsigned(abs_freq_to_go(24 downto 10)) >= 128) then
+							dividend <= "011111111111111111";
 						else
 							dividend <= abs_freq_to_go(17 downto 0);
 						end if;
 
 						-- Also cap the divisor at 128 Hz
-						if (unsigned(abs_freq_moved) >= 128) then
-							divisor <= std_logic_vector(to_unsigned(127, divisor'length));
+						if (unsigned(abs_freq_moved(24 downto 10)) >= 128) then
+							divisor <= "011111111111111111";
 						else
 							divisor <= abs_freq_moved(17 downto 0);
 						end if;
