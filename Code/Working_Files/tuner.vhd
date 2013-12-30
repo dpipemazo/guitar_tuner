@@ -123,12 +123,15 @@ architecture behavioral of TUNER is
 	-- Latch for the old current string to see if we got a nw current string
 	signal curr_string_latch : std_logic_vector(2 downto 0);
 
+	-- Signal for which direction we need to travel in
+	signal new_dir : std_logic;
+
 	--
 	-- States for the tuning state machine
 	--
 	type tune_states is (
 		IDLE,
-		DIVIDE_PREP, 
+		GET_FREQS_AND_DIR, 
 		DO_DIVIDE, 
 		GET_NEW_STEPS, 
 		SEND_STEPS_PREP,
