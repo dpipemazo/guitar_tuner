@@ -63,12 +63,6 @@ end TUNER;
 -- The architecture
 --
 architecture behavioral of TUNER is
-	
-	-- High and low thresholds for being in tune. These
-	--	will be set to the expected frequency +/- 
-	--	a certain number of cents' worth of error.
-	signal high_threshold : std_logic_vector(24 downto 0);
-	signal low_threshold  : std_logic_vector(24 downto 0);
 
 	-- Signal for the expected frequency, since it's a 
 	--	hassle to write all of the time
@@ -84,18 +78,20 @@ architecture behavioral of TUNER is
 	signal step_wait_counter : std_logic_vector(15 downto 0);
 
 	-- The number of steps to take, multiplied by 1024
-	signal new_steps_x_1024 	: std_logic_vector(22 downto 0);
-	signal step_multiplier		: std_logic_vector(12 downto 0);
-	signal new_steps_mux		: std_logic_vector(9 downto 0);
-	signal new_steps			: std_logic_vector(9 downto 0);
-	signal old_steps			: std_logic_vector(9 downto 0);
-	signal abs_steps			: std_logic_vector(9 downto 0);
+	signal new_steps_x_1024 	: std_logic_vector(21 downto 0);
+	signal step_multiplier		: std_logic_vector(11 downto 0);
+	signal new_steps_mux		: std_logic_vector(8 downto 0);
+	signal new_steps			: std_logic_vector(8 downto 0);
+	signal old_steps			: std_logic_vector(8 downto 0);
+	signal num_steps			: std_logic_vector(8 downto 0);
 
 	--
 	-- Signals for the differences
 	--
 	signal freq_to_go		: std_logic_vector(24 downto 0);
 	signal freq_moved		: std_logic_vector(24 downto 0);
+	signal abs_freq_to_go	: std_logic_vector(24 downto 0);
+	signal abs_freq_moved	: std_logic_vector(24 downto 0);
 
 	--
 	-- Signals for the divider
@@ -115,14 +111,10 @@ architecture behavioral of TUNER is
 	signal latched_quotient			: std_logic_vector(17 downto 0);
 	signal latched_fractional 		: std_logic_vector(9 downto 0);
 
-	-- Signals for the stepper controller to know
-	--	to send steps
-	signal num_steps		: std_logic_vector(8 downto 0);
-
 	--
 	-- Reset values for old_steps and old_freq
 	--
-	constant steps_reset_val 	: std_logic_vector(9 downto 0) := "0000100000";
+	constant steps_reset_val 	: std_logic_vector(8 downto 0) := "000010000";
 	constant freq_reset_val 	: std_logic_vector(23 downto 0) := "000000000000000000000000";
 
 	-- Signal telling that it's the first run of the algorithm
@@ -195,28 +187,27 @@ begin
 		);
 
 	-- Calculate freq_to_go and freq_moved
-	freq_to_go <= std_logic_vector(("0" & signed(expected_freq)) 	- ("0" & signed(new_freq)));
-	freq_moved <= std_logic_vector(("0" & signed(new_freq)) 		- ("0" & signed(old_freq)));
+	freq_to_go <= std_logic_vector(signed("0" & expected_freq) 	- signed("0" & new_freq));
+	freq_moved <= std_logic_vector(signed("0" & new_freq) 		- signed("0" & old_freq));
+
+	-- Calculate the absolute frequency to go and frequency moved
+	abs_freq_to_go <= 	freq_to_go when (freq_to_go(24) = '0') else
+						std_logic_vector(unsigned(not freq_to_go) + 1);	
+	abs_freq_moved <= 	freq_moved when (freq_moved(24) = '0') else
+						std_logic_vector(unsigned(not freq_moved) + 1);
+
+	-- Calculate the new direction based on the sign of freq_to_go and
+	--	the string which we are on. 
+	new_dir 	   <= 	freq_to_go(24) when (	std_match(curr_string, "001") or 
+												std_match(curr_string, "010") or 
+												std_match(curr_string, "011") ) else
+						not freq_to_go(24);
 
 	--
-	-- The inputs to the divider are freq_to_go and freq_moved. We cap these
-	--	values at +/- 127 in Q7.10 form, so need to add that logic in. 
+	-- The quotient will be limited to 2 plus fractional. Quotient will 
+	--	always be positive
 	--
-	dividend 	<= "011111110000000000" when (signed(freq_to_go(24 downto 10)) >= 128) else
-				   "100000010000000000" when (signed(freq_to_go(24 downto 10)) <= -127) else
-				   freq_to_go(17 downto 0);
-
-	divisor 	<= "011111110000000000" when (signed(freq_moved(24 downto 10)) >= 128) else
-				   "100000010000000000" when (signed(freq_moved(24 downto 10)) <= -127) else
-				   freq_moved(17 downto 0);
-	--
-	-- The quotient will be limited to +/- 2 plus fractional. When the algorithm starts, 
-	--	the number of steps taken will be small, and this value will most likely 
-	--	go to +/- 2. As the algorithm runs, though, the number of steps will
-	--	converge to the correct value without overshooting.
-	--
-	step_multiplier	 	<= 	"0100000000000" when (signed(latched_quotient) >= 2) else
-							"1100000000000" when (signed(latched_quotient) <= -2) else
+	step_multiplier	 	<= 	"100000000000" when (unsigned(latched_quotient) >= 2) else
 							latched_quotient(2 downto 0) & latched_fractional;
 
 	--
@@ -224,35 +215,13 @@ begin
 	--	multiplier by the past number of steps and then truncating
 	--	the low 10 bits 
 	--
-	new_steps_x_1024 	<= std_logic_vector(signed(old_steps) * signed(step_multiplier));
+	new_steps_x_1024 	<= std_logic_vector(unsigned(old_steps) * unsigned(step_multiplier));
 	--
 	-- We are multiplying the old steps value by 2, so we need
-	--	to threshold it at the max and min of +/- 511
+	--	to threshold it at the max and min of 511, or 9 bis
 	--
-	new_steps_mux 		<=  "1000000001" when ( signed(new_steps_x_1024(22 downto 10)) <= -512 ) else
-							"0111111111" when ( signed(new_steps_x_1024(22 downto 10)) >= 512 ) else
+	new_steps_mux 		<=  (others => '1') when ( unsigned(new_steps_x_1024(21 downto 10)) >= 512 ) else
 							new_steps_x_1024(19 downto 10);
-
-	--
-	-- Need to take into account that the sign of steps will
-	--	tell which direction relative to the current direction
-	--	the motor should be turned.
-	--
-	abs_steps			<= 	std_logic_vector(unsigned(not new_steps) + 1) when (new_steps(9) = '1') else
-							new_steps;
-
-
-	--
-	---
-	---- CALCULATING THE THRESHOLDS OF BEING IN TUNE
-	---
-	--
-
-	-- We need to figure out the thresholds. Initially, set the
-	--	error to a bit under 5 cents by calculating the 
-	--	expected frequency +/- the expected frequency/12. 
-	high_threshold 	<= std_logic_vector("0000000000" & unsigned(expected_freq(23 downto 9)));
-	low_threshold 	<= std_logic_vector(unsigned(not high_threshold) + 1);
 
 
 	stepClk : process(clk)
@@ -279,7 +248,6 @@ begin
 				old_freq 			<= (others => '0');
 				divide_nd 			<= '0';
 				step				<= '0';
-				dir					<= '0';
 			else
 
 				--
@@ -303,7 +271,7 @@ begin
 							old_freq	<= new_freq;
 
 							-- Prep for divide
-							curr_state 	<= DIVIDE_PREP;
+							curr_state 	<= GET_FREQS_AND_DIR;
 						-- If we're tuned, then reset to first_run for 
 						--	next time. 
 						elsif (tuned = '1') then
@@ -316,7 +284,26 @@ begin
 					-- We want to check and see if the current frequency is 
 					--	within the thresholds
 					--
-					when DIVIDE_PREP =>
+					when GET_FREQS_AND_DIR =>
+
+						-- Latch the frequency to go and the frequency moved
+						dir <= new_dir;
+
+						-- Cap the dividend at 128 Hz. If we're off by more than 
+						--	128 Hz we have bigger problems
+						if (unsigned(abs_freq_to_go) >= 128) then
+							dividend <= std_logic_vector(to_unsigned(127, dividend'length));
+						else
+							dividend <= abs_freq_to_go(17 downto 0);
+						end if;
+
+						-- Also cap the divisor at 128 Hz
+						if (unsigned(abs_freq_moved) >= 128) then
+							divisor <= std_logic_vector(to_unsigned(127, divisor'length));
+						else
+							divisor <= abs_freq_moved(17 downto 0);
+						end if;
+
 
 						-- If this is our first run, then there's no point in
 						--	doing the divide since the data is bad. So skip it
@@ -359,9 +346,11 @@ begin
 						--	just make up the step values
 						if (first_run = '1') then
 							new_steps <= steps_reset_val;
+							num_steps <= steps_reset_val;
 						else
 							-- Latch the step values
 							new_steps <= new_steps_mux;
+							num_steps <= new_steps_mux;
 						end if;
 
 						-- Move onto sending the new steps
@@ -374,15 +363,6 @@ begin
 
 						-- Need to update the 'old' steps for next time.
 						old_steps <= new_steps;
-
-						-- Always send the stepper motor
-						--	in the direction of the
-						--	steps
-						dir <= new_steps(9);
-
-						-- Latch the number of steps which need
-						--	to be taken.
-						num_steps <= abs_steps(8 downto 0);
 
 						-- Need to initialize the step wait counter to 0
 						step_wait_counter <= (others => '0');
