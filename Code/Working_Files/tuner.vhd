@@ -63,12 +63,6 @@ end TUNER;
 -- The architecture
 --
 architecture behavioral of TUNER is
-	
-	-- High and low thresholds for being in tune. These
-	--	will be set to the expected frequency +/- 
-	--	a certain number of cents' worth of error.
-	signal high_threshold : std_logic_vector(24 downto 0);
-	signal low_threshold  : std_logic_vector(24 downto 0);
 
 	-- Signal for the expected frequency, since it's a 
 	--	hassle to write all of the time
@@ -242,19 +236,6 @@ begin
 							new_steps;
 
 
-	--
-	---
-	---- CALCULATING THE THRESHOLDS OF BEING IN TUNE
-	---
-	--
-
-	-- We need to figure out the thresholds. Initially, set the
-	--	error to a bit under 5 cents by calculating the 
-	--	expected frequency +/- the expected frequency/12. 
-	high_threshold 	<= std_logic_vector("0000000000" & unsigned(expected_freq(23 downto 9)));
-	low_threshold 	<= std_logic_vector(unsigned(not high_threshold) + 1);
-
-
 	stepClk : process(clk)
 	begin
 
@@ -279,7 +260,6 @@ begin
 				old_freq 			<= (others => '0');
 				divide_nd 			<= '0';
 				step				<= '0';
-				dir					<= '0';
 			else
 
 				--
