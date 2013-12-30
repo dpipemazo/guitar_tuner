@@ -565,6 +565,8 @@ begin
 							peak_val <= "0" & max_detect_1;
 							peak_idx <= std_logic_vector(unsigned(samp_counter) - to_unsigned(1089, samp_counter'length));
 						end if;
+
+					end if;
 						
 				end if;
 
