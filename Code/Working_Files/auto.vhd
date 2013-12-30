@@ -500,7 +500,7 @@ begin
 						(others => '0');
 
 	-- Sample clock is high when count is greater than divisor/2, else low
-	sample_clock_mux <= '1' when ((unsigned(clk_counter) < ("0" & unsigned(clk_div(11 downto 1)))) or (n_reset = '0')) else
+	sample_clock_mux <= '1' when (unsigned(clk_counter) < ("0" & unsigned(clk_div(11 downto 1)))) else
 						'0';
 
 
@@ -510,13 +510,13 @@ begin
 
 		if (rising_edge(clk)) then
 
-			-- Latch the muxes
-			clk_counter 	<= clk_counter_mux;
-			sample_clock 	<= sample_clock_mux;
+				-- Latch the muxes
+				clk_counter 	<= clk_counter_mux;
+				sample_clock 	<= sample_clock_mux;
 
-			-- Need to do rising edge detection on done_sig for done
-			done_sig_latch 	<= done_sig;
-			done 			<= done_sig and not done_sig_latch;
+				-- Need to do rising edge detection on done_sig for done
+				done_sig_latch 	<= done_sig;
+				done 			<= done_sig and not done_sig_latch;
 
 		end if;
 
@@ -530,6 +530,24 @@ begin
 			-- Latch the muxes
 			samp_counter 	<= samp_counter_mux;
 			clk_div 		<= clk_div_mux;
+
+			--
+			-- Take care of resets
+			--
+			if (n_reset = '0') then
+		
+				done_sig <= '0';
+				tuned <= '0';
+				samp_counter <= (others => '0');
+
+				-- Reset the clock divider based on the string
+				if (std_match(curr_string, "000")) then
+					clk_div <= (others => '1');
+				else
+					clk_div <= string_dividers(to_integer(unsigned(curr_string) - 1));
+				end if;
+
+			end if;
 
 			--
 			-- Do the maximum detection
@@ -579,15 +597,6 @@ begin
 			-- Deal with the sample clock divider and the 
 			--	sample clock counter
 			--
-
-			-- Got the reset signal
-			if (n_reset = '0') then
-
-				-- Reset everything
-				clk_div		 	<= (others => '1');
-				samp_counter 	<= (others => '0');
-				done_sig 	 	<= '0';
-				tuned			<= '0';
 
 			-- If we get a new max and the dividers are the same, then we are done
 			elsif (unsigned(samp_counter) = 2176) then
