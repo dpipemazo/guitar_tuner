@@ -560,7 +560,7 @@ begin
 					-- If we're doing auto-tune, take the peak if it's a maximum, or take any peak past index 600
 					else
 
-						if ( (unsigned(max_detect_1) >= unsigned(peak_val)) or ((unsigned(samp_counter) - to_unsigned(1089, samp_counter'length)) >= 600) ) then
+						if ( unsigned(max_detect_1) >= unsigned(peak_val) ) then
 							peak_val <= "0" & max_detect_1;
 							peak_idx <= std_logic_vector(unsigned(samp_counter) - to_unsigned(1089, samp_counter'length));
 						end if;
