@@ -233,7 +233,7 @@ entity AUTOCORRELATE is
 														--	being tested in tune? To be in tune, 
 														--	the bin must match the expected bin. See
 														--	freq_constants.vhd for more detail.
-		motor_on	: in std_logic
+		auto_tune	: in std_logic
 	);
 
 end AUTOCORRELATE;
@@ -640,7 +640,7 @@ begin
 
 					-- Be more strict on the tuning threshold if we are not using the motors. 
 					--	If we are using the motors, allow for +/- 1 bin.
-					if (auto_on = '0') then
+					if (auto_tune = '0') then
 						-- Check to see if we are tuned
 						if (std_match(peak_idx(10 downto 0), string_bins(to_integer(unsigned(curr_string) - 1)))) then 
 							tuned <= '1';
@@ -657,6 +657,8 @@ begin
 						else
 							tuned <= '0';
 						end if;
+
+					end if;
 						
 				end if;	
 
