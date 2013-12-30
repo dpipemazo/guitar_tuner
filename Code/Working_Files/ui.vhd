@@ -256,6 +256,8 @@ begin
                 redraw            <= '1';
                 -- Note that we got tuned
                 got_tuned         <= '1';
+                -- And turn off the stepper motor
+                run_auto_tune_sig <= '0';
             end if;
 
 

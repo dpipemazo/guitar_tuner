@@ -223,12 +223,16 @@ entity AUTOCORRELATE is
 														--	frequency has been found.
 														--	high for one system clock
 
-		curr_string	: in std_logic_vector(2 downto 0)	-- The current string which the system
+		curr_string	: in std_logic_vector(2 downto 0);	-- The current string which the system
 														--	is working on. This will tell us
 														--	which mode to search in: free mode
 														--	where we attempt to identify any frequency,
 														--	or fixed mode where we are only looking for 
 														--	the frequency of interest
+		tuned		: out std_logic						-- Active high. Is the string 
+														--	being tested in tune? To be in tune, 
+														--	the bin must match the expected bin. See
+														--	freq_constants.vhd for more detail.
 	);
 
 end AUTOCORRELATE;
@@ -583,6 +587,7 @@ begin
 				clk_div		 	<= (others => '1');
 				samp_counter 	<= (others => '0');
 				done_sig 	 	<= '0';
+				tuned			<= '0';
 
 			-- If we get a new max and the dividers are the same, then we are done
 			elsif (unsigned(samp_counter) = 2176) then
@@ -622,6 +627,13 @@ begin
 					-- Post the results!
 					result_idx		<= peak_idx(10 downto 0);
 					result_div 		<= clk_div;
+
+					-- Check to see if we are tuned
+					if (std_match(peak_idx(10 downto 0), string_bins(to_integer(unsigned(curr_string) - 1)))) then 
+						tuned <= '1';
+					else
+						tuned <= '0';
+					end if;
 				end if;	
 
 			-- If it's any other clock during the cycle, keep everything

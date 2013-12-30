@@ -34,13 +34,25 @@ package freq_constants is
 	-- Define the array of sampling dividers to use
 	type string_divider is array(0 to 5) of std_logic_vector(11 downto 0);
 
-	-- Define the dividers
-	constant e2_divider : std_logic_vector(23 downto 0) := "010010100001"; -- 1185
-	constant a2_divider : std_logic_vector(23 downto 0) := "001101111000"; -- 888
-	constant d3_divider : std_logic_vector(23 downto 0) := "001010011001"; -- 665
-	constant g3_divider : std_logic_vector(23 downto 0) := "000111110010"; -- 498
-	constant b3_divider : std_logic_vector(23 downto 0) := "000110001100"; -- 396
-	constant e4_divider : std_logic_vector(23 downto 0) := "000100101000"; -- 296
+	-- Define the dividers. When we are in this mode, we are trying to 
+	--	get the frequency into a bin around 600. This will allow us to 
+	--	detect a little bit less than the frequency/2. This intentional, 
+	--	since we do not want to pick up the signature of 
+	--	the frequency/2 and incorrectly diagnose that frequency
+	--
+	-- The formula for calculating the divider is: 
+	-- 
+	--		div = 10^8/(freq*600)
+	--
+	-- However, 600 is mildly arbitrary. You want the divider to be as close
+	--	to an integer as possible, so move the bin (600) up to achieve this.
+	--	but make sure the bin is somewhere between 600 and 650, preferably closer to 600. 
+	constant e2_divider : std_logic_vector(11 downto 0) := "011111000010"; -- Divider: 1986,  Bin : 611
+	constant a2_divider : std_logic_vector(11 downto 0) := "010111001011"; -- Divider: 1483,  Bin : 613
+	constant d3_divider : std_logic_vector(11 downto 0) := "010001100010"; -- Divider: 1122,  Bin : 607
+	constant g3_divider : std_logic_vector(11 downto 0) := "001101000011"; -- Divider: 835,   Bin : 611
+	constant b3_divider : std_logic_vector(11 downto 0) := "001010011010"; -- Divider: 666,   Bin : 608
+	constant e4_divider : std_logic_vector(11 downto 0) := "000111110011"; -- Divider: 499,   Bin : 608
 
 	-- Define the array of dividers
 	constant string_dividers : string_divider := 	(
@@ -51,6 +63,28 @@ package freq_constants is
 														b3_divider,
 														e4_divider
 													);
+
+	-- Now make an array of the bins which are a result of being in tune
+	type string_bin is array(0 to 5) of std_logic_vector(10 downto 0);
+
+	-- The bin here matches the bin in the comments above
+	constant e2_bin : std_logic_vector(10 downto 0) := "01001100011";	-- Divider: 1986,  Bin : 611
+	constant a2_bin : std_logic_vector(10 downto 0) := "01001100101";	-- Divider: 1483,  Bin : 613
+	constant d3_bin : std_logic_vector(10 downto 0) := "01001011111";	-- Divider: 1122,  Bin : 607
+	constant g3_bin : std_logic_vector(10 downto 0) := "01001100011";	-- Divider: 835,   Bin : 611
+	constant b3_bin : std_logic_vector(10 downto 0) := "01001100000";	-- Divider: 666,   Bin : 608
+	constant e4_bin : std_logic_vector(10 downto 0) := "01001100000";	-- Divider: 499,   Bin : 608
+
+	-- Define the array of bins
+	constant string_bins : string_bin := 	(
+												e2_bin,
+												a2_bin,
+												d3_bin,
+												g3_bin,
+												b3_bin,
+												e4_bin
+											);
+
 
 
 

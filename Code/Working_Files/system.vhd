@@ -175,7 +175,8 @@ begin
             result_div  => auto_result_div,
             result_idx  => auto_result_idx,
             done        => auto_done,
-            curr_string => curr_string                                               
+            curr_string => curr_string,
+            tuned       => tuned                                               
         );
 
     -- Want to reset the autocorrelation unit if we either
@@ -274,9 +275,9 @@ begin
     led(5)          <= '1' when std_match(sample, "01") else '0';
     led(4)          <= '1' when std_match(sample, "00") else '0';
     led(3)          <= run_motors;
-    led(2)          <= n_stepping;
-    led(1)          <= step;
-    led(0)          <= dir;
+    led(2)          <= step;
+    led(1)          <= dir;
+    led(0)          <= tuned;
 
     --
     -- Need to synchronize the reset button
