@@ -235,7 +235,7 @@ begin
 	--	to threshold it at the max and min of 511, or 9 bis. If we got to the max, 
 	--	then we should reset the algorithm, since it has gotten out of hand. 
 	--
-	new_steps_mux 		<=  steps_reset_val when ( unsigned(new_steps_x_1024(20 downto 10)) >= 128 ) else
+	new_steps_mux 		<=  steps_reset_val when ( unsigned(new_steps_x_1024(20 downto 10)) >= 64 ) else
 							new_steps_x_1024(18 downto 10);
 
 
