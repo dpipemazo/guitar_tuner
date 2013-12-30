@@ -532,24 +532,6 @@ begin
 			clk_div 		<= clk_div_mux;
 
 			--
-			-- Take care of resets
-			--
-			if (n_reset = '0') then
-		
-				done_sig <= '0';
-				tuned <= '0';
-				samp_counter <= (others => '0');
-
-				-- Reset the clock divider based on the string
-				if (std_match(curr_string, "000")) then
-					clk_div <= (others => '1');
-				else
-					clk_div <= string_dividers(to_integer(unsigned(curr_string) - 1));
-				end if;
-
-			end if;
-
-			--
 			-- Do the maximum detection
 			--
 			if (unsigned(samp_counter) >= 1088) then
@@ -594,11 +576,29 @@ begin
 			end if;
 
 			--
-			-- Deal with the sample clock divider and the 
-			--	sample clock counter
+			-- If we should be resetting the system, then do so. NOTE: n_reset
+			--	must be low for at least one sample clock, which is at its
+			--	longest a 25 KHz cycle. Seeing as the signal comes from the
+			--	stepper motor unit which dilutes the clock down to 
+			--	700ish Hz and sends steps, we should be fine. 
 			--
+			if (n_reset = '0') then
+		
+				done_sig <= '0';
+				tuned <= '0';
+				samp_counter <= (others => '0');
 
-			-- If we get a new max and the dividers are the same, then we are done
+				-- Reset the clock divider based on the string
+				if (std_match(curr_string, "000")) then
+					clk_div <= (others => '1');
+				else
+					clk_div <= string_dividers(to_integer(unsigned(curr_string) - 1));
+				end if;
+
+			--
+			-- If we don't have a reset, but we have reached the end of 
+			--	the sampling cycle
+			--
 			elsif (unsigned(samp_counter) = 2176) then
 
 				-- We are done with the cycle so reset the sample counter
@@ -645,6 +645,7 @@ begin
 					end if;
 				end if;	
 
+			--
 			-- If it's any other clock during the cycle, keep everything
 			-- 	as is and increment the sample counter
 			else
