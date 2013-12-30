@@ -265,7 +265,7 @@ begin
     --  to make sure that we aren't spitting out
     --  samples faster than it can handle
     --
-    sample_done_sig <= (auto_done and do_sample and disp_fifo_empty and sample_valid);
+    sample_done_sig <= (auto_done and disp_fifo_empty and sample_valid);
 
     --
     -- Put interesting things on the LEDs
