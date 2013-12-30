@@ -174,7 +174,8 @@ begin
             n_reset     => auto_reset,
             result_div  => auto_result_div,
             result_idx  => auto_result_idx,
-            done        => auto_done                                               
+            done        => auto_done,
+            curr_string => curr_string                                               
         );
 
     -- Want to reset the autocorrelation unit if we either
