@@ -446,7 +446,7 @@ begin
 							curr_state <= IDLE;
 						end if;
 
-						tune_wait_counter <= std_logic_vector(unsigned(wait_counter) + 1);
+						tune_wait_counter <= std_logic_vector(unsigned(tune_wait_counter) + 1);
 
 					--
 					-- In case something goes wrong
