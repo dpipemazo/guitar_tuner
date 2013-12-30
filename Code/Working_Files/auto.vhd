@@ -545,18 +545,27 @@ begin
 						(unsigned(max_detect_1) >= unsigned(final_hamming)) and 
 						(not std_match(max_detect_2, "00000000000")) 			) then
 
-					-- If we found a peak which is bigger than the previous peaks by 
-					--	a significant margin, then we want to keep it. 
-					-- if (unsigned(max_detect_1) > (unsigned(peak_val) + to_unsigned(200, peak_val'length)) ) then
+					--
+					-- Break into two cases: free tune and auto-tune
+					--
 
-					-- For now, just take the latest peak, since we are only worried about
-					--	guitar frequencies and we are currently registering overtones
-					--	which is annoying.
-					if (unsigned(max_detect_1) >= ((unsigned(peak_val)) + to_unsigned(100, peak_val'length))) then
-						peak_val <= "0" & max_detect_1;
-						peak_idx <= std_logic_vector(unsigned(samp_counter) - to_unsigned(1089, samp_counter'length));
-					end if;
+					if (auto_tune = '0') then
+						-- For now, just take the latest peak, since we are only worried about
+						--	guitar frequencies and we are currently registering overtones
+						--	which is annoying.
+						if (unsigned(max_detect_1) >= ((unsigned(peak_val)) + to_unsigned(200, peak_val'length))) then
+							peak_val <= "0" & max_detect_1;
+							peak_idx <= std_logic_vector(unsigned(samp_counter) - to_unsigned(1089, samp_counter'length));
+						end if;
 
+					-- If we're doing auto-tune, take the peak if it's a maximum, or take any peak past index 600
+					else
+
+						if ( (unsigned(max_detect_1) >= unsigned(peak_val)) or ((unsigned(samp_counter) - to_unsigned(1089, samp_counter'length)) >= 600) ) then
+							peak_val <= "0" & max_detect_1;
+							peak_idx <= std_logic_vector(unsigned(samp_counter) - to_unsigned(1089, samp_counter'length));
+						end if;
+						
 				end if;
 
 			else
