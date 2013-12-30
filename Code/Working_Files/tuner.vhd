@@ -55,7 +55,7 @@ entity TUNER is
 		n_stepping		: out std_logic;
 
 		-- Debug output first_run
-		first_run		: out std_logic
+		first_run_sig	: out std_logic
 
 	);
 
@@ -158,6 +158,8 @@ architecture behavioral of TUNER is
 	end component;
 
 begin
+
+	first_run_sig <= first_run;
 
 	--
 	---
