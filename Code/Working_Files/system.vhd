@@ -38,9 +38,9 @@ entity system is
         led         : out std_logic_vector(7 downto 0);
         -- switches
         source      : in  std_logic;
-        do_sample   : in  std_logic;
         volume      : in  std_logic_vector(4 downto 0);
-        debug_sw    : in  std_logic;
+        m0_sw       : in  std_logic;
+        m1_sw       : in  std_logic;
 
         -- Need to declare I/O for audio here
         AUDSDI          : in std_logic;
@@ -244,8 +244,8 @@ begin
     motor_step  <= step;
     motor_dir   <= dir;
     n_step_en   <= not run_motors;
-    motor_m0    <= '0';
-    motor_m1    <= '0';
+    motor_m0    <= m0_sw; -- eighth-step microstepping
+    motor_m1    <= m1_sw;
 
     --
     -- Need to set up a multiplexer for the FIFO data. Priority
