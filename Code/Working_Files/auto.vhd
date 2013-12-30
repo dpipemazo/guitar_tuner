@@ -651,7 +651,7 @@ begin
 						-- Check to see if we are tuned. Allow +/- 1 on the thresholds
 						if (std_match(peak_idx(10 downto 0), string_bins(to_integer(unsigned(curr_string) - 1))) or 
 							std_match(peak_idx(10 downto 0), std_logic_vector(unsigned(string_bins(to_integer(unsigned(curr_string) - 1))) + 1)) or
-							std_match(peak_idx(10 downto 0), std_logic_vector(unsigned(string_bins(to_integer(unsigned(curr_string) - 1))) - 1)) then
+							std_match(peak_idx(10 downto 0), std_logic_vector(unsigned(string_bins(to_integer(unsigned(curr_string) - 1))) - 1)) ) then
 
 							tuned <= '1';
 						else
