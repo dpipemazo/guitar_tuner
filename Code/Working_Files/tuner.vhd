@@ -49,7 +49,7 @@ entity TUNER is
 
 		-- Whether or not the frequency is in tune. Will pulse high for 
 		--	one system clock
-		tuned			: out std_logic;
+		tuned			: in std_logic;
 		-- Whether or not the unit is in the process of sending steps
 		--	active low when in the process of stepping. 
 		n_stepping		: out std_logic
@@ -136,7 +136,7 @@ architecture behavioral of TUNER is
 	--
 	type tune_states is (
 		IDLE,
-		CHECK_TUNED, 
+		DIVIDE_PREP, 
 		DO_DIVIDE, 
 		GET_NEW_STEPS, 
 		SEND_STEPS_PREP,
@@ -274,7 +274,6 @@ begin
 				step_wait_counter 	<= (others => '0');
 				curr_state 			<= IDLE;
 				first_run			<= '1';
-				tuned				<= '0';
 				n_stepping 			<= '1';
 				new_freq			<= (others => '0');
 				old_freq 			<= (others => '0');
@@ -293,20 +292,22 @@ begin
 					--
 					when IDLE =>
 
-						--
-						-- Always send tuned back low in idle
-						--
-						tuned <= '0';
 						divide_nd <= '0';
 						n_stepping <= '1';
 
 						-- If we get a new reading, then move on to
 						--	check the thresholds.
-						if (new_data = '1') then
+						if ((new_data = '1') and (tuned = '0')) then
 							-- The new frequency is always the new reading
 							new_freq 	<= div_quotient & div_fractional;
 							old_freq	<= new_freq;
-							curr_state 	<= CHECK_TUNED;
+
+							-- Prep for divide
+							curr_state 	<= DIVIDE_PREP;
+						-- If we're tuned, then reset to first_run for 
+						--	next time. 
+						elsif (tuned = '1') then
+							first_run <= '1';
 						else
 							curr_state <= IDLE;
 						end if;
@@ -315,26 +316,16 @@ begin
 					-- We want to check and see if the current frequency is 
 					--	within the thresholds
 					--
-					when CHECK_TUNED =>
-						-- Need to send the divide new data signal low
-						divide_nd <= '0';
+					when DIVIDE_PREP =>
 
-						-- See if the difference between the input frequency and expected is between the thresholds
-						if ((signed(freq_to_go) < signed(high_threshold)) and (signed(freq_to_go) > signed(low_threshold))) then
-							tuned 		<= '1';
-							first_run 	<= '1';
-							curr_state 	<= IDLE;
+						-- If this is our first run, then there's no point in
+						--	doing the divide since the data is bad. So skip it
+						if (first_run = '1') then
+							curr_state <= GET_NEW_STEPS;
 						else
-							-- If this is our first run, then there's no point in
-							--	doing the divide since the data is bad. So skip it
-							if (first_run = '1') then
-								curr_state <= GET_NEW_STEPS;
-							else
-								divide_nd 	<= '1';
-								curr_state 	<= DO_DIVIDE;
-							end if;
+							divide_nd 	<= '1';
+							curr_state 	<= DO_DIVIDE;
 						end if;
-
 
 
 					--
