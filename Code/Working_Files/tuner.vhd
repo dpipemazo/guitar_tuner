@@ -211,7 +211,7 @@ begin
 	--	always be positive
 	--
 	step_multiplier	 	<= 	"100000000000" when (unsigned(latched_quotient) >= 2) else
-							latched_quotient(2 downto 0) & latched_fractional;
+							latched_quotient(1 downto 0) & latched_fractional;
 
 	--
 	-- Now calculate the number of steps by multiplying the step
