@@ -546,10 +546,9 @@ begin
 						(not std_match(max_detect_2, "00000000000")) 			) then
 
 					--
-					-- Break into two cases: free tune and auto-tune
+					-- Break into two cases: free tune and string-tune
 					--
-
-					if (auto_tune = '0') then
+					if (std_match(curr_string, "000")) then
 						-- For now, just take the latest peak, since we are only worried about
 						--	guitar frequencies and we are currently registering overtones
 						--	which is annoying.
