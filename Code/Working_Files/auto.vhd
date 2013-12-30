@@ -531,7 +531,12 @@ begin
 
 					-- If we found a peak which is bigger than the previous peaks by 
 					--	a significant margin, then we want to keep it. 
-					if (unsigned(max_detect_1) > (unsigned(peak_val) + to_unsigned(200, peak_val'length)) ) then
+					-- if (unsigned(max_detect_1) > (unsigned(peak_val) + to_unsigned(200, peak_val'length)) ) then
+
+					-- For now, just take the latest peak, since we are only worried about
+					--	guitar frequencies and we are currently registering overtones
+					--	which is annoying.
+					if (unsigned(max_detect_1) >= (unsigned(peak_val)) ) then
 						peak_val <= "0" & max_detect_1;
 						peak_idx <= std_logic_vector(unsigned(samp_counter) - to_unsigned(1089, samp_counter'length));
 					end if;
