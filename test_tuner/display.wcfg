@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="C:/Users/Dan/Documents/guitar_tuner/test_tuner/display_tb_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="attributes" />
+            <top_module name="display_constants" />
+            <top_module name="display_tb" />
+            <top_module name="math_real" />
+            <top_module name="numeric_std" />
+            <top_module name="std_logic_1164" />
+            <top_module name="std_logic_arith" />
+            <top_module name="std_logic_misc" />
+            <top_module name="std_logic_unsigned" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="15" />
+   <wvobject fp_name="/display_tb/test_clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">test_clk</obj_property>
+      <obj_property name="ObjectShortName">test_clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/display_tb/test_lcd_rs" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">test_lcd_rs</obj_property>
+      <obj_property name="ObjectShortName">test_lcd_rs</obj_property>
+   </wvobject>
+   <wvobject fp_name="/display_tb/test_lcd_rw" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">test_lcd_rw</obj_property>
+      <obj_property name="ObjectShortName">test_lcd_rw</obj_property>
+   </wvobject>
+   <wvobject fp_name="/display_tb/test_lcd_e" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">test_lcd_e</obj_property>
+      <obj_property name="ObjectShortName">test_lcd_e</obj_property>
+   </wvobject>
+   <wvobject fp_name="/display_tb/test_lcd_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">test_lcd_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">test_lcd_data[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="vbus31" type="vbus" db_ref_id="1">
+      <obj_property name="label">lcd_address</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <wvobject fp_name="/display_tb/test_lcd_data[6]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[6]</obj_property>
+         <obj_property name="ObjectShortName">test_lcd_data[6]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/display_tb/test_lcd_data[5]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[5]</obj_property>
+         <obj_property name="ObjectShortName">test_lcd_data[5]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/display_tb/test_lcd_data[4]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[4]</obj_property>
+         <obj_property name="ObjectShortName">test_lcd_data[4]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/display_tb/test_lcd_data[3]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[3]</obj_property>
+         <obj_property name="ObjectShortName">test_lcd_data[3]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/display_tb/test_lcd_data[2]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[2]</obj_property>
+         <obj_property name="ObjectShortName">test_lcd_data[2]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/display_tb/test_lcd_data[1]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[1]</obj_property>
+         <obj_property name="ObjectShortName">test_lcd_data[1]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/display_tb/test_lcd_data[0]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[0]</obj_property>
+         <obj_property name="ObjectShortName">test_lcd_data[0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="/display_tb/test_fifo_wr_en" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">test_fifo_wr_en</obj_property>
+      <obj_property name="ObjectShortName">test_fifo_wr_en</obj_property>
+   </wvobject>
+   <wvobject fp_name="/display_tb/test_fifo_wr_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">test_fifo_wr_data[15:0]</obj_property>
+      <obj_property name="ObjectShortName">test_fifo_wr_data[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/display_tb/test_reset" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">test_reset</obj_property>
+      <obj_property name="ObjectShortName">test_reset</obj_property>
+   </wvobject>
+   <wvobject fp_name="/display_tb/UUT/disp_clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">disp_clk</obj_property>
+      <obj_property name="ObjectShortName">disp_clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/display_tb/UUT/fifo_dout" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">fifo_dout[15:0]</obj_property>
+      <obj_property name="ObjectShortName">fifo_dout[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/display_tb/UUT/fifo_empty" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">fifo_empty</obj_property>
+      <obj_property name="ObjectShortName">fifo_empty</obj_property>
+   </wvobject>
+   <wvobject fp_name="/display_tb/UUT/dispFIFO/full" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">full</obj_property>
+      <obj_property name="ObjectShortName">full</obj_property>
+   </wvobject>
+   <wvobject fp_name="/display_tb/UUT/curr_state" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">curr_state</obj_property>
+      <obj_property name="ObjectShortName">curr_state</obj_property>
+   </wvobject>
+   <wvobject fp_name="/display_tb/UUT/fifo_ack" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">fifo_ack</obj_property>
+      <obj_property name="ObjectShortName">fifo_ack</obj_property>
+   </wvobject>
+</wave_config>

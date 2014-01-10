@@ -1,0 +1,51 @@
+//! **************************************************************************
+// Written by: Map P.58f on Mon Dec 30 05:46:19 2013
+//! **************************************************************************
+
+SCHEMATIC START;
+COMP "clk" LOCATE = SITE "L15" LEVEL 1;
+COMP "lcd_data<0>" LOCATE = SITE "N11" LEVEL 1;
+COMP "lcd_data<1>" LOCATE = SITE "T11" LEVEL 1;
+COMP "lcd_data<2>" LOCATE = SITE "V12" LEVEL 1;
+COMP "lcd_data<3>" LOCATE = SITE "P11" LEVEL 1;
+COMP "lcd_data<4>" LOCATE = SITE "N9" LEVEL 1;
+COMP "lcd_data<5>" LOCATE = SITE "V11" LEVEL 1;
+COMP "lcd_data<6>" LOCATE = SITE "T10" LEVEL 1;
+COMP "lcd_data<7>" LOCATE = SITE "V10" LEVEL 1;
+COMP "m0_sw" LOCATE = SITE "A10" LEVEL 1;
+COMP "m1_sw" LOCATE = SITE "D14" LEVEL 1;
+COMP "motor_step" LOCATE = SITE "U15" LEVEL 1;
+COMP "lcd_e" LOCATE = SITE "V13" LEVEL 1;
+COMP "BITCLK" LOCATE = SITE "L13" LEVEL 1;
+COMP "AUDSDI" LOCATE = SITE "T18" LEVEL 1;
+COMP "AUDSDO" LOCATE = SITE "N16" LEVEL 1;
+COMP "n_step_en" LOCATE = SITE "U13" LEVEL 1;
+COMP "AUDRST" LOCATE = SITE "T17" LEVEL 1;
+COMP "led<0>" LOCATE = SITE "U18" LEVEL 1;
+COMP "btn<0>" LOCATE = SITE "N4" LEVEL 1;
+COMP "led<1>" LOCATE = SITE "M14" LEVEL 1;
+COMP "btn<1>" LOCATE = SITE "P4" LEVEL 1;
+COMP "led<2>" LOCATE = SITE "N14" LEVEL 1;
+COMP "btn<2>" LOCATE = SITE "P3" LEVEL 1;
+COMP "led<3>" LOCATE = SITE "L14" LEVEL 1;
+COMP "btn<3>" LOCATE = SITE "F6" LEVEL 1;
+COMP "led<4>" LOCATE = SITE "M13" LEVEL 1;
+COMP "btn<4>" LOCATE = SITE "F5" LEVEL 1;
+COMP "led<5>" LOCATE = SITE "D4" LEVEL 1;
+COMP "led<6>" LOCATE = SITE "P16" LEVEL 1;
+COMP "led<7>" LOCATE = SITE "N12" LEVEL 1;
+COMP "motor_dir" LOCATE = SITE "U16" LEVEL 1;
+COMP "lcd_rs" LOCATE = SITE "V16" LEVEL 1;
+COMP "lcd_rw" LOCATE = SITE "V15" LEVEL 1;
+COMP "source" LOCATE = SITE "C14" LEVEL 1;
+COMP "volume<0>" LOCATE = SITE "P15" LEVEL 1;
+COMP "volume<1>" LOCATE = SITE "P12" LEVEL 1;
+COMP "volume<2>" LOCATE = SITE "R5" LEVEL 1;
+COMP "volume<3>" LOCATE = SITE "T5" LEVEL 1;
+COMP "volume<4>" LOCATE = SITE "E4" LEVEL 1;
+COMP "motor_m0" LOCATE = SITE "M11" LEVEL 1;
+COMP "motor_m1" LOCATE = SITE "R11" LEVEL 1;
+COMP "AUDSYNC" LOCATE = SITE "U17" LEVEL 1;
+COMP "reset_unsync" LOCATE = SITE "T15" LEVEL 1;
+SCHEMATIC END;
+

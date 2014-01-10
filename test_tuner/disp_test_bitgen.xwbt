@@ -1,0 +1,8 @@
+INTSTYLE=ise
+INFILE=C:\Users\Dan\Documents\guitar_tuner\test_tuner\disp_test.ncd
+OUTFILE=C:\Users\Dan\Documents\guitar_tuner\test_tuner\disp_test.bit
+FAMILY=Spartan6
+PART=xc6slx45-3csg324
+WORKINGDIR=C:\Users\Dan\Documents\guitar_tuner\test_tuner
+LICENSE=WebPack
+USER_INFO=210704958_0_0_577

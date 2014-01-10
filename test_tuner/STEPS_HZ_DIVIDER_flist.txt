@@ -1,0 +1,13 @@
+# Output products list for <STEPS_HZ_DIVIDER>
+STEPS_HZ_DIVIDER.asy
+STEPS_HZ_DIVIDER.gise
+STEPS_HZ_DIVIDER.ngc
+STEPS_HZ_DIVIDER.sym
+STEPS_HZ_DIVIDER.vhd
+STEPS_HZ_DIVIDER.vho
+STEPS_HZ_DIVIDER.xco
+STEPS_HZ_DIVIDER.xise
+STEPS_HZ_DIVIDER_flist.txt
+STEPS_HZ_DIVIDER_readme.txt
+STEPS_HZ_DIVIDER_xmdf.tcl
+_xmsgs\pn_parser.xmsgs

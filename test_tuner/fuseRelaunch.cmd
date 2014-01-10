@@ -1,0 +1,1 @@
+-intstyle "ise" -incremental -lib "secureip" -o "C:/Users/Dan/Documents/guitar_tuner/test_tuner/tuner_tb_isim_beh.exe" -prj "C:/Users/Dan/Documents/guitar_tuner/test_tuner/tuner_tb_beh.prj" "work.tuner_tb" 

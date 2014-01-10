@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="C:/Users/Dan/Documents/guitar_tuner/test_tuner/freq_convert_tb_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="attributes" />
+            <top_module name="freq_convert_tb" />
+            <top_module name="math_real" />
+            <top_module name="numeric_std" />
+            <top_module name="std_logic_1164" />
+            <top_module name="std_logic_arith" />
+            <top_module name="std_logic_misc" />
+            <top_module name="std_logic_signed" />
+            <top_module name="std_logic_textio" />
+            <top_module name="textio" />
+            <top_module name="vcomponents" />
+            <top_module name="vital_primitives" />
+            <top_module name="vital_timing" />
+            <top_module name="vpkg" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="21" />
+   <wvobject fp_name="/freq_convert_tb/test_clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">test_clk</obj_property>
+      <obj_property name="ObjectShortName">test_clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/freq_convert_tb/test_divider" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">test_divider[11:0]</obj_property>
+      <obj_property name="ObjectShortName">test_divider[11:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/freq_convert_tb/test_bin" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">test_bin[10:0]</obj_property>
+      <obj_property name="ObjectShortName">test_bin[10:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/freq_convert_tb/test_sample_done" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">test_sample_done</obj_property>
+      <obj_property name="ObjectShortName">test_sample_done</obj_property>
+   </wvobject>
+   <wvobject fp_name="/freq_convert_tb/test_disp_wr_en" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">test_disp_wr_en</obj_property>
+      <obj_property name="ObjectShortName">test_disp_wr_en</obj_property>
+   </wvobject>
+   <wvobject fp_name="/freq_convert_tb/test_disp_data" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">test_disp_data[15:0]</obj_property>
+      <obj_property name="ObjectShortName">test_disp_data[15:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="vbus33" type="vbus" db_ref_id="1">
+      <obj_property name="label">Character</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+      <wvobject fp_name="/freq_convert_tb/test_disp_data[7]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[7]</obj_property>
+         <obj_property name="ObjectShortName">test_disp_data[7]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/freq_convert_tb/test_disp_data[6]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[6]</obj_property>
+         <obj_property name="ObjectShortName">test_disp_data[6]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/freq_convert_tb/test_disp_data[5]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[5]</obj_property>
+         <obj_property name="ObjectShortName">test_disp_data[5]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/freq_convert_tb/test_disp_data[4]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[4]</obj_property>
+         <obj_property name="ObjectShortName">test_disp_data[4]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/freq_convert_tb/test_disp_data[3]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[3]</obj_property>
+         <obj_property name="ObjectShortName">test_disp_data[3]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/freq_convert_tb/test_disp_data[2]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[2]</obj_property>
+         <obj_property name="ObjectShortName">test_disp_data[2]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/freq_convert_tb/test_disp_data[1]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[1]</obj_property>
+         <obj_property name="ObjectShortName">test_disp_data[1]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/freq_convert_tb/test_disp_data[0]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[0]</obj_property>
+         <obj_property name="ObjectShortName">test_disp_data[0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="vbus27" type="vbus" db_ref_id="1">
+      <obj_property name="label">Column</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <wvobject fp_name="/freq_convert_tb/test_disp_data[12]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[12]</obj_property>
+         <obj_property name="ObjectShortName">test_disp_data[12]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/freq_convert_tb/test_disp_data[11]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[11]</obj_property>
+         <obj_property name="ObjectShortName">test_disp_data[11]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/freq_convert_tb/test_disp_data[10]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[10]</obj_property>
+         <obj_property name="ObjectShortName">test_disp_data[10]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/freq_convert_tb/test_disp_data[9]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[9]</obj_property>
+         <obj_property name="ObjectShortName">test_disp_data[9]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/freq_convert_tb/test_disp_data[8]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[8]</obj_property>
+         <obj_property name="ObjectShortName">test_disp_data[8]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="vbus23" type="vbus" db_ref_id="1">
+      <obj_property name="label">Row</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <wvobject fp_name="/freq_convert_tb/test_disp_data[15]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[15]</obj_property>
+         <obj_property name="ObjectShortName">test_disp_data[15]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/freq_convert_tb/test_disp_data[14]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[14]</obj_property>
+         <obj_property name="ObjectShortName">test_disp_data[14]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/freq_convert_tb/test_disp_data[13]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[13]</obj_property>
+         <obj_property name="ObjectShortName">test_disp_data[13]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="/freq_convert_tb/UUT/convert_val" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">convert_val[27:0]</obj_property>
+      <obj_property name="ObjectShortName">convert_val[27:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/freq_convert_tb/UUT/convert_count" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">convert_count</obj_property>
+      <obj_property name="ObjectShortName">convert_count</obj_property>
+   </wvobject>
+   <wvobject fp_name="vbus104" type="vbus" db_ref_id="1">
+      <obj_property name="label">Thousandths</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/freq_convert_tb/UUT/convert_val[3]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[3]</obj_property>
+         <obj_property name="ObjectShortName">convert_val[3]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/freq_convert_tb/UUT/convert_val[2]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[2]</obj_property>
+         <obj_property name="ObjectShortName">convert_val[2]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/freq_convert_tb/UUT/convert_val[1]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[1]</obj_property>
+         <obj_property name="ObjectShortName">convert_val[1]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/freq_convert_tb/UUT/convert_val[0]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[0]</obj_property>
+         <obj_property name="ObjectShortName">convert_val[0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="vbus99" type="vbus" db_ref_id="1">
+      <obj_property name="label">Hundredths</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/freq_convert_tb/UUT/convert_val[7]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[7]</obj_property>
+         <obj_property name="ObjectShortName">convert_val[7]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/freq_convert_tb/UUT/convert_val[6]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[6]</obj_property>
+         <obj_property name="ObjectShortName">convert_val[6]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/freq_convert_tb/UUT/convert_val[5]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[5]</obj_property>
+         <obj_property name="ObjectShortName">convert_val[5]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/freq_convert_tb/UUT/convert_val[4]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[4]</obj_property>
+         <obj_property name="ObjectShortName">convert_val[4]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="vbus94" type="vbus" db_ref_id="1">
+      <obj_property name="label">Tenths</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/freq_convert_tb/UUT/convert_val[11]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[11]</obj_property>
+         <obj_property name="ObjectShortName">convert_val[11]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/freq_convert_tb/UUT/convert_val[10]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[10]</obj_property>
+         <obj_property name="ObjectShortName">convert_val[10]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/freq_convert_tb/UUT/convert_val[9]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[9]</obj_property>
+         <obj_property name="ObjectShortName">convert_val[9]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/freq_convert_tb/UUT/convert_val[8]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[8]</obj_property>
+         <obj_property name="ObjectShortName">convert_val[8]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="vbus89" type="vbus" db_ref_id="1">
+      <obj_property name="label">Ones</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/freq_convert_tb/UUT/convert_val[15]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[15]</obj_property>
+         <obj_property name="ObjectShortName">convert_val[15]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/freq_convert_tb/UUT/convert_val[14]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[14]</obj_property>
+         <obj_property name="ObjectShortName">convert_val[14]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/freq_convert_tb/UUT/convert_val[13]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[13]</obj_property>
+         <obj_property name="ObjectShortName">convert_val[13]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/freq_convert_tb/UUT/convert_val[12]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[12]</obj_property>
+         <obj_property name="ObjectShortName">convert_val[12]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="vbus84" type="vbus" db_ref_id="1">
+      <obj_property name="label">Tens</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/freq_convert_tb/UUT/convert_val[19]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[19]</obj_property>
+         <obj_property name="ObjectShortName">convert_val[19]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/freq_convert_tb/UUT/convert_val[18]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[18]</obj_property>
+         <obj_property name="ObjectShortName">convert_val[18]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/freq_convert_tb/UUT/convert_val[17]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[17]</obj_property>
+         <obj_property name="ObjectShortName">convert_val[17]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/freq_convert_tb/UUT/convert_val[16]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[16]</obj_property>
+         <obj_property name="ObjectShortName">convert_val[16]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="vbus79" type="vbus" db_ref_id="1">
+      <obj_property name="label">Hundreds</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/freq_convert_tb/UUT/convert_val[23]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[23]</obj_property>
+         <obj_property name="ObjectShortName">convert_val[23]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/freq_convert_tb/UUT/convert_val[22]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[22]</obj_property>
+         <obj_property name="ObjectShortName">convert_val[22]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/freq_convert_tb/UUT/convert_val[21]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[21]</obj_property>
+         <obj_property name="ObjectShortName">convert_val[21]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/freq_convert_tb/UUT/convert_val[20]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[20]</obj_property>
+         <obj_property name="ObjectShortName">convert_val[20]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="vbus74" type="vbus" db_ref_id="1">
+      <obj_property name="label">Thousands</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject fp_name="/freq_convert_tb/UUT/convert_val[27]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[27]</obj_property>
+         <obj_property name="ObjectShortName">convert_val[27]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/freq_convert_tb/UUT/convert_val[26]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[26]</obj_property>
+         <obj_property name="ObjectShortName">convert_val[26]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/freq_convert_tb/UUT/convert_val[25]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[25]</obj_property>
+         <obj_property name="ObjectShortName">convert_val[25]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/freq_convert_tb/UUT/convert_val[24]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[24]</obj_property>
+         <obj_property name="ObjectShortName">convert_val[24]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="/freq_convert_tb/UUT/divide_output" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">divide_output[23:0]</obj_property>
+      <obj_property name="ObjectShortName">divide_output[23:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/freq_convert_tb/UUT/freq_quotient" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">freq_quotient[27:0]</obj_property>
+      <obj_property name="ObjectShortName">freq_quotient[27:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/freq_convert_tb/UUT/freq_fractional" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">freq_fractional[9:0]</obj_property>
+      <obj_property name="ObjectShortName">freq_fractional[9:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+</wave_config>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="C:/Users/Dan/Documents/guitar_tuner/test_tuner/new_auto_tb_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="attributes" />
+            <top_module name="math_real" />
+            <top_module name="new_auto_tb" />
+            <top_module name="numeric_std" />
+            <top_module name="std_logic_1164" />
+            <top_module name="std_logic_misc" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="16" />
+   <wvobject fp_name="/new_auto_tb/test_clock" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">test_clock</obj_property>
+      <obj_property name="ObjectShortName">test_clock</obj_property>
+   </wvobject>
+   <wvobject fp_name="/new_auto_tb/test_sample" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">test_sample[1:0]</obj_property>
+      <obj_property name="ObjectShortName">test_sample[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/new_auto_tb/test_reset" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">test_reset</obj_property>
+      <obj_property name="ObjectShortName">test_reset</obj_property>
+   </wvobject>
+   <wvobject fp_name="/new_auto_tb/test_result_div" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">test_result_div[11:0]</obj_property>
+      <obj_property name="ObjectShortName">test_result_div[11:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/new_auto_tb/test_result_idx" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">test_result_idx[10:0]</obj_property>
+      <obj_property name="ObjectShortName">test_result_idx[10:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/new_auto_tb/test_done" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">test_done</obj_property>
+      <obj_property name="ObjectShortName">test_done</obj_property>
+   </wvobject>
+   <wvobject fp_name="/new_auto_tb/UUT/samp_counter" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">samp_counter[11:0]</obj_property>
+      <obj_property name="ObjectShortName">samp_counter[11:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/new_auto_tb/UUT/sample_clock" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">sample_clock</obj_property>
+      <obj_property name="ObjectShortName">sample_clock</obj_property>
+   </wvobject>
+   <wvobject fp_name="/new_auto_tb/UUT/clk_div" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">clk_div[11:0]</obj_property>
+      <obj_property name="ObjectShortName">clk_div[11:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/new_auto_tb/UUT/final_hamming" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">final_hamming[10:0]</obj_property>
+      <obj_property name="ObjectShortName">final_hamming[10:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/new_auto_tb/UUT/done" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">done</obj_property>
+      <obj_property name="ObjectShortName">done</obj_property>
+   </wvobject>
+   <wvobject fp_name="/new_auto_tb/UUT/max_detect_1" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">max_detect_1[10:0]</obj_property>
+      <obj_property name="ObjectShortName">max_detect_1[10:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/new_auto_tb/UUT/max_detect_2" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">max_detect_2[10:0]</obj_property>
+      <obj_property name="ObjectShortName">max_detect_2[10:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/new_auto_tb/UUT/\genautos(0)\/autox/op_in" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">op_in</obj_property>
+      <obj_property name="ObjectShortName">op_in</obj_property>
+   </wvobject>
+   <wvobject fp_name="/new_auto_tb/UUT/peak_idx" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">peak_idx[11:0]</obj_property>
+      <obj_property name="ObjectShortName">peak_idx[11:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/new_auto_tb/UUT/peak_val" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">peak_val[11:0]</obj_property>
+      <obj_property name="ObjectShortName">peak_val[11:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+</wave_config>

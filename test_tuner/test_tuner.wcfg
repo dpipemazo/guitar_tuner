@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="C:/Users/Dan/Documents/guitar_tuner/test_tuner/tuner_tb_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="attributes" />
+            <top_module name="freq_constants" />
+            <top_module name="math_real" />
+            <top_module name="numeric_std" />
+            <top_module name="std_logic_1164" />
+            <top_module name="std_logic_arith" />
+            <top_module name="std_logic_misc" />
+            <top_module name="std_logic_signed" />
+            <top_module name="std_logic_textio" />
+            <top_module name="textio" />
+            <top_module name="tuner_tb" />
+            <top_module name="vcomponents" />
+            <top_module name="vital_primitives" />
+            <top_module name="vital_timing" />
+            <top_module name="vpkg" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="28" />
+   <wvobject fp_name="/tuner_tb/test_clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">test_clk</obj_property>
+      <obj_property name="ObjectShortName">test_clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tuner_tb/test_n_reset" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">test_n_reset</obj_property>
+      <obj_property name="ObjectShortName">test_n_reset</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tuner_tb/test_run_motor" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">test_run_motor</obj_property>
+      <obj_property name="ObjectShortName">test_run_motor</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tuner_tb/test_curr_string" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">test_curr_string[2:0]</obj_property>
+      <obj_property name="ObjectShortName">test_curr_string[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tuner_tb/test_div_quotient" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">test_div_quotient[13:0]</obj_property>
+      <obj_property name="ObjectShortName">test_div_quotient[13:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tuner_tb/test_div_fractional" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">test_div_fractional[9:0]</obj_property>
+      <obj_property name="ObjectShortName">test_div_fractional[9:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tuner_tb/test_new_data" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">test_new_data</obj_property>
+      <obj_property name="ObjectShortName">test_new_data</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tuner_tb/test_step" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">test_step</obj_property>
+      <obj_property name="ObjectShortName">test_step</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tuner_tb/test_dir" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">test_dir</obj_property>
+      <obj_property name="ObjectShortName">test_dir</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tuner_tb/test_tuned" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">test_tuned</obj_property>
+      <obj_property name="ObjectShortName">test_tuned</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tuner_tb/test_n_stepping" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">test_n_stepping</obj_property>
+      <obj_property name="ObjectShortName">test_n_stepping</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tuner_tb/testTuner/freq_to_go" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">freq_to_go[24:0]</obj_property>
+      <obj_property name="ObjectShortName">freq_to_go[24:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tuner_tb/testTuner/freq_moved" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">freq_moved[24:0]</obj_property>
+      <obj_property name="ObjectShortName">freq_moved[24:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tuner_tb/testTuner/new_steps" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">new_steps[9:0]</obj_property>
+      <obj_property name="ObjectShortName">new_steps[9:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tuner_tb/testTuner/old_steps" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">old_steps[9:0]</obj_property>
+      <obj_property name="ObjectShortName">old_steps[9:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tuner_tb/testTuner/expected_freq" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">expected_freq[23:0]</obj_property>
+      <obj_property name="ObjectShortName">expected_freq[23:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tuner_tb/testTuner/num_steps" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">num_steps[8:0]</obj_property>
+      <obj_property name="ObjectShortName">num_steps[8:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tuner_tb/testTuner/curr_state" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">curr_state</obj_property>
+      <obj_property name="ObjectShortName">curr_state</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tuner_tb/testTuner/new_freq" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">new_freq[23:0]</obj_property>
+      <obj_property name="ObjectShortName">new_freq[23:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tuner_tb/testTuner/old_freq" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">old_freq[23:0]</obj_property>
+      <obj_property name="ObjectShortName">old_freq[23:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tuner_tb/testTuner/divide_rdy" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">divide_rdy</obj_property>
+      <obj_property name="ObjectShortName">divide_rdy</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tuner_tb/testTuner/divide_rfd" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">divide_rfd</obj_property>
+      <obj_property name="ObjectShortName">divide_rfd</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tuner_tb/testTuner/divide_nd" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">divide_nd</obj_property>
+      <obj_property name="ObjectShortName">divide_nd</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tuner_tb/testTuner/dividend" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">dividend[17:0]</obj_property>
+      <obj_property name="ObjectShortName">dividend[17:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tuner_tb/testTuner/divisor" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">divisor[17:0]</obj_property>
+      <obj_property name="ObjectShortName">divisor[17:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tuner_tb/testTuner/quotient" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">quotient[17:0]</obj_property>
+      <obj_property name="ObjectShortName">quotient[17:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tuner_tb/testTuner/fractional" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">fractional[9:0]</obj_property>
+      <obj_property name="ObjectShortName">fractional[9:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="vbus57" type="vbus" db_ref_id="1">
+      <obj_property name="label">Divider_output</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      <wvobject fp_name="/tuner_tb/testTuner/quotient[17]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[17]</obj_property>
+         <obj_property name="ObjectShortName">quotient[17]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tuner_tb/testTuner/quotient[16]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[16]</obj_property>
+         <obj_property name="ObjectShortName">quotient[16]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tuner_tb/testTuner/quotient[15]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[15]</obj_property>
+         <obj_property name="ObjectShortName">quotient[15]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tuner_tb/testTuner/quotient[14]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[14]</obj_property>
+         <obj_property name="ObjectShortName">quotient[14]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tuner_tb/testTuner/quotient[13]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[13]</obj_property>
+         <obj_property name="ObjectShortName">quotient[13]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tuner_tb/testTuner/quotient[12]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[12]</obj_property>
+         <obj_property name="ObjectShortName">quotient[12]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tuner_tb/testTuner/quotient[11]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[11]</obj_property>
+         <obj_property name="ObjectShortName">quotient[11]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tuner_tb/testTuner/quotient[10]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[10]</obj_property>
+         <obj_property name="ObjectShortName">quotient[10]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tuner_tb/testTuner/quotient[9]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[9]</obj_property>
+         <obj_property name="ObjectShortName">quotient[9]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tuner_tb/testTuner/quotient[8]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[8]</obj_property>
+         <obj_property name="ObjectShortName">quotient[8]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tuner_tb/testTuner/quotient[7]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[7]</obj_property>
+         <obj_property name="ObjectShortName">quotient[7]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tuner_tb/testTuner/quotient[6]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[6]</obj_property>
+         <obj_property name="ObjectShortName">quotient[6]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tuner_tb/testTuner/quotient[5]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[5]</obj_property>
+         <obj_property name="ObjectShortName">quotient[5]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tuner_tb/testTuner/quotient[4]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[4]</obj_property>
+         <obj_property name="ObjectShortName">quotient[4]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tuner_tb/testTuner/quotient[3]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[3]</obj_property>
+         <obj_property name="ObjectShortName">quotient[3]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tuner_tb/testTuner/quotient[2]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[2]</obj_property>
+         <obj_property name="ObjectShortName">quotient[2]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tuner_tb/testTuner/quotient[1]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[1]</obj_property>
+         <obj_property name="ObjectShortName">quotient[1]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tuner_tb/testTuner/quotient[0]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[0]</obj_property>
+         <obj_property name="ObjectShortName">quotient[0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tuner_tb/testTuner/fractional[9]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[9]</obj_property>
+         <obj_property name="ObjectShortName">fractional[9]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tuner_tb/testTuner/fractional[8]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[8]</obj_property>
+         <obj_property name="ObjectShortName">fractional[8]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tuner_tb/testTuner/fractional[7]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[7]</obj_property>
+         <obj_property name="ObjectShortName">fractional[7]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tuner_tb/testTuner/fractional[6]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[6]</obj_property>
+         <obj_property name="ObjectShortName">fractional[6]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tuner_tb/testTuner/fractional[5]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[5]</obj_property>
+         <obj_property name="ObjectShortName">fractional[5]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tuner_tb/testTuner/fractional[4]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[4]</obj_property>
+         <obj_property name="ObjectShortName">fractional[4]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tuner_tb/testTuner/fractional[3]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[3]</obj_property>
+         <obj_property name="ObjectShortName">fractional[3]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tuner_tb/testTuner/fractional[2]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[2]</obj_property>
+         <obj_property name="ObjectShortName">fractional[2]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tuner_tb/testTuner/fractional[1]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[1]</obj_property>
+         <obj_property name="ObjectShortName">fractional[1]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tuner_tb/testTuner/fractional[0]" type="logic" db_ref_id="1">
+         <obj_property name="ElementShortName">[0]</obj_property>
+         <obj_property name="ObjectShortName">fractional[0]</obj_property>
+      </wvobject>
+   </wvobject>
+</wave_config>

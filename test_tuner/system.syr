@@ -1,0 +1,2174 @@
+Release 14.5 - xst P.58f (nt)
+Copyright (c) 1995-2012 Xilinx, Inc.  All rights reserved.
+--> Parameter TMPDIR set to xst/projnav.tmp
+
+
+Total REAL time to Xst completion: 0.00 secs
+Total CPU time to Xst completion: 0.13 secs
+ 
+--> Parameter xsthdpdir set to xst
+
+
+Total REAL time to Xst completion: 0.00 secs
+Total CPU time to Xst completion: 0.14 secs
+ 
+--> Reading design: system.prj
+
+TABLE OF CONTENTS
+  1) Synthesis Options Summary
+  2) HDL Parsing
+  3) HDL Elaboration
+  4) HDL Synthesis
+       4.1) HDL Synthesis Report
+  5) Advanced HDL Synthesis
+       5.1) Advanced HDL Synthesis Report
+  6) Low Level Synthesis
+  7) Partition Report
+  8) Design Summary
+       8.1) Primitive and Black Box Usage
+       8.2) Device utilization summary
+       8.3) Partition Resource Summary
+       8.4) Timing Report
+            8.4.1) Clock Information
+            8.4.2) Asynchronous Control Signals Information
+            8.4.3) Timing Summary
+            8.4.4) Timing Details
+            8.4.5) Cross Clock Domains Report
+
+
+=========================================================================
+*                      Synthesis Options Summary                        *
+=========================================================================
+---- Source Parameters
+Input File Name                    : "system.prj"
+Ignore Synthesis Constraint File   : NO
+
+---- Target Parameters
+Output File Name                   : "system"
+Output Format                      : NGC
+Target Device                      : xc6slx45-3-csg324
+
+---- Source Options
+Top Module Name                    : system
+Automatic FSM Extraction           : YES
+FSM Encoding Algorithm             : Auto
+Safe Implementation                : No
+FSM Style                          : LUT
+RAM Extraction                     : Yes
+RAM Style                          : Auto
+ROM Extraction                     : Yes
+Shift Register Extraction          : YES
+ROM Style                          : Auto
+Resource Sharing                   : YES
+Asynchronous To Synchronous        : NO
+Shift Register Minimum Size        : 2
+Use DSP Block                      : Auto
+Automatic Register Balancing       : No
+
+---- Target Options
+LUT Combining                      : Auto
+Reduce Control Sets                : Auto
+Add IO Buffers                     : YES
+Global Maximum Fanout              : 100000
+Add Generic Clock Buffer(BUFG)     : 16
+Register Duplication               : YES
+Optimize Instantiated Primitives   : NO
+Use Clock Enable                   : Auto
+Use Synchronous Set                : Auto
+Use Synchronous Reset              : Auto
+Pack IO Registers into IOBs        : Auto
+Equivalent register Removal        : YES
+
+---- General Options
+Optimization Goal                  : Speed
+Optimization Effort                : 1
+Power Reduction                    : NO
+Keep Hierarchy                     : No
+Netlist Hierarchy                  : As_Optimized
+RTL Output                         : Yes
+Global Optimization                : AllClockNets
+Read Cores                         : YES
+Write Timing Constraints           : NO
+Cross Clock Analysis               : NO
+Hierarchy Separator                : /
+Bus Delimiter                      : <>
+Case Specifier                     : Maintain
+Slice Utilization Ratio            : 100
+BRAM Utilization Ratio             : 100
+DSP48 Utilization Ratio            : 100
+Auto BRAM Packing                  : NO
+Slice Utilization Ratio Delta      : 5
+
+=========================================================================
+
+
+=========================================================================
+*                          HDL Parsing                                  *
+=========================================================================
+Parsing VHDL file "C:\Users\Dan\Documents\guitar_tuner\test_tuner\DISPLAY_FIFO.vhd" into library work
+Parsing entity <DISPLAY_FIFO>.
+Parsing architecture <DISPLAY_FIFO_a> of entity <display_fifo>.
+Parsing VHDL file "C:\Users\Dan\Documents\guitar_tuner\test_tuner\STEPS_HZ_DIVIDER.vhd" into library work
+Parsing VHDL file "C:\Users\Dan\Documents\guitar_tuner\test_tuner\FREQ_DIVIDER.vhd" into library work
+Parsing VHDL file "C:\Users\Dan\Documents\guitar_tuner\Code\Working_Files\freq_constants.vhd" into library work
+Parsing package <freq_constants>.
+Parsing VHDL file "C:\Users\Dan\Documents\guitar_tuner\Code\Working_Files\display_constants.vhd" into library work
+Parsing package <display_constants>.
+Parsing VHDL file "C:\Users\Dan\Documents\guitar_tuner\Code\Working_Files\dc97.vhd" into library work
+Parsing package <pkg_dc97>.
+Parsing package body <pkg_dc97>.
+Parsing entity <dc97>.
+Parsing architecture <dc97_arch> of entity <dc97>.
+Parsing entity <dc97cmd>.
+Parsing architecture <dc97cmd_arch> of entity <dc97cmd>.
+Parsing VHDL file "C:\Users\Dan\Documents\guitar_tuner\Code\Working_Files\ui.vhd" into library work
+Parsing entity <USER_INTERFACE>.
+Parsing architecture <behavioral> of entity <user_interface>.
+Parsing VHDL file "C:\Users\Dan\Documents\guitar_tuner\Code\Working_Files\tuner.vhd" into library work
+Parsing entity <TUNER>.
+Parsing architecture <behavioral> of entity <tuner>.
+Parsing VHDL file "C:\Users\Dan\Documents\guitar_tuner\Code\Working_Files\freq_convert.vhd" into library work
+Parsing entity <FREQ_CONVERT>.
+Parsing architecture <behavioral> of entity <freq_convert>.
+Parsing VHDL file "C:\Users\Dan\Documents\guitar_tuner\Code\Working_Files\display.vhd" into library work
+Parsing entity <DISPLAY>.
+Parsing architecture <behavioral> of entity <display>.
+Parsing VHDL file "C:\Users\Dan\Documents\guitar_tuner\Code\Working_Files\debounce.vhd" into library work
+Parsing entity <SINGLE_DEBOUNCE>.
+Parsing architecture <behavioral> of entity <single_debounce>.
+Parsing entity <DEBOUNCE>.
+Parsing architecture <behavioral> of entity <debounce>.
+Parsing VHDL file "C:\Users\Dan\Documents\guitar_tuner\Code\Working_Files\auto.vhd" into library work
+Parsing entity <SINGLE_AUTO>.
+Parsing architecture <behavioral> of entity <single_auto>.
+Parsing entity <AUTOCORRELATE>.
+Parsing architecture <behavioral> of entity <autocorrelate>.
+Parsing VHDL file "C:\Users\Dan\Documents\guitar_tuner\Code\Working_Files\audio.vhd" into library work
+Parsing entity <AUDIO>.
+Parsing architecture <behavioral> of entity <audio>.
+Parsing VHDL file "C:\Users\Dan\Documents\guitar_tuner\Code\Working_Files\system.vhd" into library work
+Parsing entity <system>.
+Parsing architecture <structural> of entity <system>.
+
+=========================================================================
+*                            HDL Elaboration                            *
+=========================================================================
+
+Elaborating entity <system> (architecture <structural>) from library <work>.
+
+Elaborating entity <DISPLAY> (architecture <behavioral>) from library <work>.
+
+Elaborating entity <DISPLAY_FIFO> (architecture <DISPLAY_FIFO_a>) from library <work>.
+INFO:HDLCompiler:679 - "C:\Users\Dan\Documents\guitar_tuner\Code\Working_Files\display.vhd" Line 305. Case statement is complete. others clause is never selected
+
+Elaborating entity <DEBOUNCE> (architecture <behavioral>) from library <work>.
+
+Elaborating entity <SINGLE_DEBOUNCE> (architecture <behavioral>) with generics from library <work>.
+
+Elaborating entity <AUDIO> (architecture <behavioral>) from library <work>.
+
+Elaborating entity <dc97> (architecture <dc97_arch>) from library <work>.
+
+Elaborating entity <dc97cmd> (architecture <dc97cmd_arch>) from library <work>.
+
+Elaborating entity <AUTOCORRELATE> (architecture <behavioral>) from library <work>.
+
+Elaborating entity <SINGLE_AUTO> (architecture <behavioral>) from library <work>.
+
+Elaborating entity <FREQ_CONVERT> (architecture <behavioral>) from library <work>.
+WARNING:HDLCompiler:89 - "C:\Users\Dan\Documents\guitar_tuner\Code\Working_Files\freq_convert.vhd" Line 120: <freq_divider> remains a black-box since it has no binding entity.
+
+Elaborating entity <USER_INTERFACE> (architecture <behavioral>) from library <work>.
+
+Elaborating entity <TUNER> (architecture <behavioral>) from library <work>.
+WARNING:HDLCompiler:89 - "C:\Users\Dan\Documents\guitar_tuner\Code\Working_Files\tuner.vhd" Line 153: <steps_hz_divider> remains a black-box since it has no binding entity.
+INFO:HDLCompiler:679 - "C:\Users\Dan\Documents\guitar_tuner\Code\Working_Files\tuner.vhd" Line 455. Case statement is complete. others clause is never selected
+
+=========================================================================
+*                           HDL Synthesis                               *
+=========================================================================
+
+Synthesizing Unit <system>.
+    Related source file is "C:\Users\Dan\Documents\guitar_tuner\Code\Working_Files\system.vhd".
+    Found 1-bit register for signal <n_reset>.
+    Found 1-bit register for signal <reset_sync>.
+    Summary:
+	inferred   2 D-type flip-flop(s).
+	inferred   1 Multiplexer(s).
+Unit <system> synthesized.
+
+Synthesizing Unit <DISPLAY>.
+    Related source file is "C:\Users\Dan\Documents\guitar_tuner\Code\Working_Files\display.vhd".
+    Found 1-bit register for signal <disp_clk>.
+    Found 1-bit register for signal <fifo_ack>.
+    Found 3-bit register for signal <curr_state>.
+    Found 1-bit register for signal <lcd_e>.
+    Found 8-bit register for signal <reset_count>.
+    Found 1-bit register for signal <lcd_rs>.
+    Found 8-bit register for signal <lcd_data>.
+    Found 12-bit register for signal <disp_clk_counter>.
+    Found finite state machine <FSM_0> for signal <curr_state>.
+    -----------------------------------------------------------------------
+    | States             | 8                                              |
+    | Transitions        | 11                                             |
+    | Inputs             | 3                                              |
+    | Outputs            | 6                                              |
+    | Clock              | disp_clk (rising_edge)                         |
+    | Power Up State     | idle                                           |
+    | Encoding           | auto                                           |
+    | Implementation     | LUT                                            |
+    -----------------------------------------------------------------------
+    Found 12-bit adder for signal <disp_clk_inc> created at line 1241.
+    Found 8-bit adder for signal <reset_count[7]_GND_7_o_add_44_OUT> created at line 1241.
+    Found 7-bit adder for signal <lcd_line_start[6]_GND_7_o_add_47_OUT> created at line 265.
+    Summary:
+	inferred   3 Adder/Subtractor(s).
+	inferred  32 D-type flip-flop(s).
+	inferred  14 Multiplexer(s).
+	inferred   1 Finite State Machine(s).
+Unit <DISPLAY> synthesized.
+
+Synthesizing Unit <DEBOUNCE>.
+    Related source file is "C:\Users\Dan\Documents\guitar_tuner\Code\Working_Files\debounce.vhd".
+    Set property "buffer_type = BUFG" for signal <db_clock>.
+    Found 1-bit register for signal <db_clock>.
+    Found 5-bit register for signal <debounced_latch>.
+    Found 5-bit register for signal <db_buttons>.
+    Found 16-bit register for signal <db_clock_counter>.
+    Found 16-bit adder for signal <db_clock_counter[15]_GND_9_o_add_0_OUT> created at line 1241.
+    Summary:
+	inferred   1 Adder/Subtractor(s).
+	inferred  27 D-type flip-flop(s).
+Unit <DEBOUNCE> synthesized.
+
+Synthesizing Unit <SINGLE_DEBOUNCE>.
+    Related source file is "C:\Users\Dan\Documents\guitar_tuner\Code\Working_Files\debounce.vhd".
+        debounce_clocks = 20
+        auto_rep_clocks = 600
+    Found 1-bit register for signal <sync_2>.
+    Found 10-bit register for signal <debounce_counter>.
+    Found 10-bit register for signal <debounce_compare>.
+    Found 1-bit register for signal <debounced_out>.
+    Found 1-bit register for signal <sync_1>.
+    Found 10-bit adder for signal <debounce_counter[9]_GND_10_o_add_10_OUT> created at line 1241.
+    Summary:
+	inferred   1 Adder/Subtractor(s).
+	inferred  23 D-type flip-flop(s).
+	inferred   6 Multiplexer(s).
+Unit <SINGLE_DEBOUNCE> synthesized.
+
+Synthesizing Unit <AUDIO>.
+    Related source file is "C:\Users\Dan\Documents\guitar_tuner\Code\Working_Files\audio.vhd".
+    Found 18-bit register for signal <temp_max>.
+    Found 18-bit register for signal <temp_min>.
+    Found 18-bit register for signal <auto_sample_max>.
+    Found 18-bit register for signal <auto_sample_min>.
+    Found 2-bit register for signal <auto_sample>.
+    Found 10-bit register for signal <sync_clk_counter>.
+    Found 10-bit adder for signal <sync_clk_counter[9]_GND_12_o_add_1_OUT> created at line 1241.
+    Found 18-bit adder for signal <sample_low_threshold> created at line 245.
+    Found 19-bit subtractor for signal <sample_amplitude> created at line 87.
+    Found 18-bit subtractor for signal <sample_high_threshold> created at line 85.
+    Found 18-bit comparator greater for signal <ac97_sample_l_in[17]_temp_max[17]_LessThan_13_o> created at line 204
+    Found 18-bit comparator greater for signal <temp_min[17]_ac97_sample_l_in[17]_LessThan_16_o> created at line 209
+    Found 19-bit comparator greater for signal <sample_valid> created at line 248
+    Found 18-bit comparator greater for signal <sample_low_threshold[17]_ac97_sample_l_in[17]_LessThan_39_o> created at line 252
+    Found 18-bit comparator lessequal for signal <ac97_sample_l_in[17]_sample_high_threshold[17]_LessThan_40_o> created at line 253
+    Summary:
+	inferred   4 Adder/Subtractor(s).
+	inferred  84 D-type flip-flop(s).
+	inferred   5 Comparator(s).
+	inferred   1 Multiplexer(s).
+Unit <AUDIO> synthesized.
+
+Synthesizing Unit <dc97>.
+    Related source file is "C:\Users\Dan\Documents\guitar_tuner\Code\Working_Files\dc97.vhd".
+    Found 1-bit register for signal <ed1_q>.
+    Found 1-bit register for signal <ed2_q>.
+    Found 1-bit register for signal <ac97_reset>.
+    Found 1-bit register for signal <ac97_sync>.
+    Found 1-bit register for signal <dc97_ready>.
+    Found 20-bit register for signal <l_cmd_addr>.
+    Found 20-bit register for signal <l_cmd_data>.
+    Found 20-bit register for signal <l_left_data>.
+    Found 20-bit register for signal <l_right_data>.
+    Found 1-bit register for signal <ac97_sdata_o>.
+    Found 8-bit register for signal <bit_count>.
+    Found 20-bit register for signal <left_in_data>.
+    Found 20-bit register for signal <right_in_data>.
+    Found 11-bit register for signal <ctrwait>.
+    Found 11-bit adder for signal <ctrwait[10]_GND_15_o_add_5_OUT> created at line 119.
+    Found 8-bit adder for signal <bit_count[7]_GND_15_o_add_45_OUT> created at line 204.
+    Found 5-bit subtractor for signal <GND_15_o_GND_15_o_sub_30_OUT<4:0>> created at line 175.
+    Found 5-bit subtractor for signal <GND_15_o_GND_15_o_sub_34_OUT<4:0>> created at line 183.
+    Found 5-bit subtractor for signal <GND_15_o_GND_15_o_sub_40_OUT<4:0>> created at line 197.
+    Found 1-bit 20-to-1 multiplexer for signal <GND_15_o_GND_15_o_MUX_146_o> created at line 175.
+    Found 1-bit 20-to-1 multiplexer for signal <GND_15_o_GND_15_o_MUX_147_o> created at line 183.
+    Found 1-bit 20-to-1 multiplexer for signal <GND_15_o_X_15_o_Mux_40_o> created at line 197.
+    Found 8-bit comparator greater for signal <n0025> created at line 161
+    Found 8-bit comparator lessequal for signal <n0037> created at line 172
+    Found 8-bit comparator lessequal for signal <n0039> created at line 172
+    Found 8-bit comparator lessequal for signal <n0045> created at line 180
+    Found 8-bit comparator lessequal for signal <n0047> created at line 180
+    Found 8-bit comparator lessequal for signal <n0053> created at line 188
+    Found 8-bit comparator lessequal for signal <n0055> created at line 188
+    Found 8-bit comparator lessequal for signal <n0058> created at line 195
+    Found 8-bit comparator lessequal for signal <n0060> created at line 195
+    Found 8-bit comparator lessequal for signal <n0084> created at line 212
+    Found 8-bit comparator lessequal for signal <n0086> created at line 212
+    Found 8-bit comparator lessequal for signal <n0089> created at line 215
+    Found 8-bit comparator lessequal for signal <n0091> created at line 215
+    Summary:
+	inferred   5 Adder/Subtractor(s).
+	inferred 145 D-type flip-flop(s).
+	inferred  13 Comparator(s).
+	inferred  10 Multiplexer(s).
+Unit <dc97> synthesized.
+
+Synthesizing Unit <dc97cmd>.
+    Related source file is "C:\Users\Dan\Documents\guitar_tuner\Code\Working_Files\dc97.vhd".
+    Found 24-bit register for signal <cmd>.
+    Found 4-bit register for signal <state>.
+    Found 4-bit adder for signal <state[3]_GND_16_o_add_3_OUT> created at line 267.
+    Found 5-bit subtractor for signal <atn> created at line 253.
+    Summary:
+	inferred   2 Adder/Subtractor(s).
+	inferred  28 D-type flip-flop(s).
+	inferred   8 Multiplexer(s).
+Unit <dc97cmd> synthesized.
+
+Synthesizing Unit <AUTOCORRELATE>.
+    Related source file is "C:\Users\Dan\Documents\guitar_tuner\Code\Working_Files\auto.vhd".
+    Set property "buffer_type = BUFG" for signal <sample_clock>.
+INFO:Xst:3210 - "C:\Users\Dan\Documents\guitar_tuner\Code\Working_Files\auto.vhd" line 399: Output port <sample_out> of the instance <genautos[1087].autox> is unconnected or connected to loadless signal.
+INFO:Xst:3210 - "C:\Users\Dan\Documents\guitar_tuner\Code\Working_Files\auto.vhd" line 399: Output port <op_out> of the instance <genautos[1087].autox> is unconnected or connected to loadless signal.
+    Found 1-bit register for signal <sample_clock>.
+    Found 1-bit register for signal <done_sig_latch>.
+    Found 1-bit register for signal <done>.
+    Found 12-bit register for signal <samp_counter>.
+    Found 12-bit register for signal <clk_div>.
+    Found 11-bit register for signal <max_detect_1>.
+    Found 12-bit register for signal <peak_val>.
+    Found 12-bit register for signal <peak_idx>.
+    Found 11-bit register for signal <max_detect_2>.
+    Found 1-bit register for signal <ops<0>>.
+    Found 1-bit register for signal <done_sig>.
+    Found 1-bit register for signal <tuned>.
+    Found 11-bit register for signal <result_idx>.
+    Found 12-bit register for signal <result_div>.
+    Found 12-bit register for signal <clk_counter>.
+    Found 3-bit adder for signal <hamming_2s_1024<0>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<1>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<2>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<3>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<4>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<5>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<6>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<7>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<8>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<9>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<10>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<11>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<12>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<13>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<14>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<15>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<16>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<17>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<18>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<19>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<20>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<21>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<22>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<23>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<24>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<25>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<26>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<27>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<28>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<29>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<30>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<31>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<32>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<33>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<34>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<35>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<36>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<37>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<38>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<39>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<40>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<41>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<42>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<43>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<44>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<45>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<46>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<47>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<48>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<49>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<50>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<51>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<52>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<53>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<54>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<55>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<56>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<57>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<58>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<59>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<60>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<61>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<62>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<63>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<64>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<65>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<66>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<67>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<68>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<69>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<70>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<71>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<72>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<73>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<74>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<75>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<76>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<77>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<78>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<79>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<80>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<81>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<82>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<83>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<84>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<85>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<86>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<87>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<88>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<89>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<90>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<91>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<92>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<93>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<94>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<95>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<96>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<97>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<98>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<99>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<100>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<101>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<102>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<103>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<104>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<105>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<106>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<107>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<108>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<109>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<110>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<111>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<112>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<113>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<114>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<115>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<116>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<117>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<118>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<119>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<120>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<121>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<122>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<123>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<124>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<125>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<126>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<127>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<128>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<129>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<130>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<131>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<132>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<133>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<134>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<135>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<136>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<137>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<138>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<139>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<140>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<141>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<142>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<143>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<144>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<145>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<146>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<147>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<148>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<149>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<150>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<151>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<152>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<153>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<154>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<155>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<156>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<157>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<158>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<159>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<160>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<161>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<162>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<163>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<164>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<165>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<166>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<167>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<168>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<169>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<170>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<171>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<172>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<173>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<174>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<175>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<176>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<177>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<178>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<179>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<180>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<181>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<182>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<183>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<184>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<185>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<186>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<187>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<188>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<189>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<190>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<191>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<192>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<193>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<194>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<195>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<196>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<197>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<198>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<199>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<200>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<201>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<202>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<203>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<204>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<205>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<206>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<207>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<208>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<209>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<210>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<211>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<212>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<213>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<214>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<215>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<216>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<217>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<218>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<219>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<220>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<221>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<222>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<223>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<224>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<225>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<226>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<227>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<228>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<229>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<230>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<231>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<232>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<233>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<234>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<235>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<236>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<237>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<238>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<239>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<240>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<241>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<242>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<243>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<244>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<245>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<246>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<247>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<248>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<249>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<250>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<251>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<252>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<253>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<254>> created at line 433.
+    Found 3-bit adder for signal <hamming_2s_1024<255>> created at line 433.
+    Found 4-bit adder for signal <hamming_3s_1024<0>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<1>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<2>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<3>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<4>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<5>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<6>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<7>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<8>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<9>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<10>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<11>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<12>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<13>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<14>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<15>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<16>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<17>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<18>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<19>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<20>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<21>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<22>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<23>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<24>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<25>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<26>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<27>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<28>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<29>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<30>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<31>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<32>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<33>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<34>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<35>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<36>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<37>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<38>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<39>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<40>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<41>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<42>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<43>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<44>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<45>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<46>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<47>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<48>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<49>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<50>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<51>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<52>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<53>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<54>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<55>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<56>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<57>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<58>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<59>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<60>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<61>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<62>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<63>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<64>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<65>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<66>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<67>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<68>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<69>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<70>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<71>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<72>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<73>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<74>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<75>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<76>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<77>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<78>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<79>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<80>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<81>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<82>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<83>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<84>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<85>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<86>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<87>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<88>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<89>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<90>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<91>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<92>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<93>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<94>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<95>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<96>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<97>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<98>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<99>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<100>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<101>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<102>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<103>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<104>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<105>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<106>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<107>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<108>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<109>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<110>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<111>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<112>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<113>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<114>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<115>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<116>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<117>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<118>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<119>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<120>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<121>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<122>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<123>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<124>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<125>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<126>> created at line 438.
+    Found 4-bit adder for signal <hamming_3s_1024<127>> created at line 438.
+    Found 5-bit adder for signal <hamming_4s_1024<0>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<1>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<2>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<3>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<4>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<5>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<6>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<7>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<8>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<9>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<10>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<11>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<12>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<13>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<14>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<15>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<16>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<17>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<18>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<19>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<20>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<21>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<22>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<23>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<24>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<25>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<26>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<27>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<28>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<29>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<30>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<31>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<32>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<33>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<34>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<35>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<36>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<37>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<38>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<39>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<40>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<41>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<42>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<43>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<44>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<45>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<46>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<47>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<48>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<49>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<50>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<51>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<52>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<53>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<54>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<55>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<56>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<57>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<58>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<59>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<60>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<61>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<62>> created at line 443.
+    Found 5-bit adder for signal <hamming_4s_1024<63>> created at line 443.
+    Found 6-bit adder for signal <hamming_5s_1024<0>> created at line 449.
+    Found 6-bit adder for signal <hamming_5s_1024<1>> created at line 449.
+    Found 6-bit adder for signal <hamming_5s_1024<2>> created at line 449.
+    Found 6-bit adder for signal <hamming_5s_1024<3>> created at line 449.
+    Found 6-bit adder for signal <hamming_5s_1024<4>> created at line 449.
+    Found 6-bit adder for signal <hamming_5s_1024<5>> created at line 449.
+    Found 6-bit adder for signal <hamming_5s_1024<6>> created at line 449.
+    Found 6-bit adder for signal <hamming_5s_1024<7>> created at line 449.
+    Found 6-bit adder for signal <hamming_5s_1024<8>> created at line 449.
+    Found 6-bit adder for signal <hamming_5s_1024<9>> created at line 449.
+    Found 6-bit adder for signal <hamming_5s_1024<10>> created at line 449.
+    Found 6-bit adder for signal <hamming_5s_1024<11>> created at line 449.
+    Found 6-bit adder for signal <hamming_5s_1024<12>> created at line 449.
+    Found 6-bit adder for signal <hamming_5s_1024<13>> created at line 449.
+    Found 6-bit adder for signal <hamming_5s_1024<14>> created at line 449.
+    Found 6-bit adder for signal <hamming_5s_1024<15>> created at line 449.
+    Found 6-bit adder for signal <hamming_5s_1024<16>> created at line 449.
+    Found 6-bit adder for signal <hamming_5s_1024<17>> created at line 449.
+    Found 6-bit adder for signal <hamming_5s_1024<18>> created at line 449.
+    Found 6-bit adder for signal <hamming_5s_1024<19>> created at line 449.
+    Found 6-bit adder for signal <hamming_5s_1024<20>> created at line 449.
+    Found 6-bit adder for signal <hamming_5s_1024<21>> created at line 449.
+    Found 6-bit adder for signal <hamming_5s_1024<22>> created at line 449.
+    Found 6-bit adder for signal <hamming_5s_1024<23>> created at line 449.
+    Found 6-bit adder for signal <hamming_5s_1024<24>> created at line 449.
+    Found 6-bit adder for signal <hamming_5s_1024<25>> created at line 449.
+    Found 6-bit adder for signal <hamming_5s_1024<26>> created at line 449.
+    Found 6-bit adder for signal <hamming_5s_1024<27>> created at line 449.
+    Found 6-bit adder for signal <hamming_5s_1024<28>> created at line 449.
+    Found 6-bit adder for signal <hamming_5s_1024<29>> created at line 449.
+    Found 6-bit adder for signal <hamming_5s_1024<30>> created at line 449.
+    Found 6-bit adder for signal <hamming_5s_1024<31>> created at line 449.
+    Found 7-bit adder for signal <hamming_6s_1024<0>> created at line 458.
+    Found 3-bit adder for signal <hamming_2s_64<0>> created at line 460.
+    Found 7-bit adder for signal <hamming_6s_1024<1>> created at line 458.
+    Found 3-bit adder for signal <hamming_2s_64<1>> created at line 460.
+    Found 7-bit adder for signal <hamming_6s_1024<2>> created at line 458.
+    Found 3-bit adder for signal <hamming_2s_64<2>> created at line 460.
+    Found 7-bit adder for signal <hamming_6s_1024<3>> created at line 458.
+    Found 3-bit adder for signal <hamming_2s_64<3>> created at line 460.
+    Found 7-bit adder for signal <hamming_6s_1024<4>> created at line 458.
+    Found 3-bit adder for signal <hamming_2s_64<4>> created at line 460.
+    Found 7-bit adder for signal <hamming_6s_1024<5>> created at line 458.
+    Found 3-bit adder for signal <hamming_2s_64<5>> created at line 460.
+    Found 7-bit adder for signal <hamming_6s_1024<6>> created at line 458.
+    Found 3-bit adder for signal <hamming_2s_64<6>> created at line 460.
+    Found 7-bit adder for signal <hamming_6s_1024<7>> created at line 458.
+    Found 3-bit adder for signal <hamming_2s_64<7>> created at line 460.
+    Found 7-bit adder for signal <hamming_6s_1024<8>> created at line 458.
+    Found 3-bit adder for signal <hamming_2s_64<8>> created at line 460.
+    Found 7-bit adder for signal <hamming_6s_1024<9>> created at line 458.
+    Found 3-bit adder for signal <hamming_2s_64<9>> created at line 460.
+    Found 7-bit adder for signal <hamming_6s_1024<10>> created at line 458.
+    Found 3-bit adder for signal <hamming_2s_64<10>> created at line 460.
+    Found 7-bit adder for signal <hamming_6s_1024<11>> created at line 458.
+    Found 3-bit adder for signal <hamming_2s_64<11>> created at line 460.
+    Found 7-bit adder for signal <hamming_6s_1024<12>> created at line 458.
+    Found 3-bit adder for signal <hamming_2s_64<12>> created at line 460.
+    Found 7-bit adder for signal <hamming_6s_1024<13>> created at line 458.
+    Found 3-bit adder for signal <hamming_2s_64<13>> created at line 460.
+    Found 7-bit adder for signal <hamming_6s_1024<14>> created at line 458.
+    Found 3-bit adder for signal <hamming_2s_64<14>> created at line 460.
+    Found 7-bit adder for signal <hamming_6s_1024<15>> created at line 458.
+    Found 3-bit adder for signal <hamming_2s_64<15>> created at line 460.
+    Found 8-bit adder for signal <hamming_7s_1024<0>> created at line 465.
+    Found 4-bit adder for signal <hamming_3s_64<0>> created at line 467.
+    Found 8-bit adder for signal <hamming_7s_1024<1>> created at line 465.
+    Found 4-bit adder for signal <hamming_3s_64<1>> created at line 467.
+    Found 8-bit adder for signal <hamming_7s_1024<2>> created at line 465.
+    Found 4-bit adder for signal <hamming_3s_64<2>> created at line 467.
+    Found 8-bit adder for signal <hamming_7s_1024<3>> created at line 465.
+    Found 4-bit adder for signal <hamming_3s_64<3>> created at line 467.
+    Found 8-bit adder for signal <hamming_7s_1024<4>> created at line 465.
+    Found 4-bit adder for signal <hamming_3s_64<4>> created at line 467.
+    Found 8-bit adder for signal <hamming_7s_1024<5>> created at line 465.
+    Found 4-bit adder for signal <hamming_3s_64<5>> created at line 467.
+    Found 8-bit adder for signal <hamming_7s_1024<6>> created at line 465.
+    Found 4-bit adder for signal <hamming_3s_64<6>> created at line 467.
+    Found 8-bit adder for signal <hamming_7s_1024<7>> created at line 465.
+    Found 4-bit adder for signal <hamming_3s_64<7>> created at line 467.
+    Found 9-bit adder for signal <hamming_8s_1024<0>> created at line 472.
+    Found 5-bit adder for signal <hamming_4s_64<0>> created at line 474.
+    Found 9-bit adder for signal <hamming_8s_1024<1>> created at line 472.
+    Found 5-bit adder for signal <hamming_4s_64<1>> created at line 474.
+    Found 9-bit adder for signal <hamming_8s_1024<2>> created at line 472.
+    Found 5-bit adder for signal <hamming_4s_64<2>> created at line 474.
+    Found 9-bit adder for signal <hamming_8s_1024<3>> created at line 472.
+    Found 5-bit adder for signal <hamming_4s_64<3>> created at line 474.
+    Found 10-bit adder for signal <hamming_9s_1024<0>> created at line 479.
+    Found 6-bit adder for signal <hamming_5s_64<0>> created at line 481.
+    Found 10-bit adder for signal <hamming_9s_1024<1>> created at line 479.
+    Found 6-bit adder for signal <hamming_5s_64<1>> created at line 481.
+    Found 11-bit adder for signal <final_hamming_1024> created at line 485.
+    Found 7-bit adder for signal <final_hamming_64> created at line 486.
+    Found 11-bit adder for signal <final_hamming> created at line 488.
+    Found 12-bit adder for signal <clk_counter_inc> created at line 1241.
+    Found 12-bit adder for signal <peak_val[11]_GND_18_o_add_566_OUT> created at line 555.
+    Found 11-bit adder for signal <GND_18_o_GND_18_o_add_642_OUT> created at line 1241.
+    Found 12-bit adder for signal <samp_counter[11]_GND_18_o_add_671_OUT> created at line 1241.
+    Found 12-bit adder for signal <clk_div_x_idx[21]_GND_18_o_add_689_OUT> created at line 1241.
+    Found 12-bit subtractor for signal <GND_18_o_GND_18_o_sub_573_OUT<11:0>> created at line 565.
+    Found 3-bit subtractor for signal <GND_18_o_GND_18_o_sub_628_OUT<2:0>> created at line 1308.
+    Found 11-bit subtractor for signal <GND_18_o_GND_18_o_sub_657_OUT<10:0>> created at line 1308.
+    Found 12x11-bit multiplier for signal <clk_div_x_idx> created at line 693.
+    Found 12-bit comparator greater for signal <clk_counter_inc[11]_clk_div[11]_LessThan_546_o> created at line 500
+    Found 12-bit comparator greater for signal <sample_clock_mux> created at line 504
+    Found 12-bit comparator greater for signal <n1642> created at line 538
+    Found 11-bit comparator greater for signal <max_detect_2[10]_max_detect_1[10]_LessThan_551_o> created at line 544
+    Found 11-bit comparator lessequal for signal <n1645> created at line 545
+    Found 12-bit comparator greater for signal <n1682> created at line 555
+    Found 12-bit comparator greater for signal <n1686> created at line 563
+    Found 12-bit comparator lessequal for signal <n1698> created at line 583
+    Found 12-bit comparator lessequal for signal <n1762> created at line 622
+    Found 12-bit comparator greater for signal <new_clk_div[11]_GND_18_o_LessThan_608_o> created at line 632
+    Summary:
+	inferred   1 Multiplier(s).
+	inferred 551 Adder/Subtractor(s).
+	inferred 111 D-type flip-flop(s).
+	inferred  10 Comparator(s).
+	inferred  52 Multiplexer(s).
+Unit <AUTOCORRELATE> synthesized.
+
+Synthesizing Unit <SINGLE_AUTO>.
+    Related source file is "C:\Users\Dan\Documents\guitar_tuner\Code\Working_Files\auto.vhd".
+    Found 2-bit register for signal <register_2>.
+    Found 2-bit register for signal <register_1>.
+    Summary:
+	inferred   4 D-type flip-flop(s).
+	inferred   2 Multiplexer(s).
+Unit <SINGLE_AUTO> synthesized.
+
+Synthesizing Unit <FREQ_CONVERT>.
+    Related source file is "C:\Users\Dan\Documents\guitar_tuner\Code\Working_Files\freq_convert.vhd".
+INFO:Xst:3210 - "C:\Users\Dan\Documents\guitar_tuner\Code\Working_Files\freq_convert.vhd" line 138: Output port <rfd> of the instance <div> is unconnected or connected to loadless signal.
+    Found 14-bit register for signal <latched_quotient>.
+    Found 10-bit register for signal <latched_fractional>.
+    Found 16-bit register for signal <convert_val>.
+    Found 1-bit register for signal <disp_wr_en>.
+    Found 5-bit register for signal <char>.
+    Found 1-bit register for signal <do_convert>.
+    Found 14-bit register for signal <quot_out>.
+    Found 10-bit register for signal <frac_out>.
+    Found 16-bit register for signal <disp_data>.
+    Found 5-bit register for signal <convert_count>.
+    Found 1-bit register for signal <new_freq_latch>.
+    Found 1-bit register for signal <new_freq>.
+    Found 1-bit register for signal <do_divide>.
+    Found 4-bit adder for signal <convert_val[6]_GND_21_o_add_6_OUT> created at line 1241.
+    Found 4-bit adder for signal <convert_val[10]_GND_21_o_add_8_OUT> created at line 1241.
+    Found 4-bit adder for signal <convert_val[14]_GND_21_o_add_10_OUT> created at line 1241.
+    Found 4-bit adder for signal <convert_val[2]_GND_21_o_add_12_OUT> created at line 1241.
+    Found 5-bit adder for signal <char[4]_GND_21_o_add_20_OUT> created at line 1241.
+    Found 5-bit adder for signal <convert_count[4]_GND_21_o_add_48_OUT> created at line 1241.
+    Found 12x11-bit multiplier for signal <div_x_bin> created at line 155.
+    Found 10x4-bit multiplier for signal <frac_mul_10> created at line 162.
+    Found 5-bit comparator greater for signal <convert_count[4]_GND_21_o_LessThan_5_o> created at line 190
+    Found 4-bit comparator lessequal for signal <n0009> created at line 197
+    Found 4-bit comparator lessequal for signal <n0016> created at line 197
+    Found 4-bit comparator lessequal for signal <n0023> created at line 197
+    Found 4-bit comparator lessequal for signal <n0030> created at line 205
+    Found 5-bit comparator lessequal for signal <n0039> created at line 223
+    Found 5-bit comparator greater for signal <convert_count[4]_PWR_27_o_LessThan_16_o> created at line 229
+    Summary:
+	inferred   2 Multiplier(s).
+	inferred   6 Adder/Subtractor(s).
+	inferred  95 D-type flip-flop(s).
+	inferred   7 Comparator(s).
+	inferred  32 Multiplexer(s).
+Unit <FREQ_CONVERT> synthesized.
+
+Synthesizing Unit <USER_INTERFACE>.
+    Related source file is "C:\Users\Dan\Documents\guitar_tuner\Code\Working_Files\ui.vhd".
+    Found 3-bit register for signal <curr_string>.
+    Found 1-bit register for signal <auto_tune>.
+    Found 2-bit register for signal <redraw_row>.
+    Found 5-bit register for signal <redraw_col>.
+    Found 1-bit register for signal <redraw>.
+    Found 1-bit register for signal <do_reset>.
+    Found 1-bit register for signal <run_auto_tune_sig>.
+    Found 1-bit register for signal <got_tuned>.
+    Found 16-bit register for signal <disp_data>.
+    Found 1-bit register for signal <disp_wr_en>.
+    Found 6-bit subtractor for signal <n0194> created at line 135.
+    Found 3-bit adder for signal <n0244[2:0]> created at line 118.
+    Found 5-bit adder for signal <redraw_col[4]_GND_23_o_add_45_OUT> created at line 197.
+    Found 3-bit adder for signal <curr_string[2]_GND_23_o_add_67_OUT> created at line 1241.
+    Found 3-bit subtractor for signal <GND_23_o_GND_23_o_sub_17_OUT<2:0>> created at line 1308.
+    Found 3-bit subtractor for signal <GND_23_o_GND_23_o_sub_26_OUT<2:0>> created at line 153.
+    Found 32x52-bit Read Only RAM for signal <_n0513>
+    Found 1-bit 4-to-1 multiplexer for signal <redraw_row[1]_redraw_col[4]_Mux_34_o> created at line 124.
+    Found 1-bit 4-to-1 multiplexer for signal <redraw_row[1]_redraw_col[4]_Mux_35_o> created at line 124.
+    Found 1-bit 4-to-1 multiplexer for signal <redraw_row[1]_redraw_col[4]_Mux_36_o> created at line 124.
+    Found 1-bit 4-to-1 multiplexer for signal <redraw_row[1]_redraw_col[4]_Mux_37_o> created at line 124.
+    Found 1-bit 4-to-1 multiplexer for signal <redraw_row[1]_redraw_col[4]_Mux_38_o> created at line 124.
+    Found 1-bit 4-to-1 multiplexer for signal <redraw_row[1]_redraw_col[4]_Mux_39_o> created at line 124.
+    Found 1-bit 4-to-1 multiplexer for signal <redraw_row[1]_redraw_col[4]_Mux_40_o> created at line 124.
+    Found 1-bit 7-to-1 multiplexer for signal <GND_23_o_GND_23_o_wide_mux_26_OUT<3>> created at line 152.
+    Found 1-bit 7-to-1 multiplexer for signal <GND_23_o_GND_23_o_wide_mux_26_OUT<2>> created at line 152.
+    Found 1-bit 8-to-1 multiplexer for signal <GND_23_o_GND_23_o_wide_mux_26_OUT<1>> created at line 152.
+    Found 1-bit 8-to-1 multiplexer for signal <GND_23_o_GND_23_o_wide_mux_26_OUT<0>> created at line 152.
+    Found 5-bit comparator lessequal for signal <n0042> created at line 152
+    Summary:
+	inferred   1 RAM(s).
+	inferred   6 Adder/Subtractor(s).
+	inferred  32 D-type flip-flop(s).
+	inferred   1 Comparator(s).
+	inferred  84 Multiplexer(s).
+Unit <USER_INTERFACE> synthesized.
+
+Synthesizing Unit <TUNER>.
+    Related source file is "C:\Users\Dan\Documents\guitar_tuner\Code\Working_Files\tuner.vhd".
+INFO:Xst:3210 - "C:\Users\Dan\Documents\guitar_tuner\Code\Working_Files\tuner.vhd" line 191: Output port <rfd> of the instance <stepHzDiv> is unconnected or connected to loadless signal.
+    Found 16-bit register for signal <step_wait_counter>.
+    Found 3-bit register for signal <curr_state>.
+    Found 1-bit register for signal <first_run>.
+    Found 1-bit register for signal <n_stepping>.
+    Found 24-bit register for signal <new_freq>.
+    Found 24-bit register for signal <old_freq>.
+    Found 1-bit register for signal <divide_nd>.
+    Found 1-bit register for signal <step>.
+    Found 1-bit register for signal <dir>.
+    Found 18-bit register for signal <dividend>.
+    Found 18-bit register for signal <divisor>.
+    Found 18-bit register for signal <latched_quotient>.
+    Found 10-bit register for signal <latched_fractional>.
+    Found 9-bit register for signal <new_steps>.
+    Found 9-bit register for signal <num_steps>.
+    Found 9-bit register for signal <old_steps>.
+    Found 24-bit register for signal <tune_wait_counter>.
+    Found 3-bit register for signal <curr_string_latch>.
+    Found finite state machine <FSM_1> for signal <curr_state>.
+    -----------------------------------------------------------------------
+    | States             | 8                                              |
+    | Transitions        | 16                                             |
+    | Inputs             | 7                                              |
+    | Outputs            | 7                                              |
+    | Clock              | clk (rising_edge)                              |
+    | Reset              | n_reset_GND_24_o_OR_192_o (positive)           |
+    | Reset type         | synchronous                                    |
+    | Reset State        | idle                                           |
+    | Power Up State     | idle                                           |
+    | Encoding           | auto                                           |
+    | Implementation     | LUT                                            |
+    -----------------------------------------------------------------------
+    Found 25-bit adder for signal <freq_to_go[24]_GND_24_o_add_9_OUT> created at line 1241.
+    Found 25-bit adder for signal <freq_moved[24]_GND_24_o_add_12_OUT> created at line 1241.
+    Found 16-bit adder for signal <step_wait_counter[15]_GND_24_o_add_51_OUT> created at line 1241.
+    Found 24-bit adder for signal <tune_wait_counter[23]_GND_24_o_add_61_OUT> created at line 1241.
+    Found 3-bit subtractor for signal <GND_24_o_GND_24_o_sub_4_OUT<2:0>> created at line 1308.
+    Found 25-bit subtractor for signal <freq_to_go> created at line 94.
+    Found 25-bit subtractor for signal <freq_moved> created at line 95.
+    Found 9-bit subtractor for signal <GND_24_o_GND_24_o_sub_55_OUT<8:0>> created at line 1308.
+    Found 9x12-bit multiplier for signal <new_steps_x_1024> created at line 232.
+    Found 18-bit comparator lessequal for signal <n0027> created at line 224
+    Found 11-bit comparator lessequal for signal <n0031> created at line 238
+    Found 15-bit comparator lessequal for signal <n0064> created at line 309
+    Found 15-bit comparator lessequal for signal <n0067> created at line 316
+    Summary:
+	inferred   1 Multiplier(s).
+	inferred   8 Adder/Subtractor(s).
+	inferred 187 D-type flip-flop(s).
+	inferred   4 Comparator(s).
+	inferred  17 Multiplexer(s).
+	inferred   1 Finite State Machine(s).
+Unit <TUNER> synthesized.
+
+=========================================================================
+HDL Synthesis Report
+
+Macro Statistics
+# RAMs                                                 : 1
+ 32x52-bit single-port Read Only RAM                   : 1
+# Multipliers                                          : 4
+ 10x4-bit multiplier                                   : 1
+ 12x11-bit multiplier                                  : 2
+ 12x9-bit multiplier                                   : 1
+# Adders/Subtractors                                   : 591
+ 10-bit adder                                          : 8
+ 11-bit adder                                          : 4
+ 11-bit subtractor                                     : 1
+ 12-bit adder                                          : 5
+ 12-bit subtractor                                     : 1
+ 16-bit adder                                          : 2
+ 18-bit adder                                          : 1
+ 18-bit subtractor                                     : 1
+ 19-bit subtractor                                     : 1
+ 24-bit adder                                          : 1
+ 25-bit adder                                          : 2
+ 25-bit subtractor                                     : 2
+ 3-bit adder                                           : 274
+ 3-bit subtractor                                      : 4
+ 4-bit adder                                           : 141
+ 5-bit adder                                           : 71
+ 5-bit subtractor                                      : 4
+ 6-bit adder                                           : 34
+ 6-bit subtractor                                      : 1
+ 7-bit adder                                           : 18
+ 8-bit adder                                           : 10
+ 9-bit adder                                           : 4
+ 9-bit subtractor                                      : 1
+# Registers                                            : 2291
+ 1-bit register                                        : 50
+ 10-bit register                                       : 14
+ 11-bit register                                       : 4
+ 12-bit register                                       : 7
+ 14-bit register                                       : 2
+ 16-bit register                                       : 5
+ 18-bit register                                       : 7
+ 2-bit register                                        : 2178
+ 20-bit register                                       : 6
+ 24-bit register                                       : 4
+ 3-bit register                                        : 2
+ 4-bit register                                        : 1
+ 5-bit register                                        : 5
+ 8-bit register                                        : 3
+ 9-bit register                                        : 3
+# Comparators                                          : 40
+ 11-bit comparator greater                             : 1
+ 11-bit comparator lessequal                           : 2
+ 12-bit comparator greater                             : 6
+ 12-bit comparator lessequal                           : 2
+ 15-bit comparator lessequal                           : 2
+ 18-bit comparator greater                             : 3
+ 18-bit comparator lessequal                           : 2
+ 19-bit comparator greater                             : 1
+ 4-bit comparator lessequal                            : 4
+ 5-bit comparator greater                              : 2
+ 5-bit comparator lessequal                            : 2
+ 8-bit comparator greater                              : 1
+ 8-bit comparator lessequal                            : 12
+# Multiplexers                                         : 2425
+ 1-bit 2-to-1 multiplexer                              : 2350
+ 1-bit 20-to-1 multiplexer                             : 3
+ 1-bit 4-to-1 multiplexer                              : 7
+ 1-bit 7-to-1 multiplexer                              : 2
+ 1-bit 8-to-1 multiplexer                              : 2
+ 10-bit 2-to-1 multiplexer                             : 6
+ 12-bit 2-to-1 multiplexer                             : 6
+ 14-bit 2-to-1 multiplexer                             : 2
+ 16-bit 2-to-1 multiplexer                             : 5
+ 18-bit 2-to-1 multiplexer                             : 3
+ 2-bit 2-to-1 multiplexer                              : 1
+ 20-bit 2-to-1 multiplexer                             : 4
+ 24-bit 2-to-1 multiplexer                             : 9
+ 25-bit 2-to-1 multiplexer                             : 4
+ 3-bit 2-to-1 multiplexer                              : 6
+ 5-bit 2-to-1 multiplexer                              : 3
+ 7-bit 2-to-1 multiplexer                              : 2
+ 8-bit 2-to-1 multiplexer                              : 7
+ 9-bit 2-to-1 multiplexer                              : 3
+# FSMs                                                 : 2
+# Xors                                                 : 545
+ 1-bit xor2                                            : 544
+ 5-bit xor2                                            : 1
+
+=========================================================================
+INFO:Xst:1767 - HDL ADVISOR - Resource sharing has identified that some arithmetic operations in this design can share the same physical resources for reduced device utilization. For improved clock frequency you may try to disable resource sharing.
+
+=========================================================================
+*                       Advanced HDL Synthesis                          *
+=========================================================================
+
+Reading core <DISPLAY_FIFO.ngc>.
+Reading core <FREQ_DIVIDER.ngc>.
+Reading core <STEPS_HZ_DIVIDER.ngc>.
+Loading core <DISPLAY_FIFO> for timing and area information for instance <dispFIFO>.
+Loading core <FREQ_DIVIDER> for timing and area information for instance <div>.
+Loading core <STEPS_HZ_DIVIDER> for timing and area information for instance <stepHzDiv>.
+INFO:Xst:2261 - The FF/Latch <debounce_compare_3> in Unit <genDBs[0].DBx> is equivalent to the following 2 FFs/Latches, which will be removed : <debounce_compare_6> <debounce_compare_9> 
+INFO:Xst:2261 - The FF/Latch <debounce_compare_3> in Unit <genDBs[1].DBx> is equivalent to the following 2 FFs/Latches, which will be removed : <debounce_compare_6> <debounce_compare_9> 
+INFO:Xst:2261 - The FF/Latch <debounce_compare_3> in Unit <genDBs[2].DBx> is equivalent to the following 2 FFs/Latches, which will be removed : <debounce_compare_6> <debounce_compare_9> 
+INFO:Xst:2261 - The FF/Latch <debounce_compare_3> in Unit <genDBs[3].DBx> is equivalent to the following 2 FFs/Latches, which will be removed : <debounce_compare_6> <debounce_compare_9> 
+INFO:Xst:2261 - The FF/Latch <debounce_compare_3> in Unit <genDBs[4].DBx> is equivalent to the following 2 FFs/Latches, which will be removed : <debounce_compare_6> <debounce_compare_9> 
+INFO:Xst:2261 - The FF/Latch <l_cmd_addr_0> in Unit <ac97_main> is equivalent to the following 17 FFs/Latches, which will be removed : <l_cmd_addr_1> <l_cmd_addr_2> <l_cmd_addr_3> <l_cmd_addr_4> <l_cmd_addr_5> <l_cmd_addr_6> <l_cmd_addr_7> <l_cmd_addr_8> <l_cmd_addr_9> <l_cmd_addr_10> <l_cmd_addr_11> <l_cmd_data_0> <l_cmd_data_1> <l_cmd_data_2> <l_cmd_data_3> <l_right_data_0> <l_right_data_1> 
+INFO:Xst:2261 - The FF/Latch <disp_clk_counter_11> in Unit <dsply> is equivalent to the following FF/Latch, which will be removed : <disp_clk> 
+INFO:Xst:2261 - The FF/Latch <disp_data_6> in Unit <frqconv> is equivalent to the following 2 FFs/Latches, which will be removed : <disp_data_7> <disp_data_15> 
+INFO:Xst:2261 - The FF/Latch <disp_data_5> in Unit <frqconv> is equivalent to the following 2 FFs/Latches, which will be removed : <disp_data_13> <disp_data_14> 
+WARNING:Xst:1710 - FF/Latch <debounce_compare_4> (without init value) has a constant value of 1 in block <genDBs[0].DBx>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <debounce_compare_4> (without init value) has a constant value of 1 in block <genDBs[1].DBx>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <debounce_compare_4> (without init value) has a constant value of 1 in block <genDBs[2].DBx>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <debounce_compare_4> (without init value) has a constant value of 1 in block <genDBs[3].DBx>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <debounce_compare_4> (without init value) has a constant value of 1 in block <genDBs[4].DBx>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <l_cmd_addr_0> (without init value) has a constant value of 0 in block <ac97_main>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <peak_val_11> (without init value) has a constant value of 0 in block <corr>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <disp_data_5> (without init value) has a constant value of 1 in block <frqconv>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <disp_data_6> (without init value) has a constant value of 0 in block <frqconv>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:2677 - Node <debounce_compare_0> of sequential type is unconnected in block <genDBs[0].DBx>.
+WARNING:Xst:2677 - Node <debounce_compare_1> of sequential type is unconnected in block <genDBs[0].DBx>.
+WARNING:Xst:2677 - Node <debounce_compare_5> of sequential type is unconnected in block <genDBs[0].DBx>.
+WARNING:Xst:2677 - Node <debounce_compare_7> of sequential type is unconnected in block <genDBs[0].DBx>.
+WARNING:Xst:2677 - Node <debounce_compare_8> of sequential type is unconnected in block <genDBs[0].DBx>.
+WARNING:Xst:2677 - Node <debounce_compare_0> of sequential type is unconnected in block <genDBs[1].DBx>.
+WARNING:Xst:2677 - Node <debounce_compare_1> of sequential type is unconnected in block <genDBs[1].DBx>.
+WARNING:Xst:2677 - Node <debounce_compare_5> of sequential type is unconnected in block <genDBs[1].DBx>.
+WARNING:Xst:2677 - Node <debounce_compare_7> of sequential type is unconnected in block <genDBs[1].DBx>.
+WARNING:Xst:2677 - Node <debounce_compare_8> of sequential type is unconnected in block <genDBs[1].DBx>.
+WARNING:Xst:2677 - Node <debounce_compare_0> of sequential type is unconnected in block <genDBs[2].DBx>.
+WARNING:Xst:2677 - Node <debounce_compare_1> of sequential type is unconnected in block <genDBs[2].DBx>.
+WARNING:Xst:2677 - Node <debounce_compare_5> of sequential type is unconnected in block <genDBs[2].DBx>.
+WARNING:Xst:2677 - Node <debounce_compare_7> of sequential type is unconnected in block <genDBs[2].DBx>.
+WARNING:Xst:2677 - Node <debounce_compare_8> of sequential type is unconnected in block <genDBs[2].DBx>.
+WARNING:Xst:2677 - Node <debounce_compare_0> of sequential type is unconnected in block <genDBs[3].DBx>.
+WARNING:Xst:2677 - Node <debounce_compare_1> of sequential type is unconnected in block <genDBs[3].DBx>.
+WARNING:Xst:2677 - Node <debounce_compare_5> of sequential type is unconnected in block <genDBs[3].DBx>.
+WARNING:Xst:2677 - Node <debounce_compare_7> of sequential type is unconnected in block <genDBs[3].DBx>.
+WARNING:Xst:2677 - Node <debounce_compare_8> of sequential type is unconnected in block <genDBs[3].DBx>.
+WARNING:Xst:2677 - Node <debounce_compare_0> of sequential type is unconnected in block <genDBs[4].DBx>.
+WARNING:Xst:2677 - Node <debounce_compare_1> of sequential type is unconnected in block <genDBs[4].DBx>.
+WARNING:Xst:2677 - Node <debounce_compare_5> of sequential type is unconnected in block <genDBs[4].DBx>.
+WARNING:Xst:2677 - Node <debounce_compare_7> of sequential type is unconnected in block <genDBs[4].DBx>.
+WARNING:Xst:2677 - Node <debounce_compare_8> of sequential type is unconnected in block <genDBs[4].DBx>.
+WARNING:Xst:2404 -  FFs/Latches <peak_val<11:11>> (without init value) have a constant value of 0 in block <AUTOCORRELATE>.
+WARNING:Xst:2404 -  FFs/Latches <disp_data<15:15>> (without init value) have a constant value of 0 in block <FREQ_CONVERT>.
+
+Synthesizing (advanced) Unit <AUDIO>.
+The following registers are absorbed into counter <sync_clk_counter>: 1 register on signal <sync_clk_counter>.
+Unit <AUDIO> synthesized (advanced).
+
+Synthesizing (advanced) Unit <AUTOCORRELATE>.
+The following registers are absorbed into counter <clk_counter>: 1 register on signal <clk_counter>.
+The following registers are absorbed into counter <samp_counter>: 1 register on signal <samp_counter>.
+	The following adders/subtractors are grouped into adder tree <Madd_final_hamming1> :
+ 	<Madd_hamming_2s_1024<0>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<1>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<2>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<3>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<4>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<5>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<6>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<7>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<8>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<9>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<10>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<11>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<12>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<13>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<14>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<15>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<16>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<17>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<18>> in block <AUTOCORRELATE>,
+	<Madd_hamming_2s_1024<19>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<20>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<21>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<22>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<23>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<24>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<25>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<26>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<27>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<28>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<29>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<30>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<31>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<32>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<33>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<34>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<35>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<36>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<37>> in block
+<AUTOCORRELATE>, 	<Madd_hamming_2s_1024<38>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<39>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<40>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<41>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<42>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<43>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<44>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<45>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<46>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<47>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<48>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<49>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<50>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<51>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<52>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<53>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<54>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<55>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<56>> in
+block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<57>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<58>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<59>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<60>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<61>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<62>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<63>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<64>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<65>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<66>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<67>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<68>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<69>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<70>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<71>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<72>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<73>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<74>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<75>>
+in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<76>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<77>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<78>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<79>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<80>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<81>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<82>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<83>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<84>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<85>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<86>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<87>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<88>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<89>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<90>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<91>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<92>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<93>> in block <AUTOCORRELATE>,
+	<Madd_hamming_2s_1024<94>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<95>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<96>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<97>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<98>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<99>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<100>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<101>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<102>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<103>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<104>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<105>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<106>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<107>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<108>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<109>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<110>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<111>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<112>> in block
+<AUTOCORRELATE>, 	<Madd_hamming_2s_1024<113>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<114>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<115>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<116>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<117>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<118>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<119>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<120>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<121>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<122>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<123>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<124>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<125>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<126>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<127>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<128>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<129>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<130>> in block <AUTOCORRELATE>,
+	<Madd_hamming_2s_1024<131>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<132>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<133>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<134>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<135>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<136>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<137>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<138>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<139>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<140>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<141>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<142>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<143>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<144>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<145>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<146>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<147>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<148>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<149>> in
+block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<150>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<151>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<152>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<153>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<154>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<155>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<156>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<157>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<158>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<159>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<160>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<161>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<162>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<163>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<164>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<165>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<166>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<167>> in block <AUTOCORRELATE>,
+	<Madd_hamming_2s_1024<168>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<169>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<170>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<171>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<172>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<173>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<174>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<175>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<176>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<177>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<178>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<179>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<180>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<181>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<182>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<183>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<184>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<185>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<186>> in
+block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<187>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<188>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<189>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<190>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<191>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<192>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<193>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<194>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<195>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<196>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<197>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<198>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<199>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<200>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<201>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<202>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<203>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<204>> in block <AUTOCORRELATE>,
+	<Madd_hamming_2s_1024<205>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<206>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<207>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<208>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<209>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<210>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<211>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<212>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<213>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<214>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<215>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<216>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<217>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<218>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<219>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<220>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<221>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<222>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<223>> in
+block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<224>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<225>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<226>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<227>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<228>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<229>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<230>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<231>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<232>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<233>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<234>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<235>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<236>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<237>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<238>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<239>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<240>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<241>> in block <AUTOCORRELATE>,
+	<Madd_hamming_2s_1024<242>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<243>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<244>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<245>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<246>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<247>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<248>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<249>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<250>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<251>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<252>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<253>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<254>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_1024<255>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_64<0>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_64<1>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_64<2>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_64<3>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_64<4>> in block <AUTOCORRELATE>,
+	<Madd_hamming_2s_64<5>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_64<6>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_64<7>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_64<8>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_64<9>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_64<10>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_64<11>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_64<12>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_64<13>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_64<14>> in block <AUTOCORRELATE>, 	<Madd_hamming_2s_64<15>> in block <AUTOCORRELATE>.
+	The following adders/subtractors are grouped into adder tree <Madd_final_hamming_641> :
+ 	<Madd_hamming_3s_64<0>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_64<1>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_64<2>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_64<3>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_64<4>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_64<5>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_64<6>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_64<7>> in block <AUTOCORRELATE>.
+	The following adders/subtractors are grouped into adder tree <Madd_hamming_5s_64<1>1> :
+ 	<Madd_hamming_4s_64<2>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_64<3>> in block <AUTOCORRELATE>.
+	The following adders/subtractors are grouped into adder tree <Madd_hamming_5s_64<0>1> :
+ 	<Madd_hamming_4s_64<0>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_64<1>> in block <AUTOCORRELATE>.
+	The following adders/subtractors are grouped into adder tree <Madd_final_hamming_10241> :
+ 	<Madd_hamming_3s_1024<0>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<1>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<2>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<3>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<4>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<5>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<6>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<7>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<8>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<9>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<10>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<11>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<12>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<13>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<14>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<15>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<16>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<17>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<18>> in block <AUTOCORRELATE>,
+	<Madd_hamming_3s_1024<19>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<20>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<21>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<22>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<23>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<24>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<25>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<26>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<27>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<28>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<29>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<30>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<31>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<32>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<33>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<34>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<35>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<36>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<37>> in block
+<AUTOCORRELATE>, 	<Madd_hamming_3s_1024<38>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<39>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<40>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<41>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<42>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<43>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<44>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<45>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<46>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<47>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<48>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<49>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<50>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<51>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<52>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<53>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<54>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<55>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<56>> in
+block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<57>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<58>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<59>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<60>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<61>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<62>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<63>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<64>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<65>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<66>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<67>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<68>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<69>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<70>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<71>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<72>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<73>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<74>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<75>>
+in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<76>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<77>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<78>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<79>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<80>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<81>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<82>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<83>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<84>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<85>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<86>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<87>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<88>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<89>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<90>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<91>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<92>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<93>> in block <AUTOCORRELATE>,
+	<Madd_hamming_3s_1024<94>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<95>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<96>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<97>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<98>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<99>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<100>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<101>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<102>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<103>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<104>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<105>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<106>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<107>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<108>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<109>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<110>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<111>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<112>> in block
+<AUTOCORRELATE>, 	<Madd_hamming_3s_1024<113>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<114>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<115>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<116>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<117>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<118>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<119>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<120>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<121>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<122>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<123>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<124>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<125>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<126>> in block <AUTOCORRELATE>, 	<Madd_hamming_3s_1024<127>> in block <AUTOCORRELATE>.
+	The following adders/subtractors are grouped into adder tree <Madd_hamming_9s_1024<1>1> :
+ 	<Madd_hamming_4s_1024<32>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<33>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<34>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<35>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<36>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<37>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<38>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<39>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<40>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<41>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<42>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<43>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<44>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<45>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<46>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<47>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<48>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<49>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<50>> in block
+<AUTOCORRELATE>, 	<Madd_hamming_4s_1024<51>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<52>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<53>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<54>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<55>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<56>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<57>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<58>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<59>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<60>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<61>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<62>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<63>> in block <AUTOCORRELATE>.
+	The following adders/subtractors are grouped into adder tree <Madd_hamming_8s_1024<3>1> :
+ 	<Madd_hamming_5s_1024<24>> in block <AUTOCORRELATE>, 	<Madd_hamming_5s_1024<25>> in block <AUTOCORRELATE>, 	<Madd_hamming_5s_1024<26>> in block <AUTOCORRELATE>, 	<Madd_hamming_5s_1024<27>> in block <AUTOCORRELATE>, 	<Madd_hamming_5s_1024<28>> in block <AUTOCORRELATE>, 	<Madd_hamming_5s_1024<29>> in block <AUTOCORRELATE>, 	<Madd_hamming_5s_1024<30>> in block <AUTOCORRELATE>, 	<Madd_hamming_5s_1024<31>> in block <AUTOCORRELATE>.
+	The following adders/subtractors are grouped into adder tree <Madd_hamming_7s_1024<7>1> :
+ 	<Madd_hamming_6s_1024<14>> in block <AUTOCORRELATE>, 	<Madd_hamming_6s_1024<15>> in block <AUTOCORRELATE>.
+	The following adders/subtractors are grouped into adder tree <Madd_hamming_7s_1024<6>1> :
+ 	<Madd_hamming_6s_1024<12>> in block <AUTOCORRELATE>, 	<Madd_hamming_6s_1024<13>> in block <AUTOCORRELATE>.
+	The following adders/subtractors are grouped into adder tree <Madd_hamming_8s_1024<2>1> :
+ 	<Madd_hamming_5s_1024<16>> in block <AUTOCORRELATE>, 	<Madd_hamming_5s_1024<17>> in block <AUTOCORRELATE>, 	<Madd_hamming_5s_1024<18>> in block <AUTOCORRELATE>, 	<Madd_hamming_5s_1024<19>> in block <AUTOCORRELATE>, 	<Madd_hamming_5s_1024<20>> in block <AUTOCORRELATE>, 	<Madd_hamming_5s_1024<21>> in block <AUTOCORRELATE>, 	<Madd_hamming_5s_1024<22>> in block <AUTOCORRELATE>, 	<Madd_hamming_5s_1024<23>> in block <AUTOCORRELATE>.
+	The following adders/subtractors are grouped into adder tree <Madd_hamming_7s_1024<5>1> :
+ 	<Madd_hamming_6s_1024<10>> in block <AUTOCORRELATE>, 	<Madd_hamming_6s_1024<11>> in block <AUTOCORRELATE>.
+	The following adders/subtractors are grouped into adder tree <Madd_hamming_7s_1024<4>1> :
+ 	<Madd_hamming_6s_1024<8>> in block <AUTOCORRELATE>, 	<Madd_hamming_6s_1024<9>> in block <AUTOCORRELATE>.
+	The following adders/subtractors are grouped into adder tree <Madd_hamming_9s_1024<0>1> :
+ 	<Madd_hamming_4s_1024<0>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<1>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<2>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<3>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<4>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<5>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<6>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<7>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<8>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<9>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<10>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<11>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<12>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<13>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<14>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<15>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<16>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<17>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<18>> in block <AUTOCORRELATE>,
+	<Madd_hamming_4s_1024<19>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<20>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<21>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<22>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<23>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<24>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<25>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<26>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<27>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<28>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<29>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<30>> in block <AUTOCORRELATE>, 	<Madd_hamming_4s_1024<31>> in block <AUTOCORRELATE>.
+	The following adders/subtractors are grouped into adder tree <Madd_hamming_8s_1024<1>1> :
+ 	<Madd_hamming_5s_1024<8>> in block <AUTOCORRELATE>, 	<Madd_hamming_5s_1024<9>> in block <AUTOCORRELATE>, 	<Madd_hamming_5s_1024<10>> in block <AUTOCORRELATE>, 	<Madd_hamming_5s_1024<11>> in block <AUTOCORRELATE>, 	<Madd_hamming_5s_1024<12>> in block <AUTOCORRELATE>, 	<Madd_hamming_5s_1024<13>> in block <AUTOCORRELATE>, 	<Madd_hamming_5s_1024<14>> in block <AUTOCORRELATE>, 	<Madd_hamming_5s_1024<15>> in block <AUTOCORRELATE>.
+	The following adders/subtractors are grouped into adder tree <Madd_hamming_7s_1024<3>1> :
+ 	<Madd_hamming_6s_1024<6>> in block <AUTOCORRELATE>, 	<Madd_hamming_6s_1024<7>> in block <AUTOCORRELATE>.
+	The following adders/subtractors are grouped into adder tree <Madd_hamming_7s_1024<2>1> :
+ 	<Madd_hamming_6s_1024<4>> in block <AUTOCORRELATE>, 	<Madd_hamming_6s_1024<5>> in block <AUTOCORRELATE>.
+	The following adders/subtractors are grouped into adder tree <Madd_hamming_8s_1024<0>1> :
+ 	<Madd_hamming_5s_1024<0>> in block <AUTOCORRELATE>, 	<Madd_hamming_5s_1024<1>> in block <AUTOCORRELATE>, 	<Madd_hamming_5s_1024<2>> in block <AUTOCORRELATE>, 	<Madd_hamming_5s_1024<3>> in block <AUTOCORRELATE>, 	<Madd_hamming_5s_1024<4>> in block <AUTOCORRELATE>, 	<Madd_hamming_5s_1024<5>> in block <AUTOCORRELATE>, 	<Madd_hamming_5s_1024<6>> in block <AUTOCORRELATE>, 	<Madd_hamming_5s_1024<7>> in block <AUTOCORRELATE>.
+	The following adders/subtractors are grouped into adder tree <Madd_hamming_7s_1024<1>1> :
+ 	<Madd_hamming_6s_1024<2>> in block <AUTOCORRELATE>, 	<Madd_hamming_6s_1024<3>> in block <AUTOCORRELATE>.
+	The following adders/subtractors are grouped into adder tree <Madd_hamming_7s_1024<0>1> :
+ 	<Madd_hamming_6s_1024<0>> in block <AUTOCORRELATE>, 	<Madd_hamming_6s_1024<1>> in block <AUTOCORRELATE>.
+Unit <AUTOCORRELATE> synthesized (advanced).
+
+Synthesizing (advanced) Unit <DEBOUNCE>.
+The following registers are absorbed into counter <db_clock_counter>: 1 register on signal <db_clock_counter>.
+Unit <DEBOUNCE> synthesized (advanced).
+
+Synthesizing (advanced) Unit <DISPLAY>.
+The following registers are absorbed into counter <disp_clk_counter>: 1 register on signal <disp_clk_counter>.
+Unit <DISPLAY> synthesized (advanced).
+
+Synthesizing (advanced) Unit <FREQ_CONVERT>.
+The following registers are absorbed into counter <char>: 1 register on signal <char>.
+The following registers are absorbed into counter <convert_count>: 1 register on signal <convert_count>.
+Unit <FREQ_CONVERT> synthesized (advanced).
+
+Synthesizing (advanced) Unit <SINGLE_DEBOUNCE>.
+The following registers are absorbed into counter <debounce_counter>: 1 register on signal <debounce_counter>.
+Unit <SINGLE_DEBOUNCE> synthesized (advanced).
+
+Synthesizing (advanced) Unit <TUNER>.
+The following registers are absorbed into counter <num_steps>: 1 register on signal <num_steps>.
+The following registers are absorbed into counter <tune_wait_counter>: 1 register on signal <tune_wait_counter>.
+Unit <TUNER> synthesized (advanced).
+
+Synthesizing (advanced) Unit <USER_INTERFACE>.
+The following registers are absorbed into counter <redraw_col>: 1 register on signal <redraw_col>.
+INFO:Xst:3218 - HDL ADVISOR - The RAM <Mram__n0513> will be implemented on LUTs either because you have described an asynchronous read or because of currently unsupported block RAM features. If you have described an asynchronous read, making it synchronous would allow you to take advantage of available block RAM resources, for optimized device usage and improved timings. Please refer to your documentation for coding guidelines.
+    -----------------------------------------------------------------------
+    | ram_type           | Distributed                         |          |
+    -----------------------------------------------------------------------
+    | Port A                                                              |
+    |     aspect ratio   | 32-word x 52-bit                    |          |
+    |     weA            | connected to signal <GND>           | high     |
+    |     addrA          | connected to signal <redraw_col>    |          |
+    |     diA            | connected to signal <GND>           |          |
+    |     doA            | connected to internal node          |          |
+    -----------------------------------------------------------------------
+Unit <USER_INTERFACE> synthesized (advanced).
+
+Synthesizing (advanced) Unit <dc97>.
+The following registers are absorbed into counter <ctrwait>: 1 register on signal <ctrwait>.
+The following registers are absorbed into counter <bit_count>: 1 register on signal <bit_count>.
+Unit <dc97> synthesized (advanced).
+
+Synthesizing (advanced) Unit <dc97cmd>.
+The following registers are absorbed into counter <state>: 1 register on signal <state>.
+Unit <dc97cmd> synthesized (advanced).
+WARNING:Xst:2677 - Node <debounce_compare_0> of sequential type is unconnected in block <SINGLE_DEBOUNCE>.
+WARNING:Xst:2677 - Node <debounce_compare_1> of sequential type is unconnected in block <SINGLE_DEBOUNCE>.
+WARNING:Xst:2677 - Node <debounce_compare_5> of sequential type is unconnected in block <SINGLE_DEBOUNCE>.
+WARNING:Xst:2677 - Node <debounce_compare_7> of sequential type is unconnected in block <SINGLE_DEBOUNCE>.
+WARNING:Xst:2677 - Node <debounce_compare_8> of sequential type is unconnected in block <SINGLE_DEBOUNCE>.
+
+=========================================================================
+Advanced HDL Synthesis Report
+
+Macro Statistics
+# RAMs                                                 : 1
+ 32x52-bit single-port distributed Read Only RAM       : 1
+# Multipliers                                          : 4
+ 10x4-bit multiplier                                   : 1
+ 12x11-bit multiplier                                  : 2
+ 12x9-bit multiplier                                   : 1
+# Adders/Subtractors                                   : 32
+ 1-bit subtractor                                      : 1
+ 11-bit adder                                          : 1
+ 11-bit subtractor                                     : 1
+ 12-bit adder                                          : 4
+ 12-bit subtractor                                     : 1
+ 16-bit adder                                          : 1
+ 18-bit adder                                          : 1
+ 18-bit subtractor                                     : 1
+ 19-bit subtractor                                     : 1
+ 25-bit adder                                          : 2
+ 25-bit subtractor                                     : 2
+ 3-bit adder                                           : 2
+ 3-bit subtractor                                      : 4
+ 4-bit adder                                           : 4
+ 5-bit subtractor                                      : 4
+ 7-bit adder                                           : 1
+ 8-bit adder                                           : 1
+# Adder Trees                                          : 1
+ 11-bit / 544-inputs adder tree                        : 1
+# Counters                                             : 18
+ 10-bit up counter                                     : 6
+ 11-bit up counter                                     : 1
+ 12-bit up counter                                     : 3
+ 16-bit up counter                                     : 1
+ 24-bit up counter                                     : 1
+ 4-bit up counter                                      : 1
+ 5-bit up counter                                      : 3
+ 8-bit up counter                                      : 1
+ 9-bit down counter                                    : 1
+# Registers                                            : 5000
+ Flip-Flops                                            : 5000
+# Comparators                                          : 40
+ 11-bit comparator greater                             : 1
+ 11-bit comparator lessequal                           : 2
+ 12-bit comparator greater                             : 6
+ 12-bit comparator lessequal                           : 2
+ 15-bit comparator lessequal                           : 2
+ 18-bit comparator greater                             : 3
+ 18-bit comparator lessequal                           : 2
+ 19-bit comparator greater                             : 1
+ 4-bit comparator lessequal                            : 4
+ 5-bit comparator greater                              : 2
+ 5-bit comparator lessequal                            : 2
+ 8-bit comparator greater                              : 1
+ 8-bit comparator lessequal                            : 12
+# Multiplexers                                         : 209
+ 1-bit 2-to-1 multiplexer                              : 144
+ 1-bit 20-to-1 multiplexer                             : 3
+ 1-bit 4-to-1 multiplexer                              : 7
+ 1-bit 7-to-1 multiplexer                              : 2
+ 1-bit 8-to-1 multiplexer                              : 2
+ 10-bit 2-to-1 multiplexer                             : 1
+ 12-bit 2-to-1 multiplexer                             : 5
+ 14-bit 2-to-1 multiplexer                             : 2
+ 16-bit 2-to-1 multiplexer                             : 5
+ 18-bit 2-to-1 multiplexer                             : 3
+ 2-bit 2-to-1 multiplexer                              : 1
+ 20-bit 2-to-1 multiplexer                             : 4
+ 24-bit 2-to-1 multiplexer                             : 9
+ 25-bit 2-to-1 multiplexer                             : 4
+ 3-bit 2-to-1 multiplexer                              : 6
+ 7-bit 2-to-1 multiplexer                              : 2
+ 8-bit 2-to-1 multiplexer                              : 7
+ 9-bit 2-to-1 multiplexer                              : 2
+# FSMs                                                 : 2
+# Xors                                                 : 545
+ 1-bit xor2                                            : 544
+ 5-bit xor2                                            : 1
+
+=========================================================================
+
+=========================================================================
+*                         Low Level Synthesis                           *
+=========================================================================
+WARNING:Xst:1710 - FF/Latch <debounce_compare_4> (without init value) has a constant value of 1 in block <SINGLE_DEBOUNCE>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <l_right_data_1> (without init value) has a constant value of 0 in block <dc97>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <l_right_data_0> (without init value) has a constant value of 0 in block <dc97>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <l_cmd_addr_11> (without init value) has a constant value of 0 in block <dc97>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <l_cmd_addr_10> (without init value) has a constant value of 0 in block <dc97>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <l_cmd_addr_9> (without init value) has a constant value of 0 in block <dc97>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <l_cmd_addr_8> (without init value) has a constant value of 0 in block <dc97>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <l_cmd_addr_7> (without init value) has a constant value of 0 in block <dc97>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <l_cmd_addr_6> (without init value) has a constant value of 0 in block <dc97>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <l_cmd_addr_5> (without init value) has a constant value of 0 in block <dc97>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <l_cmd_addr_4> (without init value) has a constant value of 0 in block <dc97>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <l_cmd_addr_3> (without init value) has a constant value of 0 in block <dc97>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <l_cmd_addr_2> (without init value) has a constant value of 0 in block <dc97>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <l_cmd_addr_1> (without init value) has a constant value of 0 in block <dc97>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <l_cmd_addr_0> (without init value) has a constant value of 0 in block <dc97>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <l_cmd_data_3> (without init value) has a constant value of 0 in block <dc97>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <l_cmd_data_2> (without init value) has a constant value of 0 in block <dc97>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <l_cmd_data_1> (without init value) has a constant value of 0 in block <dc97>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <l_cmd_data_0> (without init value) has a constant value of 0 in block <dc97>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <disp_data_5> (without init value) has a constant value of 1 in block <FREQ_CONVERT>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <disp_data_6> (without init value) has a constant value of 0 in block <FREQ_CONVERT>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <disp_data_7> (without init value) has a constant value of 0 in block <FREQ_CONVERT>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <disp_data_13> (without init value) has a constant value of 1 in block <FREQ_CONVERT>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <disp_data_14> (without init value) has a constant value of 1 in block <FREQ_CONVERT>. This FF/Latch will be trimmed during the optimization process.
+INFO:Xst:2261 - The FF/Latch <debounce_compare_3> in Unit <SINGLE_DEBOUNCE> is equivalent to the following 2 FFs/Latches, which will be removed : <debounce_compare_6> <debounce_compare_9> 
+Analyzing FSM <MFsm> for best encoding.
+Optimizing FSM <dsply/FSM_0> on signal <curr_state[1:3]> with user encoding.
+--------------------------------
+ State              | Encoding
+--------------------------------
+ idle               | 000
+ do_reset           | 001
+ send_addr_set_rs   | 010
+ send_addr_set_data | 011
+ send_addr_drop_en  | 100
+ send_data_set_rs   | 101
+ send_data_set_data | 110
+ send_data_drop_en  | 111
+--------------------------------
+Analyzing FSM <MFsm> for best encoding.
+Optimizing FSM <tunr/FSM_1> on signal <curr_state[1:3]> with user encoding.
+-------------------------------
+ State             | Encoding
+-------------------------------
+ idle              | 000
+ get_freqs_and_dir | 001
+ do_divide         | 010
+ get_new_steps     | 011
+ send_steps_prep   | 100
+ send_steps_high   | 101
+ send_steps_low    | 110
+ tune_wait         | 111
+-------------------------------
+WARNING:Xst:1710 - FF/Latch <cmd_5> (without init value) has a constant value of 0 in block <dc97cmd>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <cmd_7> (without init value) has a constant value of 0 in block <dc97cmd>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <cmd_13> (without init value) has a constant value of 0 in block <dc97cmd>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <cmd_14> (without init value) has a constant value of 0 in block <dc97cmd>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <cmd_16> (without init value) has a constant value of 0 in block <dc97cmd>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <cmd_22> (without init value) has a constant value of 0 in block <dc97cmd>. This FF/Latch will be trimmed during the optimization process.
+INFO:Xst:2261 - The FF/Latch <cmd_0> in Unit <dc97cmd> is equivalent to the following FF/Latch, which will be removed : <cmd_8> 
+INFO:Xst:2261 - The FF/Latch <cmd_2> in Unit <dc97cmd> is equivalent to the following FF/Latch, which will be removed : <cmd_10> 
+INFO:Xst:2261 - The FF/Latch <cmd_4> in Unit <dc97cmd> is equivalent to the following FF/Latch, which will be removed : <cmd_12> 
+INFO:Xst:2261 - The FF/Latch <cmd_1> in Unit <dc97cmd> is equivalent to the following FF/Latch, which will be removed : <cmd_9> 
+
+Optimizing unit <system> ...
+
+Optimizing unit <DEBOUNCE> ...
+
+Optimizing unit <SINGLE_DEBOUNCE> ...
+
+Optimizing unit <AUDIO> ...
+
+Optimizing unit <dc97cmd> ...
+
+Optimizing unit <dc97> ...
+
+Optimizing unit <DISPLAY> ...
+
+Optimizing unit <AUTOCORRELATE> ...
+
+Optimizing unit <FREQ_CONVERT> ...
+
+Optimizing unit <USER_INTERFACE> ...
+
+Optimizing unit <TUNER> ...
+WARNING:Xst:1710 - FF/Latch <new_steps_6> (without init value) has a constant value of 0 in block <TUNER>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <new_steps_7> (without init value) has a constant value of 0 in block <TUNER>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <new_steps_8> (without init value) has a constant value of 0 in block <TUNER>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <dividend_17> (without init value) has a constant value of 0 in block <TUNER>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <divisor_17> (without init value) has a constant value of 0 in block <TUNER>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <new_steps_6> (without init value) has a constant value of 0 in block <TUNER>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <new_steps_7> (without init value) has a constant value of 0 in block <TUNER>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <new_steps_8> (without init value) has a constant value of 0 in block <TUNER>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <dividend_17> (without init value) has a constant value of 0 in block <TUNER>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <divisor_17> (without init value) has a constant value of 0 in block <TUNER>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1710 - FF/Latch <audo/ac97_main/l_cmd_addr_18> (without init value) has a constant value of 0 in block <system>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <audo/ac97_main/l_cmd_addr_12> (without init value) has a constant value of 0 in block <system>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <audo/ac97_main/l_cmd_data_18> (without init value) has a constant value of 0 in block <system>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <audo/ac97_main/l_cmd_data_17> (without init value) has a constant value of 0 in block <system>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <audo/ac97_main/l_cmd_data_11> (without init value) has a constant value of 0 in block <system>. This FF/Latch will be trimmed during the optimization process.
+WARNING:Xst:1895 - Due to other FF/Latch trimming, FF/Latch <audo/ac97_main/l_cmd_data_9> (without init value) has a constant value of 0 in block <system>. This FF/Latch will be trimmed during the optimization process.
+INFO:Xst:2261 - The FF/Latch <dsply/disp_clk_counter_11> in Unit <system> is equivalent to the following FF/Latch, which will be removed : <dsply/disp_clk> 
+INFO:Xst:2261 - The FF/Latch <audo/ac97_main/l_cmd_data_12> in Unit <system> is equivalent to the following FF/Latch, which will be removed : <audo/ac97_main/l_cmd_data_4> 
+INFO:Xst:2261 - The FF/Latch <audo/ac97_main/l_cmd_data_13> in Unit <system> is equivalent to the following FF/Latch, which will be removed : <audo/ac97_main/l_cmd_data_5> 
+INFO:Xst:2261 - The FF/Latch <audo/ac97_main/l_cmd_data_14> in Unit <system> is equivalent to the following FF/Latch, which will be removed : <audo/ac97_main/l_cmd_data_6> 
+INFO:Xst:2261 - The FF/Latch <audo/ac97_main/l_cmd_data_16> in Unit <system> is equivalent to the following FF/Latch, which will be removed : <audo/ac97_main/l_cmd_data_8> 
+
+Mapping all equations...
+Building and optimizing final netlist ...
+Found area constraint ratio of 100 (+ 5) on block system, actual ratio is 43.
+INFO:Xst:2260 - The FF/Latch <U0/xst_fifo_generator/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.wr_rst_reg_1> in Unit <dsply/dispFIFO> is equivalent to the following FF/Latch : <U0/xst_fifo_generator/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.wr_rst_reg_0> 
+INFO:Xst:2260 - The FF/Latch <U0/xst_fifo_generator/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.rd_rst_reg_2> in Unit <dsply/dispFIFO> is equivalent to the following 2 FFs/Latches : <U0/xst_fifo_generator/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.rd_rst_reg_1> <U0/xst_fifo_generator/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.rd_rst_reg_0> 
+INFO:Xst:2260 - The FF/Latch <U0/xst_fifo_generator/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.rd/gr1.rfwft/empty_fwft_i> in Unit <dsply/dispFIFO> is equivalent to the following FF/Latch : <U0/xst_fifo_generator/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.rd/gr1.rfwft/empty_fwft_fb> 
+INFO:Xst:2260 - The FF/Latch <U0/xst_fifo_generator/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.wr/gwas.wsts/ram_full_i> in Unit <dsply/dispFIFO> is equivalent to the following FF/Latch : <U0/xst_fifo_generator/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.wr/gwas.wsts/ram_full_fb_i> 
+INFO:Xst:2260 - The FF/Latch <blk000000b1> in Unit <blk00000003> is equivalent to the following FF/Latch : <blk000005de> 
+INFO:Xst:2260 - The FF/Latch <blk000000b5> in Unit <blk00000003> is equivalent to the following FF/Latch : <blk000005d6> 
+INFO:Xst:2260 - The FF/Latch <blk0000000c> in Unit <blk00000003> is equivalent to the following 5 FFs/Latches : <blk000005d9> <blk000005da> <blk000005db> <blk000005dc> <blk000005dd> 
+INFO:Xst:2260 - The FF/Latch <U0/xst_fifo_generator/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.wr/gwas.wsts/ram_full_i> in Unit <dsply/dispFIFO> is equivalent to the following FF/Latch : <U0/xst_fifo_generator/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.wr/gwas.wsts/ram_full_fb_i> 
+INFO:Xst:2260 - The FF/Latch <U0/xst_fifo_generator/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.rd/gr1.rfwft/empty_fwft_i> in Unit <dsply/dispFIFO> is equivalent to the following FF/Latch : <U0/xst_fifo_generator/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.rd/gr1.rfwft/empty_fwft_fb> 
+INFO:Xst:2260 - The FF/Latch <U0/xst_fifo_generator/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.wr_rst_reg_1> in Unit <dsply/dispFIFO> is equivalent to the following FF/Latch : <U0/xst_fifo_generator/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.wr_rst_reg_0> 
+INFO:Xst:2260 - The FF/Latch <U0/xst_fifo_generator/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.rd_rst_reg_2> in Unit <dsply/dispFIFO> is equivalent to the following 2 FFs/Latches : <U0/xst_fifo_generator/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.rd_rst_reg_1> <U0/xst_fifo_generator/gconvfifo.rf/grf.rf/rstblk/ngwrdrst.grst.rd_rst_reg_0> 
+INFO:Xst:2260 - The FF/Latch <blk000000b1> in Unit <blk00000003> is equivalent to the following FF/Latch : <blk000005de> 
+INFO:Xst:2260 - The FF/Latch <blk000000b5> in Unit <blk00000003> is equivalent to the following FF/Latch : <blk000005d6> 
+INFO:Xst:2260 - The FF/Latch <blk0000000c> in Unit <blk00000003> is equivalent to the following 5 FFs/Latches : <blk000005d9> <blk000005da> <blk000005db> <blk000005dc> <blk000005dd> 
+INFO:Xst:2260 - The FF/Latch <blk000000b1> in Unit <blk00000003> is equivalent to the following FF/Latch : <blk000005de> 
+INFO:Xst:2260 - The FF/Latch <blk000000b5> in Unit <blk00000003> is equivalent to the following FF/Latch : <blk000005d6> 
+INFO:Xst:2260 - The FF/Latch <blk0000000c> in Unit <blk00000003> is equivalent to the following 5 FFs/Latches : <blk000005d9> <blk000005da> <blk000005db> <blk000005dc> <blk000005dd> 
+
+Final Macro Processing ...
+
+Processing Unit <system> :
+	Found 2-bit shift register for signal <n_reset>.
+	Found 2-bit shift register for signal <dbounce/genDBs[4].DBx/sync_2>.
+	Found 2-bit shift register for signal <dbounce/genDBs[3].DBx/sync_2>.
+	Found 2-bit shift register for signal <dbounce/genDBs[2].DBx/sync_2>.
+	Found 2-bit shift register for signal <dbounce/genDBs[1].DBx/sync_2>.
+	Found 2-bit shift register for signal <dbounce/genDBs[0].DBx/sync_2>.
+	Found 3-bit shift register for signal <audo/ac97_main/right_in_data_2>.
+	Found 3-bit shift register for signal <audo/ac97_main/left_in_data_2>.
+Unit <system> processed.
+
+=========================================================================
+Final Register Report
+
+Macro Statistics
+# Registers                                            : 5075
+ Flip-Flops                                            : 5075
+# Shift Registers                                      : 8
+ 2-bit shift register                                  : 6
+ 3-bit shift register                                  : 2
+
+=========================================================================
+
+=========================================================================
+*                           Partition Report                            *
+=========================================================================
+
+Partition Implementation Status
+-------------------------------
+
+  No Partitions were found in this design.
+
+-------------------------------
+
+=========================================================================
+*                            Design Summary                             *
+=========================================================================
+
+Top Level Output File Name         : system.ngc
+
+Primitive and Black Box Usage:
+------------------------------
+# BELS                             : 8735
+#      GND                         : 5
+#      INV                         : 73
+#      LUT1                        : 192
+#      LUT2                        : 885
+#      LUT3                        : 1095
+#      LUT4                        : 1673
+#      LUT5                        : 1246
+#      LUT6                        : 1120
+#      MUXCY                       : 1188
+#      MUXF7                       : 45
+#      VCC                         : 3
+#      XORCY                       : 1210
+# FlipFlops/Latches                : 6988
+#      FD                          : 2711
+#      FDC                         : 61
+#      FDCE                        : 28
+#      FDE                         : 3795
+#      FDE_1                       : 34
+#      FDP                         : 15
+#      FDPE                        : 3
+#      FDR                         : 148
+#      FDRE                        : 179
+#      FDS                         : 2
+#      FDSE                        : 12
+# RAMS                             : 3
+#      RAMB16BWER                  : 2
+#      RAMB8BWER                   : 1
+# Shift Registers                  : 436
+#      SRLC16E                     : 434
+#      SRLC32E                     : 2
+# Clock Buffers                    : 6
+#      BUFG                        : 4
+#      BUFGP                       : 2
+# IO Buffers                       : 42
+#      IBUF                        : 15
+#      OBUF                        : 27
+# DSPs                             : 27
+#      DSP48A1                     : 27
+
+Device utilization summary:
+---------------------------
+
+Selected Device : 6slx45csg324-3 
+
+
+Slice Logic Utilization: 
+ Number of Slice Registers:            6988  out of  54576    12%  
+ Number of Slice LUTs:                 6720  out of  27288    24%  
+    Number used as Logic:              6284  out of  27288    23%  
+    Number used as Memory:              436  out of   6408     6%  
+       Number used as SRL:              436
+
+Slice Logic Distribution: 
+ Number of LUT Flip Flop pairs used:  11514
+   Number with an unused Flip Flop:    4526  out of  11514    39%  
+   Number with an unused LUT:          4794  out of  11514    41%  
+   Number of fully used LUT-FF pairs:  2194  out of  11514    19%  
+   Number of unique control sets:        78
+
+IO Utilization: 
+ Number of IOs:                          44
+ Number of bonded IOBs:                  44  out of    218    20%  
+
+Specific Feature Utilization:
+ Number of Block RAM/FIFO:                3  out of    116     2%  
+    Number using Block RAM only:          3
+ Number of BUFG/BUFGCTRL/BUFHCEs:         6  out of     16    37%  
+ Number of DSP48A1s:                     27  out of     58    46%  
+
+---------------------------
+Partition Resource Summary:
+---------------------------
+
+  No Partitions were found in this design.
+
+---------------------------
+
+
+=========================================================================
+Timing Report
+
+NOTE: THESE TIMING NUMBERS ARE ONLY A SYNTHESIS ESTIMATE.
+      FOR ACCURATE TIMING INFORMATION PLEASE REFER TO THE TRACE REPORT
+      GENERATED AFTER PLACE-and-ROUTE.
+
+Clock Information:
+------------------
+-----------------------------------+------------------------+-------+
+Clock Signal                       | Clock buffer(FF name)  | Load  |
+-----------------------------------+------------------------+-------+
+clk                                | BUFGP                  | 2678  |
+dbounce/db_clock                   | BUFG                   | 75    |
+audo/ac97_main/ac97_sync           | BUFG                   | 84    |
+BITCLK                             | BUFGP                  | 101   |
+dsply/disp_clk_counter_11          | BUFG                   | 91    |
+corr/sample_clock                  | BUFG                   | 4425  |
+-----------------------------------+------------------------+-------+
+
+Asynchronous Control Signals Information:
+----------------------------------------
+No asynchronous control signals found in this design
+
+Timing Summary:
+---------------
+Speed Grade: -3
+
+   Minimum period: 17.591ns (Maximum Frequency: 56.848MHz)
+   Minimum input arrival time before clock: 2.354ns
+   Maximum output required time after clock: 8.169ns
+   Maximum combinational path delay: 4.372ns
+
+Timing Details:
+---------------
+All values displayed in nanoseconds (ns)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'clk'
+  Clock period: 10.001ns (frequency: 99.985MHz)
+  Total number of paths / destination ports: 1007380 / 4673
+-------------------------------------------------------------------------
+Delay:               10.001ns (Levels of Logic = 12)
+  Source:            tunr/latched_quotient_10 (FF)
+  Destination:       tunr/num_steps_8 (FF)
+  Source Clock:      clk rising
+  Destination Clock: clk rising
+
+  Data Path: tunr/latched_quotient_10 to tunr/num_steps_8
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDE:C->Q              1   0.447   0.924  tunr/latched_quotient_10 (tunr/latched_quotient_10)
+     LUT5:I0->O           12   0.203   1.156  tunr/GND_24_o_latched_quotient[17]_LessThan_24_o21 (tunr/GND_24_o_latched_quotient[17]_LessThan_24_o2)
+     LUT6:I2->O            1   0.203   0.579  tunr/Mmux_step_multiplier31 (tunr/step_multiplier<11>)
+     DSP48A1:B11->M13      1   3.364   0.684  tunr/Mmult_new_steps_x_1024 (tunr/new_steps_x_1024<13>)
+     LUT2:I0->O            1   0.203   0.580  tunr/Mmux_new_steps_mux[8]_GND_24_o_mux_46_OUT4_SW0 (N64)
+     LUT6:I5->O            2   0.205   0.721  tunr/Mmux_new_steps_mux[8]_GND_24_o_mux_46_OUT4 (tunr/new_steps_mux[8]_GND_24_o_mux_46_OUT<3>)
+     LUT3:I1->O            1   0.203   0.000  tunr/Mcount_num_steps_lut<3> (tunr/Mcount_num_steps_lut<3>)
+     MUXCY:S->O            1   0.172   0.000  tunr/Mcount_num_steps_cy<3> (tunr/Mcount_num_steps_cy<3>)
+     MUXCY:CI->O           1   0.019   0.000  tunr/Mcount_num_steps_cy<4> (tunr/Mcount_num_steps_cy<4>)
+     MUXCY:CI->O           1   0.019   0.000  tunr/Mcount_num_steps_cy<5> (tunr/Mcount_num_steps_cy<5>)
+     MUXCY:CI->O           1   0.019   0.000  tunr/Mcount_num_steps_cy<6> (tunr/Mcount_num_steps_cy<6>)
+     MUXCY:CI->O           0   0.019   0.000  tunr/Mcount_num_steps_cy<7> (tunr/Mcount_num_steps_cy<7>)
+     XORCY:CI->O           1   0.180   0.000  tunr/Mcount_num_steps_xor<8> (tunr/Mcount_num_steps8)
+     FDE:D                     0.102          tunr/num_steps_8
+    ----------------------------------------
+    Total                     10.001ns (5.358ns logic, 4.643ns route)
+                                       (53.6% logic, 46.4% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'dbounce/db_clock'
+  Clock period: 4.898ns (frequency: 204.159MHz)
+  Total number of paths / destination ports: 1140 / 130
+-------------------------------------------------------------------------
+Delay:               4.898ns (Levels of Logic = 3)
+  Source:            dbounce/genDBs[4].DBx/debounce_counter_7 (FF)
+  Destination:       dbounce/genDBs[4].DBx/debounce_counter_9 (FF)
+  Source Clock:      dbounce/db_clock rising
+  Destination Clock: dbounce/db_clock rising
+
+  Data Path: dbounce/genDBs[4].DBx/debounce_counter_7 to dbounce/genDBs[4].DBx/debounce_counter_9
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDR:C->Q              2   0.447   0.961  dbounce/genDBs[4].DBx/debounce_counter_7 (dbounce/genDBs[4].DBx/debounce_counter_7)
+     LUT5:I0->O            1   0.203   0.924  dbounce/genDBs[4].DBx/GND_10_o_INV_37_o1 (dbounce/genDBs[4].DBx/GND_10_o_INV_37_o1)
+     LUT6:I1->O            2   0.203   0.617  dbounce/genDBs[4].DBx/GND_10_o_INV_37_o3 (dbounce/genDBs[4].DBx/GND_10_o_INV_37_o)
+     LUT2:I1->O           12   0.205   0.908  dbounce/genDBs[4].DBx/GND_10_o_GND_10_o_OR_34_o_01 (dbounce/genDBs[4].DBx/GND_10_o_GND_10_o_OR_34_o_0)
+     FDR:R                     0.430          dbounce/genDBs[4].DBx/debounce_counter_1
+    ----------------------------------------
+    Total                      4.898ns (1.488ns logic, 3.410ns route)
+                                       (30.4% logic, 69.6% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'audo/ac97_main/ac97_sync'
+  Clock period: 7.486ns (frequency: 133.588MHz)
+  Total number of paths / destination ports: 46377 / 157
+-------------------------------------------------------------------------
+Delay:               7.486ns (Levels of Logic = 26)
+  Source:            audo/auto_sample_max_0 (FF)
+  Destination:       audo/auto_sample_1 (FF)
+  Source Clock:      audo/ac97_main/ac97_sync rising
+  Destination Clock: audo/ac97_main/ac97_sync rising
+
+  Data Path: audo/auto_sample_max_0 to audo/auto_sample_1
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDE:C->Q              2   0.447   0.721  audo/auto_sample_max_0 (audo/auto_sample_max_0)
+     LUT2:I0->O            1   0.203   0.000  audo/Msub_sample_amplitude_lut<0> (audo/Msub_sample_amplitude_lut<0>)
+     MUXCY:S->O            1   0.172   0.000  audo/Msub_sample_amplitude_cy<0> (audo/Msub_sample_amplitude_cy<0>)
+     MUXCY:CI->O           1   0.019   0.000  audo/Msub_sample_amplitude_cy<1> (audo/Msub_sample_amplitude_cy<1>)
+     MUXCY:CI->O           1   0.019   0.000  audo/Msub_sample_amplitude_cy<2> (audo/Msub_sample_amplitude_cy<2>)
+     MUXCY:CI->O           1   0.019   0.000  audo/Msub_sample_amplitude_cy<3> (audo/Msub_sample_amplitude_cy<3>)
+     MUXCY:CI->O           1   0.019   0.000  audo/Msub_sample_amplitude_cy<4> (audo/Msub_sample_amplitude_cy<4>)
+     MUXCY:CI->O           1   0.019   0.000  audo/Msub_sample_amplitude_cy<5> (audo/Msub_sample_amplitude_cy<5>)
+     MUXCY:CI->O           1   0.019   0.000  audo/Msub_sample_amplitude_cy<6> (audo/Msub_sample_amplitude_cy<6>)
+     MUXCY:CI->O           1   0.019   0.000  audo/Msub_sample_amplitude_cy<7> (audo/Msub_sample_amplitude_cy<7>)
+     MUXCY:CI->O           1   0.019   0.000  audo/Msub_sample_amplitude_cy<8> (audo/Msub_sample_amplitude_cy<8>)
+     MUXCY:CI->O           1   0.019   0.000  audo/Msub_sample_amplitude_cy<9> (audo/Msub_sample_amplitude_cy<9>)
+     MUXCY:CI->O           1   0.019   0.000  audo/Msub_sample_amplitude_cy<10> (audo/Msub_sample_amplitude_cy<10>)
+     MUXCY:CI->O           1   0.019   0.000  audo/Msub_sample_amplitude_cy<11> (audo/Msub_sample_amplitude_cy<11>)
+     MUXCY:CI->O           1   0.019   0.000  audo/Msub_sample_amplitude_cy<12> (audo/Msub_sample_amplitude_cy<12>)
+     MUXCY:CI->O           1   0.019   0.000  audo/Msub_sample_amplitude_cy<13> (audo/Msub_sample_amplitude_cy<13>)
+     MUXCY:CI->O           1   0.019   0.000  audo/Msub_sample_amplitude_cy<14> (audo/Msub_sample_amplitude_cy<14>)
+     MUXCY:CI->O           1   0.019   0.000  audo/Msub_sample_amplitude_cy<15> (audo/Msub_sample_amplitude_cy<15>)
+     MUXCY:CI->O           1   0.019   0.000  audo/Msub_sample_amplitude_cy<16> (audo/Msub_sample_amplitude_cy<16>)
+     XORCY:CI->O           3   0.180   0.651  audo/Msub_sample_amplitude_xor<17> (audo/sample_amplitude<17>)
+     LUT2:I1->O            1   0.205   0.000  audo/Msub_sample_high_threshold_lut<14> (audo/Msub_sample_high_threshold_lut<14>)
+     MUXCY:S->O            1   0.172   0.000  audo/Msub_sample_high_threshold_cy<14> (audo/Msub_sample_high_threshold_cy<14>)
+     XORCY:CI->O           2   0.180   0.864  audo/Msub_sample_high_threshold_xor<15> (audo/sample_high_threshold<15>)
+     LUT4:I0->O            0   0.203   0.000  audo/Mcompar__n0134_lutdi7 (audo/Mcompar__n0134_lutdi7)
+     MUXCY:DI->O           1   0.339   0.580  audo/Mcompar__n0134_cy<7> (audo/Mcompar__n0134_cy<7>)
+     LUT5:I4->O            1   0.205   0.808  audo/Mcompar__n0134_cy<8> (audo/_n0134)
+     LUT3:I0->O            2   0.205   0.616  audo/_n01371 (audo/_n0137)
+     FDRE:R                    0.430          audo/auto_sample_1
+    ----------------------------------------
+    Total                      7.486ns (3.245ns logic, 4.241ns route)
+                                       (43.3% logic, 56.7% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'BITCLK'
+  Clock period: 8.994ns (frequency: 111.189MHz)
+  Total number of paths / destination ports: 1988 / 175
+-------------------------------------------------------------------------
+Delay:               4.497ns (Levels of Logic = 3)
+  Source:            audo/ac97_main/bit_count_3 (FF)
+  Destination:       audo/ac97_main/left_in_data_19 (FF)
+  Source Clock:      BITCLK rising
+  Destination Clock: BITCLK falling
+
+  Data Path: audo/ac97_main/bit_count_3 to audo/ac97_main/left_in_data_19
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FD:C->Q              19   0.447   1.436  audo/ac97_main/bit_count_3 (audo/ac97_main/bit_count_3)
+     LUT6:I0->O            1   0.203   0.000  audo/ac97_main/GND_15_o_bit_count[7]_AND_20_o2_F (N250)
+     MUXF7:I0->O           1   0.131   0.684  audo/ac97_main/GND_15_o_bit_count[7]_AND_20_o2 (audo/ac97_main/GND_15_o_bit_count[7]_AND_20_o2)
+     LUT2:I0->O           19   0.203   1.071  audo/ac97_main/GND_15_o_bit_count[7]_AND_20_o3 (audo/ac97_main/GND_15_o_bit_count[7]_AND_20_o)
+     FDE_1:CE                  0.322          audo/ac97_main/left_in_data_3
+    ----------------------------------------
+    Total                      4.497ns (1.306ns logic, 3.191ns route)
+                                       (29.0% logic, 71.0% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'dsply/disp_clk_counter_11'
+  Clock period: 4.546ns (frequency: 219.971MHz)
+  Total number of paths / destination ports: 623 / 199
+-------------------------------------------------------------------------
+Delay:               4.546ns (Levels of Logic = 4)
+  Source:            dsply/curr_state_FSM_FFd1 (FF)
+  Destination:       dsply/lcd_data_1 (FF)
+  Source Clock:      dsply/disp_clk_counter_11 rising
+  Destination Clock: dsply/disp_clk_counter_11 rising
+
+  Data Path: dsply/curr_state_FSM_FFd1 to dsply/lcd_data_1
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FD:C->Q              17   0.447   1.132  dsply/curr_state_FSM_FFd1 (dsply/curr_state_FSM_FFd1)
+     LUT2:I0->O            1   0.203   0.580  dsply/Mmux_curr_state[2]_lcd_data[7]_wide_mux_53_OUT41_SW0 (N12)
+     LUT6:I5->O            4   0.205   0.788  dsply/Mmux_curr_state[2]_lcd_data[7]_wide_mux_53_OUT41 (dsply/Mmux_curr_state[2]_lcd_data[7]_wide_mux_53_OUT41)
+     LUT2:I0->O            1   0.203   0.684  dsply/Mmux_curr_state[2]_lcd_data[7]_wide_mux_53_OUT2_SW0 (N20)
+     LUT6:I4->O            1   0.203   0.000  dsply/Mmux_curr_state[2]_lcd_data[7]_wide_mux_53_OUT2 (dsply/curr_state[2]_lcd_data[7]_wide_mux_53_OUT<1>)
+     FDE:D                     0.102          dsply/lcd_data_1
+    ----------------------------------------
+    Total                      4.546ns (1.363ns logic, 3.183ns route)
+                                       (30.0% logic, 70.0% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'corr/sample_clock'
+  Clock period: 17.591ns (frequency: 56.848MHz)
+  Total number of paths / destination ports: 82032974934 / 6702
+-------------------------------------------------------------------------
+Delay:               17.591ns (Levels of Logic = 26)
+  Source:            corr/genautos[341].autox/register_1_0 (FF)
+  Destination:       corr/peak_val_10 (FF)
+  Source Clock:      corr/sample_clock rising
+  Destination Clock: corr/sample_clock rising
+
+  Data Path: corr/genautos[341].autox/register_1_0 to corr/peak_val_10
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDE:C->Q              1   0.447   0.827  corr/genautos[341].autox/register_1_0 (corr/genautos[341].autox/register_1_0)
+     LUT4:I0->O            2   0.203   0.617  corr/genautos[341].autox/auto_out1 (corr/autos<341>)
+     LUT5:I4->O            4   0.205   0.912  corr/hamming_1s_1024<170><1>1 (corr/hamming_1s_1024<170><1>)
+     LUT3:I0->O            3   0.205   0.879  corr/ADDERTREE_INTERNAL_Madd169_lut<0>121 (corr/ADDERTREE_INTERNAL_Madd169_lut<0>12)
+     LUT5:I2->O            3   0.205   0.651  corr/ADDERTREE_INTERNAL_Madd171_lut<0>11 (corr/ADDERTREE_INTERNAL_Madd171_lut<0>1)
+     LUT6:I5->O            2   0.205   0.845  corr/ADDERTREE_INTERNAL_Madd171_xor<0>41 (corr/ADDERTREE_INTERNAL_Madd_3171)
+     LUT3:I0->O            1   0.205   0.580  corr/ADDERTREE_INTERNAL_Madd1833 (corr/ADDERTREE_INTERNAL_Madd1833)
+     LUT4:I3->O            1   0.205   0.000  corr/ADDERTREE_INTERNAL_Madd183_lut<0>4 (corr/ADDERTREE_INTERNAL_Madd183_lut<0>4)
+     MUXCY:S->O            1   0.172   0.000  corr/ADDERTREE_INTERNAL_Madd183_cy<0>_3 (corr/ADDERTREE_INTERNAL_Madd183_cy<0>4)
+     XORCY:CI->O           1   0.180   0.684  corr/ADDERTREE_INTERNAL_Madd183_xor<0>_4 (corr/ADDERTREE_INTERNAL_Madd_5183)
+     LUT2:I0->O            1   0.203   0.000  corr/ADDERTREE_INTERNAL_Madd200_lut<5> (corr/ADDERTREE_INTERNAL_Madd200_lut<5>)
+     MUXCY:S->O            1   0.172   0.000  corr/ADDERTREE_INTERNAL_Madd200_cy<5> (corr/ADDERTREE_INTERNAL_Madd200_cy<5>)
+     XORCY:CI->O           2   0.180   0.617  corr/ADDERTREE_INTERNAL_Madd200_xor<6> (corr/ADDERTREE_INTERNAL_Madd_6200)
+     LUT3:I2->O            1   0.205   0.580  corr/ADDERTREE_INTERNAL_Madd2016 (corr/ADDERTREE_INTERNAL_Madd2016)
+     LUT4:I3->O            1   0.205   0.000  corr/ADDERTREE_INTERNAL_Madd201_lut<0>7 (corr/ADDERTREE_INTERNAL_Madd201_lut<0>7)
+     MUXCY:S->O            1   0.172   0.000  corr/ADDERTREE_INTERNAL_Madd201_cy<0>_6 (corr/ADDERTREE_INTERNAL_Madd201_cy<0>7)
+     XORCY:CI->O           1   0.180   0.684  corr/ADDERTREE_INTERNAL_Madd201_xor<0>_7 (corr/ADDERTREE_INTERNAL_Madd_8201)
+     LUT2:I0->O            1   0.203   0.000  corr/ADDERTREE_INTERNAL_Madd269_lut<8> (corr/ADDERTREE_INTERNAL_Madd269_lut<8>)
+     MUXCY:S->O            1   0.172   0.000  corr/ADDERTREE_INTERNAL_Madd269_cy<8> (corr/ADDERTREE_INTERNAL_Madd269_cy<8>)
+     XORCY:CI->O           2   0.180   0.617  corr/ADDERTREE_INTERNAL_Madd269_xor<9> (corr/ADDERTREE_INTERNAL_Madd_9269)
+     LUT3:I2->O            1   0.205   0.580  corr/ADDERTREE_INTERNAL_Madd2709 (corr/ADDERTREE_INTERNAL_Madd2709)
+     LUT4:I3->O            0   0.205   0.000  corr/ADDERTREE_INTERNAL_Madd270_lut<0>10 (corr/ADDERTREE_INTERNAL_Madd270_lut<0>10)
+     XORCY:LI->O           1   0.136   0.684  corr/ADDERTREE_INTERNAL_Madd270_xor<0>_9 (corr/ADDERTREE_INTERNAL_Madd_10270)
+     LUT2:I0->O            0   0.203   0.000  corr/ADDERTREE_INTERNAL_Madd542_lut<10> (corr/ADDERTREE_INTERNAL_Madd542_lut<10>)
+     XORCY:LI->O           3   0.136   0.755  corr/ADDERTREE_INTERNAL_Madd542_xor<10> (corr/ADDERTREE_INTERNAL_Madd_10542)
+     LUT2:I0->O            1   0.203   0.000  corr/Mcompar_final_hamming[10]_max_detect_1[10]_LessThan_552_o_lut<5> (corr/Mcompar_final_hamming[10]_max_detect_1[10]_LessThan_552_o_lut<5>)
+     MUXCY:S->O           23   0.411   1.153  corr/Mcompar_final_hamming[10]_max_detect_1[10]_LessThan_552_o_cy<5> (corr/final_hamming[10]_max_detect_1[10]_LessThan_552_o)
+     FDRE:CE                   0.322          corr/peak_val_0
+    ----------------------------------------
+    Total                     17.591ns (5.925ns logic, 11.666ns route)
+                                       (33.7% logic, 66.3% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'clk'
+  Total number of paths / destination ports: 8 / 7
+-------------------------------------------------------------------------
+Offset:              2.354ns (Levels of Logic = 2)
+  Source:            volume<4> (PAD)
+  Destination:       audo/ac97_state/cmd_4 (FF)
+  Destination Clock: clk rising
+
+  Data Path: volume<4> to audo/ac97_state/cmd_4
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O             1   1.222   0.827  volume_4_IBUF (volume_4_IBUF)
+     LUT5:I1->O            1   0.203   0.000  audo/ac97_state/state[3]_PWR_17_o_wide_mux_5_OUT<4>1 (audo/ac97_state/state[3]_PWR_17_o_wide_mux_5_OUT<4>)
+     FD:D                      0.102          audo/ac97_state/cmd_4
+    ----------------------------------------
+    Total                      2.354ns (1.527ns logic, 0.827ns route)
+                                       (64.9% logic, 35.1% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'dbounce/db_clock'
+  Total number of paths / destination ports: 5 / 5
+-------------------------------------------------------------------------
+Offset:              1.801ns (Levels of Logic = 1)
+  Source:            btn<4> (PAD)
+  Destination:       dbounce/genDBs[4].DBx/Mshreg_sync_2 (FF)
+  Destination Clock: dbounce/db_clock rising
+
+  Data Path: btn<4> to dbounce/genDBs[4].DBx/Mshreg_sync_2
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O             1   1.222   0.579  btn_4_IBUF (btn_4_IBUF)
+     SRLC16E:D                -0.060          dbounce/genDBs[4].DBx/Mshreg_sync_2
+    ----------------------------------------
+    Total                      1.801ns (1.222ns logic, 0.579ns route)
+                                       (67.9% logic, 32.1% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'BITCLK'
+  Total number of paths / destination ports: 2 / 2
+-------------------------------------------------------------------------
+Offset:              1.838ns (Levels of Logic = 1)
+  Source:            AUDSDI (PAD)
+  Destination:       audo/ac97_main/Mshreg_right_in_data_2 (FF)
+  Destination Clock: BITCLK falling
+
+  Data Path: AUDSDI to audo/ac97_main/Mshreg_right_in_data_2
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O             2   1.222   0.616  AUDSDI_IBUF (AUDSDI_IBUF)
+     SRLC16E:D                -0.060          audo/ac97_main/Mshreg_right_in_data_2
+    ----------------------------------------
+    Total                      1.838ns (1.222ns logic, 0.616ns route)
+                                       (66.5% logic, 33.5% route)
+
+=========================================================================
+Timing constraint: Default OFFSET OUT AFTER for Clock 'audo/ac97_main/ac97_sync'
+  Total number of paths / destination ports: 557 / 4
+-------------------------------------------------------------------------
+Offset:              8.169ns (Levels of Logic = 11)
+  Source:            audo/auto_sample_max_0 (FF)
+  Destination:       led<7> (PAD)
+  Source Clock:      audo/ac97_main/ac97_sync rising
+
+  Data Path: audo/auto_sample_max_0 to led<7>
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDE:C->Q              2   0.447   0.721  audo/auto_sample_max_0 (audo/auto_sample_max_0)
+     LUT2:I0->O            1   0.203   0.000  audo/Msub_sample_amplitude_lut<0> (audo/Msub_sample_amplitude_lut<0>)
+     MUXCY:S->O            1   0.172   0.000  audo/Msub_sample_amplitude_cy<0> (audo/Msub_sample_amplitude_cy<0>)
+     MUXCY:CI->O           1   0.019   0.000  audo/Msub_sample_amplitude_cy<1> (audo/Msub_sample_amplitude_cy<1>)
+     MUXCY:CI->O           1   0.019   0.000  audo/Msub_sample_amplitude_cy<2> (audo/Msub_sample_amplitude_cy<2>)
+     MUXCY:CI->O           1   0.019   0.000  audo/Msub_sample_amplitude_cy<3> (audo/Msub_sample_amplitude_cy<3>)
+     MUXCY:CI->O           1   0.019   0.000  audo/Msub_sample_amplitude_cy<4> (audo/Msub_sample_amplitude_cy<4>)
+     XORCY:CI->O           3   0.180   0.898  audo/Msub_sample_amplitude_xor<5> (audo/sample_amplitude<5>)
+     LUT4:I0->O            1   0.203   0.580  audo/sample_valid32 (audo/sample_valid31)
+     LUT6:I5->O            1   0.205   0.827  audo/sample_valid33 (audo/sample_valid32)
+     LUT6:I2->O           11   0.203   0.882  audo/sample_valid34 (led_7_OBUF)
+     OBUF:I->O                 2.571          led_7_OBUF (led<7>)
+    ----------------------------------------
+    Total                      8.169ns (4.260ns logic, 3.909ns route)
+                                       (52.2% logic, 47.8% route)
+
+=========================================================================
+Timing constraint: Default OFFSET OUT AFTER for Clock 'clk'
+  Total number of paths / destination ports: 7 / 7
+-------------------------------------------------------------------------
+Offset:              4.807ns (Levels of Logic = 2)
+  Source:            uiunit/run_auto_tune_sig (FF)
+  Destination:       n_step_en (PAD)
+  Source Clock:      clk rising
+
+  Data Path: uiunit/run_auto_tune_sig to n_step_en
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FD:C->Q              16   0.447   1.004  uiunit/run_auto_tune_sig (uiunit/run_auto_tune_sig)
+     INV:I->O              1   0.206   0.579  n_step_en1_INV_0 (n_step_en_OBUF)
+     OBUF:I->O                 2.571          n_step_en_OBUF (n_step_en)
+    ----------------------------------------
+    Total                      4.807ns (3.224ns logic, 1.583ns route)
+                                       (67.1% logic, 32.9% route)
+
+=========================================================================
+Timing constraint: Default OFFSET OUT AFTER for Clock 'corr/sample_clock'
+  Total number of paths / destination ports: 1 / 1
+-------------------------------------------------------------------------
+Offset:              3.847ns (Levels of Logic = 1)
+  Source:            corr/tuned (FF)
+  Destination:       led<0> (PAD)
+  Source Clock:      corr/sample_clock rising
+
+  Data Path: corr/tuned to led<0>
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDR:C->Q              9   0.447   0.829  corr/tuned (corr/tuned)
+     OBUF:I->O                 2.571          led_0_OBUF (led<0>)
+    ----------------------------------------
+    Total                      3.847ns (3.018ns logic, 0.829ns route)
+                                       (78.5% logic, 21.5% route)
+
+=========================================================================
+Timing constraint: Default OFFSET OUT AFTER for Clock 'dsply/disp_clk_counter_11'
+  Total number of paths / destination ports: 10 / 10
+-------------------------------------------------------------------------
+Offset:              3.634ns (Levels of Logic = 1)
+  Source:            dsply/lcd_rs (FF)
+  Destination:       lcd_rs (PAD)
+  Source Clock:      dsply/disp_clk_counter_11 rising
+
+  Data Path: dsply/lcd_rs to lcd_rs
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FD:C->Q               2   0.447   0.616  dsply/lcd_rs (dsply/lcd_rs)
+     OBUF:I->O                 2.571          lcd_rs_OBUF (lcd_rs)
+    ----------------------------------------
+    Total                      3.634ns (3.018ns logic, 0.616ns route)
+                                       (83.0% logic, 17.0% route)
+
+=========================================================================
+Timing constraint: Default OFFSET OUT AFTER for Clock 'BITCLK'
+  Total number of paths / destination ports: 2 / 2
+-------------------------------------------------------------------------
+Offset:              3.634ns (Levels of Logic = 1)
+  Source:            audo/ac97_main/ac97_sync (FF)
+  Destination:       AUDSYNC (PAD)
+  Source Clock:      BITCLK rising
+
+  Data Path: audo/ac97_main/ac97_sync to AUDSYNC
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FD:C->Q               2   0.447   0.616  audo/ac97_main/ac97_sync (audo/ac97_main/ac97_sync)
+     OBUF:I->O                 2.571          AUDSYNC_OBUF (AUDSYNC)
+    ----------------------------------------
+    Total                      3.634ns (3.018ns logic, 0.616ns route)
+                                       (83.0% logic, 17.0% route)
+
+=========================================================================
+Timing constraint: Default path analysis
+  Total number of paths / destination ports: 2 / 2
+-------------------------------------------------------------------------
+Delay:               4.372ns (Levels of Logic = 2)
+  Source:            m0_sw (PAD)
+  Destination:       motor_m0 (PAD)
+
+  Data Path: m0_sw to motor_m0
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O             1   1.222   0.579  m0_sw_IBUF (motor_m0_OBUF)
+     OBUF:I->O                 2.571          motor_m0_OBUF (motor_m0)
+    ----------------------------------------
+    Total                      4.372ns (3.793ns logic, 0.579ns route)
+                                       (86.8% logic, 13.2% route)
+
+=========================================================================
+
+Cross Clock Domains Report:
+--------------------------
+
+Clock to Setup on destination clock BITCLK
+---------------+---------+---------+---------+---------+
+               | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock   |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+---------------+---------+---------+---------+---------+
+BITCLK         |    6.040|    2.025|    4.497|         |
+clk            |    1.128|         |         |         |
+---------------+---------+---------+---------+---------+
+
+Clock to Setup on destination clock audo/ac97_main/ac97_sync
+------------------------+---------+---------+---------+---------+
+                        | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock            |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+------------------------+---------+---------+---------+---------+
+BITCLK                  |         |    5.347|         |         |
+audo/ac97_main/ac97_sync|    7.486|         |         |         |
+clk                     |    4.249|         |         |         |
+------------------------+---------+---------+---------+---------+
+
+Clock to Setup on destination clock clk
+-------------------------+---------+---------+---------+---------+
+                         | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock             |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+-------------------------+---------+---------+---------+---------+
+BITCLK                   |    1.165|         |         |         |
+audo/ac97_main/ac97_sync |    6.690|         |         |         |
+clk                      |   10.001|         |         |         |
+corr/sample_clock        |    5.563|         |         |         |
+dbounce/db_clock         |    1.507|         |         |         |
+dsply/disp_clk_counter_11|    2.386|         |         |         |
+-------------------------+---------+---------+---------+---------+
+
+Clock to Setup on destination clock corr/sample_clock
+------------------------+---------+---------+---------+---------+
+                        | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock            |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+------------------------+---------+---------+---------+---------+
+audo/ac97_main/ac97_sync|    8.431|         |         |         |
+clk                     |    6.908|         |         |         |
+corr/sample_clock       |   17.591|         |         |         |
+------------------------+---------+---------+---------+---------+
+
+Clock to Setup on destination clock dbounce/db_clock
+----------------+---------+---------+---------+---------+
+                | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock    |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+----------------+---------+---------+---------+---------+
+dbounce/db_clock|    4.898|         |         |         |
+----------------+---------+---------+---------+---------+
+
+Clock to Setup on destination clock dsply/disp_clk_counter_11
+-------------------------+---------+---------+---------+---------+
+                         | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock             |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+-------------------------+---------+---------+---------+---------+
+clk                      |    4.239|         |         |         |
+dsply/disp_clk_counter_11|    4.546|         |         |         |
+-------------------------+---------+---------+---------+---------+
+
+=========================================================================
+
+
+Total REAL time to Xst completion: 142.00 secs
+Total CPU time to Xst completion: 141.66 secs
+ 
+--> 
+
+Total memory usage is 257852 kilobytes
+
+Number of errors   :    0 (   0 filtered)
+Number of warnings :   89 (   0 filtered)
+Number of infos    :   42 (   0 filtered)
+
