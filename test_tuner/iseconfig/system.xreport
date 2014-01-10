@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <report-views version="2.0" >
  <header>
-  <DateModified>2013-12-24T01:40:29</DateModified>
+  <DateModified>2013-12-30T04:30:27</DateModified>
   <ModuleName>system</ModuleName>
-  <SummaryTimeStamp>2013-12-22T23:08:34</SummaryTimeStamp>
+  <SummaryTimeStamp>2013-12-30T04:30:19</SummaryTimeStamp>
   <SavedFilePath>C:/Users/Dan/Documents/guitar_tuner/test_tuner/iseconfig/system.xreport</SavedFilePath>
-  <ImplementationReportsDirectory>C:/Users/Dan/Documents/guitar_tuner/test_tuner</ImplementationReportsDirectory>
+  <ImplementationReportsDirectory>C:/Users/Dan/Documents/guitar_tuner/test_tuner\</ImplementationReportsDirectory>
   <DateInitialized>2013-12-22T21:43:04</DateInitialized>
   <EnableMessageFiltering>false</EnableMessageFiltering>
  </header>
@@ -19,7 +19,7 @@
     <toc-item title="Detailed Reports" target="Detailed Reports" />
    </view>
    <view inputState="Unknown" program="implementation" contextTags="FPGA_ONLY" hidden="true" type="HTML" file="system_envsettings.html" label="System Settings" />
-   <view inputState="Translated" program="map" locator="MAP_IOB_TABLE" contextTags="FPGA_ONLY" type="IOBProperties" file="system_map.xrpt" label="IOB Properties" />
+   <view inputState="Translated" program="map" locator="MAP_IOB_TABLE" contextTags="FPGA_ONLY" type="IOBProperties" file="system_map.xrpt" showConstraints="0" label="IOB Properties" />
    <view inputState="Translated" program="map" contextTags="FPGA_ONLY" hidden="true" type="Control_Sets" file="system_map.xrpt" label="Control Set Information" />
    <view inputState="Translated" program="map" locator="MAP_MODULE_HIERARCHY" contextTags="FPGA_ONLY" type="Module_Utilization" file="system_map.xrpt" label="Module Level Utilization" />
    <view inputState="Mapped" program="par" locator="CONSTRAINT_TABLE" contextTags="FPGA_ONLY" type="ConstraintsData" file="system.ptwx" label="Timing Constraints" translator="ptwxToTableXML.xslt" />

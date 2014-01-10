@@ -23,6 +23,11 @@ IP Symbol Generator:
 
    * FREQ_DIVIDER.asy
 
+SYM file generator:
+   Generate a SYM file for compatibility with legacy flows
+
+   * FREQ_DIVIDER.sym
+
 Generate ISE metadata:
    Create a metadata file for use when including this core in ISE designs
 

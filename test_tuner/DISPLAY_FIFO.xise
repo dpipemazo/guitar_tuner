@@ -17,14 +17,14 @@
   <files>
     <file xil_pn:name="DISPLAY_FIFO.ngc" xil_pn:type="FILE_NGC">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="2"/>
-      <association xil_pn:name="Implementation" xil_pn:seqID="2"/>
+      <association xil_pn:name="Implementation" xil_pn:seqID="0"/>
     </file>
     <file xil_pn:name="DISPLAY_FIFO.vhd" xil_pn:type="FILE_VHDL">
-      <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="3"/>
-      <association xil_pn:name="Implementation" xil_pn:seqID="3"/>
-      <association xil_pn:name="PostMapSimulation" xil_pn:seqID="3"/>
-      <association xil_pn:name="PostRouteSimulation" xil_pn:seqID="3"/>
-      <association xil_pn:name="PostTranslateSimulation" xil_pn:seqID="3"/>
+      <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="4"/>
+      <association xil_pn:name="Implementation" xil_pn:seqID="1"/>
+      <association xil_pn:name="PostMapSimulation" xil_pn:seqID="4"/>
+      <association xil_pn:name="PostRouteSimulation" xil_pn:seqID="4"/>
+      <association xil_pn:name="PostTranslateSimulation" xil_pn:seqID="4"/>
     </file>
   </files>
 
@@ -51,8 +51,8 @@
     <!--                                                                                  -->
     <property xil_pn:name="PROP_DesignName" xil_pn:value="DISPLAY_FIFO" xil_pn:valueState="non-default"/>
     <property xil_pn:name="PROP_DevFamilyPMName" xil_pn:value="spartan6" xil_pn:valueState="default"/>
-    <property xil_pn:name="PROP_intProjectCreationTimestamp" xil_pn:value="2013-12-24T01:37:20" xil_pn:valueState="non-default"/>
-    <property xil_pn:name="PROP_intWbtProjectID" xil_pn:value="B2A7AD8B670C47BD983129EA586BB557" xil_pn:valueState="non-default"/>
+    <property xil_pn:name="PROP_intProjectCreationTimestamp" xil_pn:value="2013-12-28T14:26:55" xil_pn:valueState="non-default"/>
+    <property xil_pn:name="PROP_intWbtProjectID" xil_pn:value="4AD16D0E631343698D76CE6ADB3B3E96" xil_pn:valueState="non-default"/>
     <property xil_pn:name="PROP_intWorkingDirLocWRTProjDir" xil_pn:value="Same" xil_pn:valueState="non-default"/>
     <property xil_pn:name="PROP_intWorkingDirUsed" xil_pn:value="No" xil_pn:valueState="non-default"/>
   </properties>
